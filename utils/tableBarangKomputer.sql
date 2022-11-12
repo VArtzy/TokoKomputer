@@ -1,0 +1,145 @@
+CREATE TABLE `barang` (
+  `KODE` varchar(25) NOT NULL,
+  `NAMA` varchar(50) DEFAULT NULL,
+  `SATUAN_ID` int DEFAULT NULL,
+  `STOK` decimal(9,3) DEFAULT '0.000',
+  `MIN_STOK` int DEFAULT '0',
+  `MAX_STOK` int DEFAULT '0',
+  `HARGA_BELI` decimal(18,3) DEFAULT '0.000',
+  `IS_UPDATE_HARGA_JUAL` smallint DEFAULT '0',
+  `GOLONGAN_ID` varchar(6) NOT NULL,
+  `LOKASI_ID` varchar(6) NOT NULL,
+  `SUPPLIER_ID` varchar(10) DEFAULT NULL,
+  `KODE_BARCODE` varchar(25) DEFAULT NULL,
+  `URUT` int DEFAULT NULL,
+  `STOK_AWAL` int DEFAULT '0',
+  `DISKON_RP` int DEFAULT '0',
+  `GARANSI` varchar(10) DEFAULT NULL,
+  `SUB_GOLONGAN_ID` varchar(6) DEFAULT NULL,
+  `TGL_TRANSAKSI` date DEFAULT NULL,
+  `DISKON_GENERAL` int DEFAULT '0',
+  `DISKON_SILVER` int DEFAULT '0',
+  `DISKON_GOLD` int DEFAULT '0',
+  `POIN` int DEFAULT '0',
+  `IS_WAJIB_ISI_IMEI` smallint DEFAULT '0',
+  `GUNA` char(1) DEFAULT NULL,
+  `FOTO` varchar(300) DEFAULT NULL,
+  `MARGIN` int DEFAULT NULL,
+  `temp_harga_beli` decimal(18,3) NOT NULL
+);
+
+CREATE TABLE `customer` (
+  `KODE` varchar(10) NOT NULL,
+  `NAMA` varchar(30) DEFAULT NULL,
+  `ALAMAT` varchar(50) DEFAULT NULL,
+  `KONTAK` varchar(30) DEFAULT NULL,
+  `NPWP` varchar(25) DEFAULT NULL,
+  `JATUH_TEMPO` smallint DEFAULT NULL,
+  `URUT` smallint DEFAULT NULL,
+  `WILAYAH_ID` varchar(5) DEFAULT NULL,
+  `DEF` smallint DEFAULT '0',
+  `ALAMAT2` varchar(50) DEFAULT NULL,
+  `KODE_BARCODE` varchar(10) DEFAULT NULL,
+  `PLAFON_PIUTANG` int DEFAULT '0',
+  `TOTAL_PIUTANG` decimal(18,2) DEFAULT '0.00',
+  `TOTAL_PEMBAYARAN_PIUTANG` decimal(18,2) DEFAULT '0.00',
+  `KOTA` varchar(50) DEFAULT NULL,
+  `TELEPON` varchar(20) DEFAULT NULL,
+  `JENIS_ANGGOTA` varchar(10) DEFAULT NULL
+);
+
+CREATE TABLE `jual` (
+  `NOTA` varchar(15) NOT NULL,
+  `CUSTOMER_ID` varchar(10) NOT NULL,
+  `SALESMAN_ID` varchar(10) NOT NULL,
+  `STATUS_NOTA` char(1) DEFAULT 'T',
+  `STATUS_BAYAR` char(1) DEFAULT 'L',
+  `TANGGAL` date DEFAULT NULL,
+  `TEMPO` date DEFAULT NULL,
+  `DISKON` decimal(10,3) DEFAULT '0.000',
+  `PPN` decimal(10,3) DEFAULT '0.000',
+  `KETERANGAN` varchar(100) DEFAULT NULL,
+  `USER_ADMIN` varchar(15) DEFAULT NULL,
+  `URUT` int DEFAULT NULL,
+  `OPERATOR` varchar(30) DEFAULT NULL,
+  `NOTA_BELI` varchar(14) DEFAULT NULL,
+  `LOKASI_ID` varchar(6) DEFAULT NULL,
+  `TOTAL_NOTA` decimal(18,3) DEFAULT '0.000',
+  `TOTAL_PELUNASAN_NOTA` decimal(18,3) DEFAULT '0.000',
+  `PROFIT` decimal(18,3) DEFAULT '0.000',
+  `PRINT_COUNTER` int NOT NULL DEFAULT '0'
+);
+
+CREATE TABLE `item_jual` (
+  `ID` int NOT NULL,
+  `NOTA` varchar(15) NOT NULL,
+  `BARANG_ID` varchar(14) NOT NULL,
+  `JUMLAH` decimal(9,3) DEFAULT '0.000',
+  `HARGA_BELI` decimal(18,3) DEFAULT '0.000',
+  `HARGA_JUAL` decimal(18,3) DEFAULT '0.000',
+  `DISKON_1` decimal(5,2) DEFAULT '0.00',
+  `DISKON_2` decimal(5,2) DEFAULT '0.00',
+  `DISKON_3` decimal(5,2) DEFAULT '0.00',
+  `DISKON_4` decimal(5,2) DEFAULT '0.00',
+  `KETERANGAN` varchar(100) NOT NULL,
+  `DISKON_RP` int DEFAULT '0',
+  `TGL_RETUR` date DEFAULT NULL,
+  `JUMLAH2` decimal(9,2) DEFAULT '0.00',
+  `MULTI_PRICE` varchar(10) DEFAULT NULL,
+  `DAFTAR_SATUAN` varchar(50) DEFAULT NULL,
+  `KET1` varchar(4) DEFAULT NULL,
+  `KET2` varchar(4) DEFAULT NULL,
+  `IMEI` varchar(50) DEFAULT NULL,
+  `DISKON_MEMBER` int DEFAULT '0'
+);
+
+CREATE TABLE `pelunasan_piutang` (
+  `NO_PELUNASAN` varchar(15) NOT NULL,
+  `CUSTOMER_ID` varchar(10) NOT NULL,
+  `TANGGAL` date DEFAULT NULL,
+  `KETERANGAN` varchar(256) DEFAULT NULL,
+  `URUT` int DEFAULT NULL,
+  `OPERATOR` varchar(30) DEFAULT NULL,
+  `PRINT_COUNTER` int NOT NULL DEFAULT '0'
+);
+
+CREATE TABLE `item_pelunasan_piutang` (
+  `NO_PELUNASAN` varchar(15) NOT NULL,
+  `NOTA_JUAL` varchar(15) NOT NULL,
+  `NOMINAL` decimal(18,3) DEFAULT '0.000',
+  `KETERANGAN` varchar(200) DEFAULT NULL,
+  `DISKON` decimal(3,3) DEFAULT '0.000',
+  `RETUR` decimal(18,3) DEFAULT '0.000',
+  `DISKON_RP` decimal(18,3) DEFAULT '0.000'
+);
+
+
+
+ALTER TABLE `barang`
+  ADD PRIMARY KEY (`KODE`),
+  ADD KEY `FK_BARANG_1` (`GOLONGAN_ID`),
+  ADD KEY `FK_BARANG_2` (`LOKASI_ID`),
+  ADD KEY `FK_BARANG_3` (`SUPPLIER_ID`);
+
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`KODE`),
+  ADD KEY `FK_CUSTOMER_1` (`WILAYAH_ID`);
+
+
+ALTER TABLE `jual`
+  ADD PRIMARY KEY (`NOTA`),
+  ADD KEY `FK_JUAL_1` (`CUSTOMER_ID`),
+  ADD KEY `FK_JUAL_2` (`SALESMAN_ID`);
+
+ALTER TABLE `item_jual`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_ITEM_JUAL_1` (`NOTA`),
+  ADD KEY `FK_ITEM_JUAL_2` (`BARANG_ID`);
+
+ALTER TABLE `pelunasan_piutang`
+  ADD PRIMARY KEY (`NO_PELUNASAN`),
+  ADD KEY `FK_PELUNASAN_PIUTANG_1` (`CUSTOMER_ID`);
+
+ALTER TABLE `item_pelunasan_piutang`
+  ADD KEY `FK_ITEM_PELUNASAN_PIUTANG_1` (`NO_PELUNASAN`),
+  ADD KEY `FK_ITEM_PELUNASAN_PIUTANG_2` (`NOTA_JUAL`);
