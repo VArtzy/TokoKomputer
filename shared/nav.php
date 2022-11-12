@@ -17,7 +17,7 @@
         <div class="flex-none">
             <ul class="menu menu-horizontal p-0 gap-6 text-white">
                 <li><a class="btn btn-success rounded-lg">Login</a></li>
-                <li><a class="btn rounded-lg">Register</a></li>
+                <li><a class="btn rounded-lg" href="daftar.php">Register</a></li>
             </ul>
         </div>
     </div>
