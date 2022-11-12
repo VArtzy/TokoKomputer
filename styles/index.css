@@ -9965,6 +9965,11 @@ html {
     --tw-text-opacity: 1;
     color: rgb(56 189 248 / var(--tw-text-opacity));
   }
+
+  .dark\:hover\:text-amber-400:hover {
+    --tw-text-opacity: 1;
+    color: rgb(251 191 36 / var(--tw-text-opacity));
+  }
 }
 
 @media (min-width: 640px) {
