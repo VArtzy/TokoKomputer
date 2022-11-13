@@ -28,30 +28,31 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./styles/index.css">
-    <title><?php if (isset($title)) {echo 'Toko Komputer - ' . $title;}
-    else {echo "Toko Komputer";} ?></title>
+    <title>Toko Komputer - Admin</title>
 </head>
 
 <body class="font-dm">
-<?php 
-    require_once('utils/functions.php');
-
-    if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
-    $id = $_COOKIE['id'];
-    $key = $_COOKIE['key'];
-
-    // ambil username berdasarkan id
-    $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
-    $row = mysqli_fetch_assoc($result);
-
-    if ($key === hash('sha256', $row['NAMA'])) {
-        $username = $row['NAMA'];
-        include('shared/navlogged.php');
-    }
-} else {
-        include('shared/navlog.php');
-}
-?>
+<nav class="navbar bg-base-100 max-w-6xl mx-auto">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <label tabindex="0" class="btn btn-ghost lg:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+      </label>
+      <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <li><a href="index.php">Home</a></li>
+        <li><a href="pesan.php">Belanja</a></li>
+      </ul>
+    </div>
+    <a class="btn btn-ghost normal-case text-xl">Toko Komputer Admin</a>
+  </div>
+  <div class="navbar-end hidden lg:flex">
+    <ul class="menu menu-horizontal p-0">
+      <li><a href="index.php">Home</a></li>
+        <li><a href="pesan.php">Belanja</a></li>
+        <li><a href="logoutAdmin.php">Logout</a></li>
+    </ul>
+  </div>
+</nav>
 </body>
 
 </html>

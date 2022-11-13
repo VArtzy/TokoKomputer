@@ -12,11 +12,32 @@ if (isset($_POST["register"])) {
     }
 }
 
+// cek cookie
+if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
+    $id = $_COOKIE['id'];
+    $key = $_COOKIE['key'];
+
+    // ambil username berdasarkan id
+    $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
+    $row = mysqli_fetch_assoc($result);
+
+    // cek cookie dan username
+    if ($key === hash('sha256', $row['NAMA'])) {
+        $_SESSION['login'] = true;
+    }
+}
+
+if (isset($_SESSION["login"])) {
+    header("Location: pesan.php");
+    exit;
+}
+
+ $title = "Daftar";
 include('shared/nav.php');
 ?>
 
 <main id="main" class="md:grid place-items-center max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8">
-    <h1 class="md:mt-32 text-4xl mb-4 text-center text-amber-600 dark:text-amber-400">Halaman Pendaftaran</h1>
+    <h1 class="md:mt-8 text-4xl mb-4 text-center text-amber-600 dark:text-amber-400">Halaman Pendaftaran</h1>
     <p class="max-w-[567px] mx-auto text-center text-slate-800 dark:text-amber-50 mb-8">Sebelum kamu memesan, ada baiknya kamu melakukan daftar terlebih dahulu. Biar kami bisa memproses pesanan kamu. Ga lama kok, ga sampai semenit :)</p>
 
     <form action="" method="POST">

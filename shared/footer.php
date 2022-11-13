@@ -1,12 +1,13 @@
 <footer class="footer p-10 bg-base-300 text-base-content">
     <div>
         <span class="footer-title">Produk</span>
-        <a class="link link-hover">Belanja</a>
+        <a href="index.php" class="link link-hover">Home Page</a>
+        <a href="pesan.php" class="link link-hover">Belanja</a>
         <a class="link link-hover">Servis</a>
     </div>
     <div>
         <span class="footer-title">Toko Computer</span>
-        <a class="link link-hover">Tentang Kami</a>
+        <a href="" class="link link-hover">Tentang Kami</a>
     </div>
     <div>
         <span class="footer-title">Social</span>

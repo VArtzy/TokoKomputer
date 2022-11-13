@@ -26,8 +26,8 @@ if (isset($_SESSION["login"])) {
 
 if (isset($_POST["login"])) {
 
-    $username = $_POST["NAMA"];
-    $password = $_POST["PASSWORD"];
+    $username = $_POST["NAMAADMIN"];
+    $password = $_POST["PASSWORDADMIN"];
 
     $result = mysqli_query($conn, "SELECT * FROM customer WHERE NAMA = '$username'");
 
@@ -46,8 +46,7 @@ if (isset($_POST["login"])) {
             header("Location: pesan.php");
             exit;
         } else {
-            $errormsg = 'Password salah!' . $password . $row['PASSWORD'];
-            echo password_verify($password, $row["PASSWORD"]);
+            $errormsg = 'Password salah!';
         }
     } else {
         $errormsg = 'Username Tidak ditemukan! Jika tidak mempunyai akun cobalah daftar.';
@@ -56,11 +55,11 @@ if (isset($_POST["login"])) {
     $error = true;
 }
 
-
+ $title = "Login";
 include('shared/nav.php');
 ?>
 
-<main id="main" class="md:grid place-items-center max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-32">
+<main id="main" class="md:grid place-items-center max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-4xl mb-4 text-amber-600 dark:text-amber-400 text-center">Halaman Login</h1>
     <p class="max-w-[567px] mx-auto mb-8 text-center text-slate-800 dark:text-amber-50">Masuk ke akun kamu.</p>
 
@@ -74,15 +73,15 @@ include('shared/nav.php');
 
             <li>
 
-                <label for="NAMA">Nama :</label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="NAMA" id="NAMA">
+                <label for="NAMAADMIN">Nama :</label>
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="NAMAADMIN" id="NAMAADMIN">
 
             </li>
 
             <li>
 
-                <label for="PASSWORD">Password :</label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="password" name="PASSWORD" id="PASSWORD">
+                <label for="PASSWORDADMIN">Password :</label>
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="password" name="PASSWORDADMIN" id="PASSWORDADMIN">
 
             </li>
 

@@ -2,7 +2,12 @@
 module.exports = {
     content: ["./**/*.{html,php,js}"],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                'dm': ['DM Sans', 'system-ui', 'arial'],
+                'rb': ['Roboto', 'arial']
+            }
+        },
     },
     plugins: [require("daisyui")],
 }

@@ -16,10 +16,8 @@ if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
     if ($key === hash('sha256', $row['NAMA'])) {
         $username = $row['NAMA'];
     } else {
-        echo $key . '                      ' . hash('sha256', $row['NAMA']);
-        // header("Location: logout.php");
+        header("Location: logout.php");
     }
 } else {
-    echo 'pass';
-    // header("Location: logout.php");
+    header("Location: logout.php");
 }
