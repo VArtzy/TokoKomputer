@@ -51,6 +51,7 @@
       <ul class="menu menu-horizontal p-0">
         <li><a href="index.php">Home</a></li>
         <li><a href="pesan.php">Belanja</a></li>
+        <li><a href="tambahBarang.php">Tambah</a></li>
       </ul>
     </div>
     <div class="navbar-end">
