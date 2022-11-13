@@ -47,3 +47,43 @@ function registrasi($data)
 
     return mysqli_affected_rows($conn);
 }
+
+function ubahProfile($data)
+{
+    global $conn;
+
+    $id = $data["id"];
+    $NAMA = stripslashes($data["NAMA"]);
+    $PASSWORD = mysqli_real_escape_string($conn, $data["PASSWORD"]);
+    $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
+    $KOTA = mysqli_real_escape_string($conn, $data["KOTA"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+    $ALAMAT2 = mysqli_real_escape_string($conn, $data["ALAMAT2"]);
+    $JENISANGOTA = mysqli_real_escape_string($conn, $data["JENISANGOTA"]);
+
+    if ($PASSWORD !== $PASSWORD2) {
+        echo "<script>alert('konfirmasi password tidak sesuai');</script>";
+        return false;
+    }
+
+    $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
+
+    $query = "UPDATE `customer` SET
+NAMA = '$NAMA',
+PASSWORD = '$PASSWORD',
+ALAMAT = '$ALAMAT',
+KONTAK = '$KONTAK',
+NPWP = '$NPWP',
+KOTA = '$KOTA',
+TELEPON = '$TELEPON',
+ALAMAT2 = '$ALAMAT2',
+JENIS_ANGGOTA = '$JENISANGOTA'
+WHERE KODE = '$id';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
