@@ -28,7 +28,11 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./styles/index.css">
-  <title>Toko Komputer - Admin</title>
+  <title><?php if (isset($title)) {
+            echo 'Toko Komputer - ' . $title;
+          } else {
+            echo "Toko Komputer";
+          } ?></title>
 </head>
 
 <body class="font-dm">
@@ -41,17 +45,28 @@
           </svg>
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a href="index.php">Home</a></li>
-          <li><a href="pesan.php">Belanja</a></li>
+          <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="pesan.php"><i class="fa-solid fa-cart-shopping"></i> Belanja</a></li>
+          <li><a href="tambahBarang.php"><i class="fa-solid fa-file-circle-plus"></i> Tambah</a></li>
+          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i> User & Admin</a></li>
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl">Toko Komputer Admin</a>
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal p-0">
-        <li><a href="index.php">Home</a></li>
-        <li><a href="pesan.php">Belanja</a></li>
-        <li><a href="tambahBarang.php">Tambah</a></li>
+        <div class="tooltip tooltip-bottom" data-tip="Admin Homepage">
+          <li><a href="admin.php"><i class="fa-solid fa-house"></i></a></li>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Belanja">
+          <li><a href="pesan.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Tambah Barang">
+          <li><a href="tambahBarang.php"><i class="fa-solid fa-file-circle-plus"></i></a></li>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="User & Admin Management">
+          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i></a></li>
+        </div>
       </ul>
     </div>
     <div class="navbar-end">
@@ -65,7 +80,7 @@
           <li class="px-4 mb-2 font-bold"><?php if (isset($username)) {
                                             echo $username;
                                           } ?></li>
-          <li><a href="logout.php">Logout</a></li>
+          <li><a href="logoutAdmin.php">Logout</a></li>
         </ul>
       </div>
     </div>

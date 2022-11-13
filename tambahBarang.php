@@ -5,7 +5,7 @@ require_once './utils/loggedAdmin.php';
 if (isset($_POST["tambah"])) {
     if (tambahBarang($_POST) > 0) {
         echo  "<script>
-    alert('user baru berhasil ditambahkan');
+    alert('Barang baru berhasil ditambahkan');
     </script>";
         header('Location: admin.php');
     } else {

@@ -41,7 +41,7 @@ if (isset($_POST["loginAdmin"])) {
             $_SESSION["loginAdmin"] = true;
 
             setcookie('1', $row['ID'], time() + (60 * 60 * 24 * 30));
-            setcookie('2', $row['NAMA'], time() + (60 * 60 * 24 * 30));
+            setcookie('2', hash("sha256", $row['NAMA']), time() + (60 * 60 * 24 * 30));
 
             header("Location: admin.php");
             exit;
@@ -55,7 +55,7 @@ if (isset($_POST["loginAdmin"])) {
     $error = true;
 }
 
- $title = "Login Admin";
+$title = "Login Admin";
 include('shared/navAdmin.php');
 ?>
 

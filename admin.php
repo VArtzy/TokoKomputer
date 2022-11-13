@@ -4,6 +4,7 @@ require_once('utils/loggedAdmin.php');
 
 $brg = query("SELECT * FROM BARANG");
 
+$title = "Admin - $username";
 include('shared/navadmin.php');
 ?>
 
@@ -32,7 +33,7 @@ include('shared/navadmin.php');
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle w-12 h-12">
-                                        <img width="50px" height="50px" src="/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
+                                        <img width="50px" height="50px" src="img/foto/<?= $b["FOTO"]; ?>" alt="Gambar <?= $b["FOTO"]; ?>" />
                                     </div>
                                 </div>
                                 <div>
@@ -45,7 +46,7 @@ include('shared/navadmin.php');
                         <td>
                             Satuan: <?= $b["SATUAN_ID"]; ?>
                             <br />
-                            Stok: <?= $b["STOK"]; ?>
+                            Stok: <?= round($b["STOK"]); ?>
                             <br />
                             <span class="badge badge-ghost badge-sm">Min: <?= $b["MIN_STOK"]; ?></span>
                             <span class="badge badge-ghost badge-sm">Max: <?= $b["MAX_STOK"]; ?></span>
@@ -67,10 +68,10 @@ include('shared/navadmin.php');
                             <br>
                             <span class="badge badge-warning"><?= $b["POIN"]; ?></span>
                         </th>
-                        <td>
-                            <a><i class="fa-solid fa-file-lines"></i></a>
-                            <a><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a><i class="fa-solid fa-trash"></i></a>
+                        <td class="grid items-center gap-2">
+                            <a href="editBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                            <a href="deleteBarang.php?id=<?= $b["KODE"]; ?>" onclick="return confirm('Apakah anda benar benar ingin menghapus barang ini?')"><i class="fa-solid fa-trash text-rose-500 scale-150"></i></a>
+                            <a href="detailBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-file-lines text-amber-500 scale-150"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

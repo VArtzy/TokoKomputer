@@ -10,11 +10,12 @@ if (isset($_COOKIE['1']) && isset($_COOKIE['2'])) {
     $key = $_COOKIE['2'];
 
     // ambil username berdasarkan id
-    $result = mysqli_query($conn, "SELECT `NAMA` FROM `user_admin` WHERE ID = '$id'");
+    $result = mysqli_query($conn, "SELECT `NAMA`, `GROUP_HAK_AKSES_ID` FROM `user_admin` WHERE ID = '$id'");
     $row = mysqli_fetch_assoc($result);
 
-    if ($key === $row['NAMA']) {
+    if ($key === hash("sha256", $row['NAMA'])) {
         $username = $row['NAMA'];
+        $hakAksesID = $row['GROUP_HAK_AKSES_ID'];
     } else {
         header("Location: logoutAdmin.php");
     }
