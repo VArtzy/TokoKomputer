@@ -10,11 +10,12 @@ if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
     $key = $_COOKIE['key'];
 
     // ambil username berdasarkan id
-    $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
+    $result = mysqli_query($conn, "SELECT NAMA, TOTAL_PEMBAYARAN_PIUTANG FROM customer WHERE `KODE` = '$id'");
     $row = mysqli_fetch_assoc($result);
 
     if ($key === hash('sha256', $row['NAMA'])) {
         $username = $row['NAMA'];
+        $totalPembayaranPiutang = $row['TOTAL_PEMBAYARAN_PIUTANG'];
     } else {
         header("Location: logout.php");
     }

@@ -44,7 +44,7 @@ include('shared/navadmin.php');
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle w-12 h-12">
-                                        <img width="50px" height="50px" src="<?= $b["FOTO"]; ?>" alt="Gambar <?= $b["FOTO"]; ?>" />
+                                        <img width="50px" height="50px" src="<?= $b["FOTO"]; ?>" alt="<?= $b["FOTO"]; ?>" />
                                     </div>
                                 </div>
                                 <div>
