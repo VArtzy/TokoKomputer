@@ -45,6 +45,29 @@ function tambahBarang($data)
     return mysqli_affected_rows($conn);
 }
 
+function cari($keyword)
+{
+    $query = "SELECT * FROM `barang`
+    WHERE
+    NAMA LIKE '%$keyword%' OR
+    KODE LIKE '%$keyword%' OR
+    HARGA_BELI LIKE '%$keyword%'
+    ";
+    return query($query);
+}
+
+function cariUser($keyword)
+{
+    $query = "SELECT * FROM `customer`
+WHERE
+NAMA LIKE '%$keyword%' OR
+TELEPON LIKE '%$keyword%' OR
+ALAMAT LIKE '%$keyword%' OR
+JENIS_ANGGOTA LIKE '%$keyword%'
+";
+    return query($query);
+}
+
 function tambahAdmin($data)
 {
     global $conn;

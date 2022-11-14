@@ -7,7 +7,7 @@ if (isset($_POST["tambah"])) {
         echo  "<script>
     alert('Barang baru berhasil ditambahkan');
     </script>";
-        header('Location: admin.php');
+        header('Location: barang.php');
     } else {
         echo mysqli_error($conn);
     }
@@ -57,7 +57,7 @@ include('shared/navadmin.php');
             </li>
             <li>
                 <label for="GARANSI">Garansi: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="GARANSI" id="GARANSI">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="GARANSI" id="GARANSI">
             </li>
             <li>
                 <label for="TGL_TRANSAKSI">Tanggal Transaksi: </label>

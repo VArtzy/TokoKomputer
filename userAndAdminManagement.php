@@ -2,9 +2,13 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$user = query("SELECT * FROM customer");
-$admin = query("SELECT * FROM user_admin");
+$user = query("SELECT * FROM customer LIMIT 20");
+$admin = query("SELECT * FROM user_admin LIMIT 5");
 $currAdmin = query("SELECT * FROM user_admin WHERE ID = $id")[0];
+
+if (isset($_POST["cari"])) {
+    $mahasiswa = cariUser($_POST["keyword"]);
+}
 
 $title = "User & Admin Management - $username";
 include('shared/navadmin.php');
@@ -15,7 +19,12 @@ include('shared/navadmin.php');
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
     <h2 class="text-xl mb-4">USERS</h2>
 
-    <div class="overflow-x-auto w-full mb-16">
+    <div class="mb-4">
+            <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Telepon/Alamat/Jenis Anggota user" autocomplete="off" id="keyword">
+            <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
+        </div>
+
+    <div id="container" class="overflow-x-auto w-full mb-16">
         <table class="table w-full">
             <!-- head -->
             <thead>
@@ -183,6 +192,8 @@ include('shared/navadmin.php');
         </table>
     </div>
 </main>
+
+<script src="script/cariUser.js"></script>
 
 <?php
 include('shared/footer.php');

@@ -46,8 +46,8 @@
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li><a href="pesan.php"><i class="fa-solid fa-cart-shopping"></i> Belanja</a></li>
-          <li><a href="tambahBarang.php"><i class="fa-solid fa-file-circle-plus"></i> Tambah</a></li>
+          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
+          <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i> User & Admin</a></li>
         </ul>
       </div>
@@ -58,11 +58,11 @@
         <div class="tooltip tooltip-bottom" data-tip="Admin Homepage">
           <li><a href="admin.php"><i class="fa-solid fa-house"></i></a></li>
         </div>
-        <div class="tooltip tooltip-bottom" data-tip="Belanja">
-          <li><a href="pesan.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        <div class="tooltip tooltip-bottom" data-tip="Order & Invoices">
+          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
         </div>
-        <div class="tooltip tooltip-bottom" data-tip="Tambah Barang">
-          <li><a href="tambahBarang.php"><i class="fa-solid fa-file-circle-plus"></i></a></li>
+        <div class="tooltip tooltip-bottom" data-tip="Manajemen Barang">
+          <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i></a></li>
         </div>
         <div class="tooltip tooltip-bottom" data-tip="User & Admin Management">
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i></a></li>

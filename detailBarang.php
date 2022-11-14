@@ -11,7 +11,7 @@ include('shared/navadmin.php');
 ?>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <img src="img/foto/<?= $brg["FOTO"]; ?>" alt="<?= $brg["NAMA"]; ?>">
+    <img class="max-w-xl rounded-lg aspect-video object-cover" src="<?= $brg["FOTO"]; ?>" alt="<?= $brg["NAMA"]; ?>">
     <h1 class="text-2xl"><?= $brg["NAMA"]; ?></h1>
     <div class="grid grid-cols-5">
         <p>Satuan: <?= $brg["SATUAN_ID"]; ?></p>

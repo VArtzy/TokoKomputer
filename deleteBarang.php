@@ -9,14 +9,14 @@ if (
     echo "
     <script>
     alert('Barang berhasil dihapus');
-    document.location.href = 'admin.php';
+    document.location.href = 'barang.php';
     </script>
     ";
 } else {
     echo "
     <script>
     alert('Barang gagal dihapus');
-    document.location.href = 'admin.php';
+    document.location.href = 'barang.php';
     </script>
     ";
 }

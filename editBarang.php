@@ -11,7 +11,7 @@ if (isset($_POST["tambah"])) {
         echo  "<script>
     alert('Barang berhasil diedit');
     </script>";
-        header('Location: admin.php');
+        header('Location: barang.php');
     } else {
         echo mysqli_error($conn);
     }
@@ -81,7 +81,7 @@ include('shared/navadmin.php');
             </div>
             <li>
                 <label for="GARANSI">Garansi: </label>
-                <input value="<?= $brg["GARANSI"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="GARANSI" id="GARANSI">
+                <input value="<?= $brg["GARANSI"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="GARANSI" id="GARANSI">
             </li>
             <li>
                 <label for="TGL_TRANSAKSI">Tanggal Transaksi: </label>
@@ -97,7 +97,7 @@ include('shared/navadmin.php');
             </li>
             <li>
                 <label for="FOTO">Upload Foto: </label>
-                <img class="max-w-xl rounded-lg aspect-video object-cover" src="img/foto/<?= $brg["FOTO"]; ?>" alt="<?= $brg["NAMA"]; ?>">
+                <img class="max-w-xl rounded-lg aspect-video object-cover" src="<?= $brg["FOTO"]; ?>" alt="<?= $brg["NAMA"]; ?>">
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" accept="" type="file" name="FOTO" id="FOTO">
             </li>
             <li>
