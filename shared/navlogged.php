@@ -35,9 +35,14 @@
                                             } ?></li>
             <li><a href="pesan.php">Belanja</a></li>
             <li>
-              <a href="profile.php?id=<?= $id; ?>" class="justify-between">
-                Profile
+              <a href="riwayat.php" class="justify-between">
+                Pesanan
                 <span class="badge">New</span>
+              </a>
+            </li>
+            <li>
+              <a href="profile.php?id=<?= $id; ?>">
+                Profile
               </a>
             </li>
             <li><a href="logout.php">Logout</a></li>

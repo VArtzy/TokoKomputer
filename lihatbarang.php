@@ -1,6 +1,25 @@
 <?php
 require_once 'utils/functions.php';
-require_once 'utils/logged.php';
+
+// cek cookie
+if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
+  $id = $_COOKIE['id'];
+  $key = $_COOKIE['key'];
+
+  // ambil username berdasarkan id
+  $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
+  $row = mysqli_fetch_assoc($result);
+
+  // cek cookie dan username
+  if ($key === hash('sha256', $row['NAMA'])) {
+    $_SESSION['login'] = true;
+  }
+}
+
+if (isset($_SESSION["login"])) {
+  header("Location: pesan.php");
+  exit;
+}
 
 $brg = query("SELECT * FROM BARANG ORDER BY RAND() LIMIT 0, 20");
 
@@ -14,9 +33,8 @@ include('shared/nav.php');
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
 
-  <h1 class="text-2xl mb-8 font-semibold">Belanja</h1>
-
-  <h2 class="text-xl mb-4 loading-dom-content">Loading...</h2>
+  <h1 class="text-2xl mb-4">Barang-barang kami.</h1>
+  <h2 class="text-xl mb-4">Ingin membeli? <a class="text-sky-600" href="login.php">Login sekarang</a>.</h2>
 
   <div class="">
     <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">

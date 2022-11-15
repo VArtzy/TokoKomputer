@@ -40,7 +40,7 @@ include('shared/navadmin.php');
         <p>Guna: <?= $brg["GUNA"]; ?></p>
         <p>Temp Harga Beli: <?= $brg["temp_harga_beli"]; ?></p>
     </div>
-    <a href="admin.php" class="btn btn-primary">Kembali</a>
+    <a href="barang.php" class="btn btn-primary">Kembali</a>
 </main>
 
 <?php include('shared/footer.php') ?>

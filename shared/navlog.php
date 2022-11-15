@@ -8,7 +8,7 @@
                 </label>
                 <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li><a href="/index.php">Home</a></li>
-                    <li> <a href="/pesan.php">Belanja</a></li>
+                    <li> <a href="/lihatbarang.php">Belanja</a></li>
                 </ul>
             </div>
             <a class="btn btn-ghost normal-case text-xl">Toko Komputer</a>
@@ -16,11 +16,11 @@
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal p-0">
                 <li><a href="index.php">Home</a></li>
-                <li> <a href="pesan.php">Belanja</a></li>
+                <li> <a href="lihatbarang.php">Belanja</a></li>
             </ul>
         </div>
         <div class="navbar-end gap-4">
             <a class="btn btn-success rounded-lg text-white" href="login.php">Login</a>
             <a class="btn rounded-lg text-white" href="daftar.php">Register</a>
         </div>
-</nav>
+    </nav>

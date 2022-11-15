@@ -20,11 +20,25 @@ foreach ($data as $d) {
 }
 
 if (isset($_POST["checkout"])) {
-    if (tambahNota($_POST) > 0) {
+    $nota = uniqid();
+    $total = 0;
+    foreach ($data as $d) {
+        $total = $total + ($d['price'] * $d['count']);
+    }
+
+    foreach ($data as $d) {
+        if (tambahItemNota($nota, $d['id'], $d['count'], $d['price']) > 0) {
+        } else {
+            echo mysqli_error($conn);
+        }
+    }
+
+    if (tambahNota($nota, $id, $total, $_POST) > 0) {
         echo  "<script>
     alert('Berhasil memesan pesanan kamu!');
     </script>";
-        header('Location: barang.php');
+        echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
+        header('Location: pesan.php');
     } else {
         echo mysqli_error($conn);
     }
@@ -37,7 +51,7 @@ include('shared/nav.php');
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold mb-4">Halaman Checkout</h1>
 
-    <button class="btn btn-warning mb-8" href="pesan.php">Kembali</button>
+    <a class="btn btn-warning mb-8" href="pesan.php">Kembali</a>
 
     <?php if (!empty($data)) { ?>
         <div class="overflow-x-auto w-full mt-8 mb-4">
@@ -105,26 +119,33 @@ include('shared/nav.php');
                 </tbody>
             </table>
         </div>
+        <span class="text-info text-info-cart">Subtotal: Rp. 0.00</span>
 
-        <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mb-8">
-            <div class="collapse-title text-xl font-medium">
-                Mulai Order
-            </div>
-            <div class="collapse-content">
-                <form action="" method="post">
-                    <input type="hidden" name="CUSTOMER_ID" id="CUSTOMER_ID" value="<?= $id; ?>">
-                    <ul>
-                        <li>
-                            <label for="CUSTOMER_NAMA">Atas Nama: </label>
-                            <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" value="<?= $username; ?>">
-                        </li>
-                        <li>
-                            <button class="btn btn-success" type="submit" name="checkout">CHECKOUT</button>
-                        </li>
-                    </ul>
-                </form>
-            </div>
-        </div>
+
+        <form action="" method="post">
+            <ul>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="CUSTOMER_NAMA">Atas Nama: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Nama</span>
+                        <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" value="<?= $username; ?>">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="SALESMAN_ID">Salesman ID: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Salesman ID:</span>
+                        <input type="text" name="SALESMAN_ID" id="SALESMAN_ID" class="input input-bordered">
+                    </label>
+                    <li>
+                        <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
+                    </li>
+            </ul>
+        </form>
 
         <p>Punya pertanyaan seputar pembelian? <a class="link link-success">Jangan ragu tanyakan kami</a>.</p>
     <?php } else { ?>
