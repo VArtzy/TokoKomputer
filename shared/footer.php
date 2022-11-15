@@ -4,6 +4,7 @@
         <a href="index.php" class="link link-hover">Home Page</a>
         <a href="pesan.php" class="link link-hover">Belanja</a>
         <a class="link link-hover">Servis</a>
+        <p>Web App Created With <i class="fa-solid fa-heart text-rose-600"></i> by <a href="" class="text-sky-600">Farrel Nikoson</a>.</p>
     </div>
     <div>
         <span class="footer-title">Toko Computer</span>

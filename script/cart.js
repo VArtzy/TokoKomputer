@@ -287,5 +287,5 @@ displayCart()
 
 window.addEventListener("DOMContentLoaded", () => {
     const loadinDomContent = document.querySelector(".loading-dom-content")
-    loadinDomContent.style.display = "none"
+    if (loadinDomContent) loadinDomContent.style.display = "none"
 })

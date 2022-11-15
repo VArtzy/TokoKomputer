@@ -24,7 +24,7 @@ include('shared/nav.php');
   </div>
 
 
-  <div id="container" class="lg:grid lg:grid-cols-4 md:grid-cols-2 gap-16 mt-8">
+  <div id="container" class="grid lg:grid-cols-4 md:grid-cols-2 gap-16 mt-8">
     <?php foreach ($brg as $b) : ?>
       <div class="card max-w-lg bg-base-100 shadow-xl">
         <figure><img class="aspect-video object-cover" src="<?= $b["FOTO"]; ?>" alt="<?= $b["NAMA"]; ?>" /></figure>
