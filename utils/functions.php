@@ -94,6 +94,32 @@ function tambahAdmin($data)
     return mysqli_affected_rows($conn);
 }
 
+function tambahNota($data)
+{
+    global $conn;
+
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $PASS = mysqli_real_escape_string($conn, $data["PASS"]);
+    $PASS2 = mysqli_real_escape_string($conn, $data["PASS2"]);
+    $IS_AKTIF = mysqli_real_escape_string($conn, $data["IS_AKTIF"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+    $NO_REKENING = mysqli_real_escape_string($conn, $data["NO_REKENING"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $GAJI_POKOK = mysqli_real_escape_string($conn, $data["GAJI_POKOK"]);
+
+    if ($PASS !== $PASS2) {
+        echo "<script>alert('konfirmasi password tidak sesuai');</script>";
+        return false;
+    }
+
+    // tambahkan user baru ke database
+    mysqli_query($conn, "INSERT INTO `user_`(`NAMA`, `PASS`, `IS_AKTIF`, `ALAMAT`, `WILAYAH_ID`, `TELEPON`, `NO_REKENING`, `GAJI_POKOK`) VALUES
+     ('$NAMA','$PASS','$IS_AKTIF','$ALAMAT','$WILAYAH_ID','$TELEPON', '$NO_REKENING', '$GAJI_POKOK')");
+
+    return mysqli_affected_rows($conn);
+}
+
 function upload()
 {
 

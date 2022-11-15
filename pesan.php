@@ -53,6 +53,12 @@ include('shared/nav.php');
     <?php endforeach; ?>
   </div>
 
+  <div class="btn-group">
+    <button class="btn">«</button>
+    <button class="btn">Page 22</button>
+    <button class="btn">»</button>
+  </div>
+
 </main>
 
 <script src="script/cariBarang.js"></script>
