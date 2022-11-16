@@ -26,6 +26,24 @@ if (isset($_POST["submit"])) {
     }
 }
 
+if (isset($_POST["hapus"])) {
+    // cek apakah daata berhasil diubah
+    if (hapusAdmin($_POST['id']) > 0) {
+        echo "
+        <script>
+        alert('Berhasil menghapus Admin');
+        document.location.href = 'userAndAdminManagement.php';
+        </script>
+        ";
+    } else {
+        echo "        
+        <script>
+        alert('Gagal menghapus Admin');
+        document.location.href = 'userAndAdminManagement.php';
+        </script>";
+    }
+}
+
 $title = $userAdmin["NAMA"] . " - Edit Admin";
 include('shared/navadmin.php');
 ?>
@@ -55,6 +73,7 @@ include('shared/navadmin.php');
             </li>
             <li>
                 <button class="px-4 py-2 rounded-lg uppercase bg-amber-600 text-white hover:outline-amber-600 hover:bg-white hover:text-amber-600 hover:-translate-y-1 transition-all" type="submit" name="submit">Perbarui</button>
+                <button class="btn btn-error" onclick="return confirm('Apakah anda yakin ingin menghapus admin ini?')" type="submit" name="hapus">!Hapus admin</button>
             </li>
         </ul>
     </form>

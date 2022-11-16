@@ -4,11 +4,12 @@
         <a href="index.php" class="link link-hover">Home Page</a>
         <a href="pesan.php" class="link link-hover">Belanja</a>
         <a class="link link-hover">Servis</a>
-        <p>Web App Created With <i class="fa-solid fa-heart text-rose-600"></i> by <a href="" class="text-sky-600">Farrel Nikoson</a>.</p>
+        <p>Joga Computer Developer © All Rights Reserved.</p>
     </div>
     <div>
-        <span class="footer-title">Toko Computer</span>
-        <a href="" class="link link-hover">Tentang Kami</a>
+        <span class="footer-title">Joga Computer</span>
+        <a href="https://wa.me/6289665805560?text=Hallo%20min,%20bisa%20minta%20bantuannya%20dong..." class="link link-hover">Kontak Kami</a>
+        <a href="" class="link link-hover">Jl. Ki Hajar Dewantara 53. Jebres. Surakarta.</a>
     </div>
     <div>
         <span class="footer-title">Social</span>

@@ -1,6 +1,6 @@
     <nav class="navbar bg-base-100 max-w-6xl mx-auto">
       <div class="flex-1">
-        <a class="btn btn-ghost normal-case text-xl">Toko Komputer</a>
+        <a class="btn btn-ghost normal-case text-xl">Joga Computer</a>
       </div>
       <div class="flex-none">
         <div class="dropdown dropdown-end">

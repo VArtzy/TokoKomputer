@@ -11,7 +11,7 @@
                     <li> <a href="/lihatbarang.php">Belanja</a></li>
                 </ul>
             </div>
-            <a class="btn btn-ghost normal-case text-xl">Toko Komputer</a>
+            <a class="btn btn-ghost normal-case text-xl">Joga Computer</a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal p-0">
@@ -24,3 +24,8 @@
             <a class="btn rounded-lg text-white" href="daftar.php">Register</a>
         </div>
     </nav>
+    <div class="toast toast-end">
+        <div>
+            <a aria-label="Chat on WhatsApp" href="https://wa.me/6289665805560?text=Hallo%20min,%20bisa%20minta%20bantuannya%20dong..."><img alt="Chat on WhatsApp" src="img/WhatsAppButtonGreenSmall.svg" /> </a>
+        </div>
+    </div>

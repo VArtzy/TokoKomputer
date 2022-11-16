@@ -34,13 +34,17 @@ if (isset($_POST["checkout"])) {
     }
 
     if (tambahNota($nota, $id, $total, $_POST) > 0) {
-        echo  "<script>
-    alert('Berhasil memesan pesanan kamu!');
-    </script>";
         echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
-        header('Location: pesan.php');
+        echo  "<script>
+        alert('Berhasil Menambah Pesanan Kamu!');
+        document.location.href = 'riwayat.php';
+        </script>";
     } else {
         echo mysqli_error($conn);
+        echo  "<script>
+        alert('Gagal Menambah Pesanan Kamu!');
+        document.location.href = 'riwayat.php';
+        </script>";
     }
 }
 
@@ -133,17 +137,8 @@ include('shared/nav.php');
                         <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" value="<?= $username; ?>">
                     </label>
                 </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="SALESMAN_ID">Salesman ID: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Salesman ID:</span>
-                        <input type="text" name="SALESMAN_ID" id="SALESMAN_ID" class="input input-bordered">
-                    </label>
-                    <li>
-                        <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
-                    </li>
+                <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
+                </li>
             </ul>
         </form>
 

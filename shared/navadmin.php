@@ -51,7 +51,7 @@
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i> User & Admin</a></li>
         </ul>
       </div>
-      <a class="btn btn-ghost normal-case text-xl">Toko Komputer Admin</a>
+      <a class="btn btn-ghost normal-case text-xl">Joga Computer Admin</a>
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal p-0">

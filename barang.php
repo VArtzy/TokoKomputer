@@ -13,7 +13,7 @@ include('shared/navadmin.php');
 ?>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl">Halaman Admin</h1>
+    <h1 class="text-2xl font-semibold">Halaman Admin</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
     <div class="md:flex gap-4">
         <a class="btn btn-primary mb-4" href="tambahBarang.php">Tambah Barang</a>

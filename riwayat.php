@@ -13,16 +13,27 @@ include('shared/nav.php');
     <h1 class="text-2xl mb-8 font-semibold">Riwayat Order Kamu.</h1>
     <h2 class="text-xl mb-4">Kamu bisa cek riwayat pesanan-pesanan kamu disini ya!</h2>
 
+    <a class="btn btn-warning mb-8" href="pesan.php">Kembali</a>
+
+
     <?php if (!empty($nota)) { ?>
-        <div class="grid grid-cols-4>
-        <?php foreach ($nota as $n) : ?>
-            <a href=" detailNota.php?nota=<?= $n['NOTA']; ?>"><?= $n['NOTA']; ?></a>
-            <p><?= $n['SALESMAN_ID']; ?></p>
-            <p><?= $n['STATUS_NOTA']; ?></p>
-            <p><?= $n['STATUS_BAYAR']; ?></p>
-            <p><?= $n['TANGGAL']; ?></p>
-            <p><?= $n['TOTAL_NOTA']; ?></p>
-        <?php endforeach; ?>
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-16 mt-8">
+            <?php foreach ($nota as $n) : ?>
+                <div class="card w-96 bg-base-100 shadow-xl">
+                    <a href=" detailNota.php?nota=<?= $n['NOTA']; ?>" class="card-body">
+                        <h2 class="card-title">
+                            <?= $n['NOTA']; ?>
+                        </h2>
+                        <div class="badge badge-secondary"><?= $n['TANGGAL']; ?></div>
+                        <p>Salesman ID: <?= $n['SALESMAN_ID']; ?></p>
+                        <p>Total: <?= $n['TOTAL_NOTA']; ?></p>
+                        <div class="card-actions justify-end">
+                            <div class="badge badge-outline"><?= $n['STATUS_BAYAR']; ?></div>
+                            <div class="badge badge-outline"><?= $n['STATUS_NOTA']; ?></div>
+                        </div>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
     <?php } else { ?>
         <p class="text-lg">Kamu belum pesan apa-apa lho! Yuk <a href="pesan.php" class="text-sky-600">Coba pesan</a>.</p>
