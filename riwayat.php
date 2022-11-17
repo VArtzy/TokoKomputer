@@ -17,7 +17,7 @@ include('shared/nav.php');
 
 
     <?php if (!empty($nota)) { ?>
-        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-16 mt-8">
+        <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-16 mt-8">
             <?php foreach ($nota as $n) : ?>
                 <div class="card w-96 bg-base-100 shadow-xl">
                     <a href=" detailNota.php?nota=<?= $n['NOTA']; ?>" class="card-body">

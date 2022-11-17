@@ -6,7 +6,7 @@ $nota = $_GET['nota'];
 
 $notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR FROM JUAL WHERE NOTA = '$nota'")[0];
 $salesman = query("SELECT KODE, NAMA FROM salesman");
-$namaPelanggan = query("SELECT NAMA FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'")[0]["NAMA"];
+$namaPelanggan = query("SELECT NAMA FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'");
 
 $item = query("SELECT * FROM ITEM_JUAL WHERE nota = '$nota'");
 
@@ -39,7 +39,11 @@ include('shared/navadmin.php');
         <p class="font-semibold text-lg">Total Harga <span class="badge badge-lg badge-info mb-2"><?= rupiah(round($notas["TOTAL_NOTA"])); ?></span></p>
         <p>Status Nota <span class="badge mb-2"><?= $notas["STATUS_NOTA"]; ?></span></p>
         <p>Status Bayar <span class="badge badge-warning"><?= $notas["STATUS_BAYAR"]; ?></span></p>
-        <p>Pelanggan <span class="badge badge-primary"><?= $namaPelanggan; ?></span></p>
+        <p>Pelanggan <span class="badge badge-primary"><?php if (!empty($namaPelanggan)) {
+                                                            echo $namaPelanggan[0]["NAMA"];
+                                                        } else {
+                                                            echo $notas['CUSTOMER_ID'];
+                                                        }; ?></span></p>
         <p>Salesman <span class="badge badge-primary"><?= $notas["SALESMAN_ID"]; ?></span></p>
         <p>Tanggal Pemesanan <span class="badge badge-primary"><?= $notas["TANGGAL"]; ?></span></p>
         <p>Total Pelunasan Nota <span class="badge badge-primary"><?= $notas["TOTAL_PELUNASAN_NOTA"]; ?></span></p>

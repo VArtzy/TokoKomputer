@@ -61,6 +61,7 @@ function cariNota($keyword)
 {
     $query = "SELECT * FROM `jual`
 WHERE
+NOTA LIKE '%$keyword%' OR
 SALESMAN_ID LIKE '%$keyword%' OR
 STATUS_NOTA LIKE '%$keyword%' OR
 OPERATOR LIKE '%$keyword%' OR
@@ -176,6 +177,24 @@ function tambahNota($nota, $id, $total)
 
     mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `TOTAL_NOTA`, `TANGGAL`) VALUES
      ('$NOTA', '$CUSTOMER_ID','$TOTAL_NOTA', '$TANGGAL')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahNotaAdmin($nota, $username, $total, $data)
+{
+    date_default_timezone_set("Asia/Jakarta");
+    global $conn;
+
+    $NOTA = $nota;
+    $USER_ADMIN = $username;
+    $TOTAL_NOTA = $total;
+    $TANGGAL = Date('Y-m-d');
+    $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
+    $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $data["CUSTOMER_NAMA"]);
+
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `TOTAL_NOTA`, `TANGGAL`) VALUES
+     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$TOTAL_NOTA', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }

@@ -1,6 +1,30 @@
 <?php
 require_once 'utils/functions.php';
 
+  $kw = $_GET['kw'];
+
+if (isset($kw)) {
+  echo "<script>// ambil elemen
+var keyword = document.getElementById('keyword')
+var tombolcari = document.getElementById('tombol-cari')
+var container = document.getElementById('container')
+
+    // buat objek ajax
+    var xhr = new XMLHttpRequest()
+
+    // cek kesiapan ajax
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            container.innerHTML = xhr.responseText
+        }
+
+    // eksekusi ajax
+    xhr.open('GET', 'ajax/barangCard.php?keyword=' + $kw, true)
+    xhr.send()
+}
+</script>";
+}
+
 // cek cookie
 if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
   $id = $_COOKIE['id'];
@@ -37,7 +61,7 @@ include('shared/nav.php');
   <h2 class="text-xl mb-4">Ingin membeli? <a class="text-sky-600" href="login.php">Login sekarang</a>.</h2>
 
   <div class="">
-    <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
+    <input type="text" name="keyword" size="40" value="<?php if(isset($kw)) {echo $kw;} ?>" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
     <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
   </div>
 
@@ -64,7 +88,7 @@ include('shared/nav.php');
                                 } ?> btn-sm text-white add-to-cart" <?php if (round($b["STOK"]) > 0) {
                                                                     } else {
                                                                       echo 'disabled';
-                                                                    } ?> data-id="<?= $b["id"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                    } ?> data-id="<?= $b["id"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>" href="pesan.php">TAMBAH</button>
           </div>
         </div>
       </div>

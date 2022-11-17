@@ -28,30 +28,33 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./styles/index.css">
-    <title><?php if (isset($title)) {echo 'Toko Komputer - ' . $title;}
-    else {echo "Toko Komputer";} ?></title>
+    <title><?php if (isset($title)) {
+                echo 'Joga Computer - ' . $title;
+            } else {
+                echo "Joga Computer";
+            } ?></title>
 </head>
 
 <body class="font-dm">
-<?php 
+    <?php
     require_once('utils/functions.php');
 
     if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
-    $id = $_COOKIE['id'];
-    $key = $_COOKIE['key'];
+        $id = $_COOKIE['id'];
+        $key = $_COOKIE['key'];
 
-    // ambil username berdasarkan id
-    $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
-    $row = mysqli_fetch_assoc($result);
+        // ambil username berdasarkan id
+        $result = mysqli_query($conn, "SELECT NAMA FROM customer WHERE `KODE` = '$id'");
+        $row = mysqli_fetch_assoc($result);
 
-    if ($key === hash('sha256', $row['NAMA'])) {
-        $username = $row['NAMA'];
-        include('shared/navlogged.php');
-    }
-} else {
+        if ($key === hash('sha256', $row['NAMA'])) {
+            $username = $row['NAMA'];
+            include('shared/navlogged.php');
+        }
+    } else {
         include('shared/navlog.php');
-}
-?>
+    }
+    ?>
 </body>
 
 </html>
