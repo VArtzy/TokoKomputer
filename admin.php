@@ -19,7 +19,7 @@ include('shared/navadmin.php');
 
 <script defer>
   const tip = document.querySelector('#tip');
-  let tips = ['Gunakan tab index untuk memasukan input lebih cepat 🤫', 'Minum air 8 Gelas sehari bisa buat kamu jadi fokus 🥛', 'Kontak dengan pelanggan dapat meningkat konversi hingga 89% 😱']
+  let tips = ['Gunakan tab index untuk memasukan input lebih cepat 🤫', 'Minum air 8 Gelas sehari bisa buat kamu jadi fokus 🥛', 'Kontak dengan pelanggan dapat meningkat konversi hingga 89% 😱', 'Gunakan Laptop/PC untuk exprience administratif terbaik 💻']
   let t = tips[Math.floor(Math.random() * tips.length)]
   tip.textContent = t
   const motivasi = document.querySelector('#motivasi');

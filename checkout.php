@@ -142,7 +142,7 @@ include('shared/nav.php');
             </ul>
         </form>
 
-        <p>Punya pertanyaan seputar pembelian? <a class="link link-success">Jangan ragu tanyakan kami</a>.</p>
+        <p>Punya pertanyaan seputar pembelian? <a class="link link-success" href="https://wa.me/6289665805560?text=Hallo%20min,%20bisa%20minta%20bantuannya%20dong...">Jangan ragu tanyakan kami</a>.</p>
     <?php } else { ?>
         <p>Kamu belum mengisi keranjang kamu 😅. Yuk <a href="pesan.php" class="text-sky-600">belanja</a>.</p>
     <?php } ?>

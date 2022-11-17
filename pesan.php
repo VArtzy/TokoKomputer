@@ -19,7 +19,7 @@ include('shared/nav.php');
   <h2 class="text-xl mb-4 loading-dom-content">Loading...</h2>
 
   <div class="">
-    <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
+    <input type="text" name="keyword" size="40" class="input input-bordered w-20 max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
     <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
   </div>
 

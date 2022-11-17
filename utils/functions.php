@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -50,10 +50,23 @@ function cari($keyword)
 {
     $query = "SELECT * FROM `barang`
     WHERE
+    ID LIKE '%$keyword%' OR
     NAMA LIKE '%$keyword%' OR
     KODE LIKE '%$keyword%' OR
     HARGA_BELI LIKE '%$keyword%'
     ";
+    return query($query);
+}
+
+function cariItem($keyword)
+{
+    $query = "SELECT * FROM `item_jual`
+WHERE
+NOTA LIKE '%$keyword%' OR
+BARANG_ID LIKE '%$keyword%' OR
+JUMLAH LIKE '%$keyword%' OR
+HARGA_BELI LIKE '%$keyword%' OR LIMIT 0, 20
+";
     return query($query);
 }
 
@@ -69,6 +82,19 @@ TEMPO LIKE '%$keyword%' OR
 TANGGAL LIKE '%$keyword%' OR
 TOTAL_PELUNASAN_NOTA LIKE '%$keyword%' OR
 STATUS_BAYAR LIKE '%$keyword%' ORDER BY id DESC LIMIT 0, 10
+";
+    return query($query);
+}
+
+function cariPelunasan($keyword)
+{
+    $query = "SELECT * FROM `pelunasan_piutang`
+WHERE
+NO_PELUNASAN LIKE '%$keyword%' OR
+CUSTOMER_ID LIKE '%$keyword%' OR
+TANGGAL LIKE '%$keyword%' OR
+KETERANGAN LIKE '%$keyword%' OR
+OPERATOR LIKE '%$keyword%' LIMIT 0, 20
 ";
     return query($query);
 }
