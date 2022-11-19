@@ -22,7 +22,7 @@ include('shared/navadmin.php');
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Manajemen User & Admin dan Sales</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
-    <h2 class="text-xl mb-4">USERS</h2>
+    <h2 class="text-xl mb-4">Customer</h2>
 
     <div class="mb-4">
         <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Telepon/Alamat/Jenis Anggota user" autocomplete="off" id="keyword">

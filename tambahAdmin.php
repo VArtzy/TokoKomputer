@@ -14,11 +14,7 @@ if (isset($_POST["submit"])) {
         </script>
         ";
     } else {
-        echo "        
-        <script>
-        alert('Gagal Menambah Admin Baru');
-        document.location.href = 'userAndAdminManagement.php';
-        </script>";
+        echo mysqli_error($conn);
     }
 }
 

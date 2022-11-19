@@ -7,7 +7,7 @@ $query = "SELECT * FROM `barang`
 WHERE
 NAMA LIKE '%$keyword%' OR
 KODE LIKE '%$keyword%' OR
-HARGA_BELI LIKE '%$keyword%' ORDER BY id DESC LIMIT 0, 10
+HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);
 ?>
@@ -33,7 +33,7 @@ $brg = query($query);
                               } ?> btn-sm text-white add-to-cart" onclick="tambahBarang(event)" <?php if (round($b["STOK"]) > 0) {
                                                                                                 } else {
                                                                                                   echo 'disabled';
-                                                                                                } ?> data-id="<?= $b["id"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                                                } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
         </div>
       </div>
     </div>

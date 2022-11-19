@@ -5,10 +5,9 @@ $keyword = $_GET["keyword"];
 
 $query = "SELECT * FROM `barang`
 WHERE
-ID LIKE '%$keyword%' OR
 NAMA LIKE '%$keyword%' OR
 KODE LIKE '%$keyword%' OR
-HARGA_BELI LIKE '%$keyword%' ORDER BY id DESC LIMIT 0, 10
+HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);
 ?>

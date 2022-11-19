@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -201,8 +201,8 @@ function tambahNota($nota, $id, $total)
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
 
-    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `TOTAL_NOTA`, `TANGGAL`) VALUES
-     ('$NOTA', '$CUSTOMER_ID','$TOTAL_NOTA', '$TANGGAL')");
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
+     ('$NOTA', '$CUSTOMER_ID','$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }
@@ -213,14 +213,14 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     global $conn;
 
     $NOTA = $nota;
-    $USER_ADMIN = $username;
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
     $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $data["CUSTOMER_NAMA"]);
 
-    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `TOTAL_NOTA`, `TANGGAL`) VALUES
-     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$TOTAL_NOTA', '$TANGGAL')");
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
+     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }

@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$brg = query("SELECT * FROM BARANG ORDER BY id DESC LIMIT 0, 20");
+$brg = query("SELECT * FROM BARANG ORDER BY KODE DESC LIMIT 0, 20");
 
 if (isset($_POST["cari"])) {
     $mahasiswa = cari($_POST["keyword"]);

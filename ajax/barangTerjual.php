@@ -16,7 +16,6 @@ $item = query($query);
 <?php if (!empty($item)) : ?>
     <?php foreach ($item as $i) : ?>
         <tr>
-            <th><?= $i['ID']; ?></th>
             <td><?= $i['NOTA']; ?></td>
             <td><?= $i['BARANG_ID']; ?></td>
             <td><?= $i['JUMLAH']; ?></td>

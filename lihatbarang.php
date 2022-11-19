@@ -64,9 +64,9 @@ include('shared/nav.php');
   <h2 class="text-xl mb-4">Ingin membeli? <a class="text-sky-600" href="login.php">Login sekarang</a>.</h2>
 
   <div class="">
-    <input type="text" name="keyword" size="40" value="<?php if (isset($kw)) {
+    <input type="text" name="keyword" size="30" value="<?php if (isset($kw)) {
                                                           echo $kw;
-                                                        } ?>" class="input w-20 input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
+                                                        } ?>" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
     <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
   </div>
 

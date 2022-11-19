@@ -19,7 +19,7 @@ include('shared/nav.php');
   <h2 class="text-xl mb-4 loading-dom-content">Loading...</h2>
 
   <div class="">
-    <input type="text" name="keyword" size="40" class="input input-bordered w-20 max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
+    <input type="text" name="keyword" size="30" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
     <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
   </div>
 
@@ -46,7 +46,7 @@ include('shared/nav.php');
                                 } ?> btn-sm text-white add-to-cart" <?php if (round($b["STOK"]) > 0) {
                                                                     } else {
                                                                       echo 'disabled';
-                                                                    } ?> data-id="<?= $b["id"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                    } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
           </div>
         </div>
       </div>
