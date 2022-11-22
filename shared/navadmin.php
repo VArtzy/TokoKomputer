@@ -28,6 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
   <title><?php if (isset($title)) {
             echo 'Toko Komputer - ' . $title;
           } else {
@@ -48,7 +49,9 @@
           <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
           <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
           <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
-          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i> User & Admin</a></li>
+          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
+          <li><a href="master.php"> e.preventDefault()
+              Master</a></li>
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl">Joga Computer Admin</a>
@@ -66,6 +69,9 @@
         </div>
         <div class="tooltip tooltip-bottom" data-tip="User & Admin Management">
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i></a></li>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Master Page">
+          <li><a href="master.php"><i class="fa-solid fa-user-tie"></i></a></li>
         </div>
       </ul>
     </div>

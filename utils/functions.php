@@ -419,7 +419,7 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
     $PROFIT = mysqli_real_escape_string($conn, $data["PROFIT"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
-    $USER_ADMIN = $userAdmin;
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TANGGAL = Date('Y-m-d');
 
     mysqli_query($conn, "UPDATE `jual` SET 
@@ -539,6 +539,48 @@ JENIS_ANGGOTA = '$JENISANGOTA'
 WHERE KODE = '$id';";
 
     mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+
+function tambahGolongan($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `golongan`(`KODE`, `KETERANGAN`) VALUES
+     ('$KODE', '$KETERANGAN')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahGolongan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `golongan` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusGolongan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM golongan WHERE KODE = '$KODE_LAMA'");
 
     return mysqli_affected_rows($conn);
 }

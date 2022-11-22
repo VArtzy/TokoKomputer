@@ -1,0 +1,13 @@
+CREATE TABLE `satuan` (
+  `KODE` int NOT NULL,
+  `NAMA` varchar(25) NOT NULL,
+  `KONVERSI` varchar(25) NOT NULL
+);
+
+
+ALTER TABLE `satuan`
+  ADD PRIMARY KEY (`KODE`);
+
+ALTER TABLE `satuan`
+  MODIFY `KODE` int NOT NULL AUTO_INCREMENT;
+
