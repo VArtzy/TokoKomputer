@@ -2,16 +2,16 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM golongan ORDER BY KETERANGAN ASC");
+$item = query("SELECT * FROM sub_golongan ORDER BY KETERANGAN ASC");
 
 if (isset($_POST["submit"])) {
 
     // cek apakah daata berhasil diubah
-    if (tambahGolongan($_POST) > 0) {
+    if (tambahSubgolongan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Menambah golongan Baru');
-        document.location.href = 'golongan.php';
+        alert('Berhasil Menambah subgolongan Baru');
+        document.location.href = 'subgolongan.php';
         </script>
         ";
     } else {
@@ -22,11 +22,11 @@ if (isset($_POST["submit"])) {
 if (isset($_POST["ubah"])) {
 
     // cek apakah daata berhasil diubah
-    if (ubahGolongan($_POST) > 0) {
+    if (ubahSubgolongan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Memperbaiki golongan');
-        document.location.href = 'golongan.php';
+        alert('Berhasil Memperbaiki subgolongan');
+        document.location.href = 'subgolongan.php';
         </script>
         ";
     } else {
@@ -37,11 +37,11 @@ if (isset($_POST["ubah"])) {
 if (isset($_POST["hapus"])) {
 
     // cek apakah daata berhasil diubah
-    if (hapusGolongan($_POST) > 0) {
+    if (hapusSubgolongan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Menghapus golongan');
-        document.location.href = 'golongan.php';
+        alert('Berhasil Menghapus subgolongan');
+        document.location.href = 'subgolongan.php';
         </script>
         ";
     } else {
@@ -49,7 +49,7 @@ if (isset($_POST["hapus"])) {
     }
 }
 
-$title = "Golongan - $username";
+$title = "Subgolongan - $username";
 include('shared/navadmin.php');
 ?>
 
@@ -90,11 +90,11 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xscl font-semibold">Golongan</h1>
+    <h1 class="text-2xl font-semibold">Subgolongan</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <label for="my-modal-6" class="btn btn-success mb-4">Tambah Golongan</label>
+        <label for="my-modal-6" class="btn btn-success mb-4">Tambah Subgolongan</label>
     </div>
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
@@ -118,7 +118,7 @@ include('shared/navadmin.php');
                         <td><?= $i['KETERANGAN']; ?></td>
                         <td>
                             <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
-                                <a tabindex="1" href="golongan.php?kode=<?= $i['KODE']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                                <a tabindex="1" href="subgolongan.php?kode=<?= $i['KODE']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -133,7 +133,7 @@ include('shared/navadmin.php');
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
-                <h3 class="font-bold text-lg">Golongan</h3>
+                <h3 class="font-bold text-lg">Subgolongan</h3>
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KODE">Kode: </label>
@@ -168,14 +168,14 @@ include('shared/navadmin.php');
 <?php if (isset($_GET['kode'])) : ?>
     <?php
     $kode = $_GET['kode'];
-    $item = query("SELECT * FROM golongan WHERE KODE = '$kode'")[0];
+    $item = query("SELECT * FROM sub_golongan WHERE KODE = '$kode'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['KODE']; ?>" name="KODE_LAMA">
-                <h3 class="font-bold text-lg">Aksi Golongan</h3>
+                <h3 class="font-bold text-lg">Aksi Subgolongan</h3>
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KODE">Kode: </label>
@@ -199,7 +199,7 @@ include('shared/navadmin.php');
                         <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
                     </div>
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="golongan.php" for="my-modal-edit" class="btn">Batal</a>
+                        <a id="batal" href="subgolongan.php" for="my-modal-edit" class="btn">Batal</a>
                     </div>
                     <div class="tooltip tooltip-success" data-tip="CTRL + A">
                         <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>

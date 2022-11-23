@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -581,6 +581,47 @@ function hapusGolongan($data)
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     mysqli_query($conn, "DELETE FROM golongan WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahSubgolongan($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `sub_golongan`(`KODE`, `KETERANGAN`) VALUES
+     ('$KODE', '$KETERANGAN')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahSubgolongan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `sub_golongan` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusSubgolongan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM sub_golongan WHERE KODE = '$KODE_LAMA'");
 
     return mysqli_affected_rows($conn);
 }

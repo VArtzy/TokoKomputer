@@ -50,8 +50,15 @@
           <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
           <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
-          <li><a href="master.php"> e.preventDefault()
-              Master</a></li>
+          <li><i class="fa-solid fa-user-tie">Master</i></li>
+          <li><a href="golongan.php">Gologan</a></li>
+          <li><a href="subgolongan.php">Subgolongan</a></li>
+          <li><i class="fa-solid fa-money-bills">Transaksi</i></li>
+          <li><a>Pembelian</a></li>
+          <li><a>Pelunasan Hutang</a></li>
+          <hr>
+          <li><a href="">Penjualan</a></li>
+          <li><a href="">Pembayaran Piutang</a></li>
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl">Joga Computer Admin</a>
@@ -70,9 +77,29 @@
         <div class="tooltip tooltip-bottom" data-tip="User & Admin Management">
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-gear"></i></a></li>
         </div>
-        <div class="tooltip tooltip-bottom" data-tip="Master Page">
-          <li><a href="master.php"><i class="fa-solid fa-user-tie"></i></a></li>
-        </div>
+        <li>
+          <div class="dropdown dropdown-bottom dropdown-hover">
+            <label tabindex="0" class=""><i class="fa-solid fa-user-tie"></i></label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a href="golongan.php">Gologan</a></li>
+              <li><a href="subgolongan.php">Subgolongan</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <div class="dropdown dropdown-bottom dropdown-hover">
+            <label tabindex="0" class=""><i class="fa-solid fa-money-bills"></i></label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a>Pembelian</a></li>
+              <li><a>Pelunasan Hutang</a></li>
+              <li>
+                <hr>
+              </li>
+              <li><a href="">Penjualan</a></li>
+              <li><a href="">Pembayaran Piutang</a></li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
     <div class="navbar-end">
