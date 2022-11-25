@@ -12,11 +12,39 @@ $title = "Barang - $username";
 include('shared/navadmin.php');
 ?>
 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var table = $('#table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
+
+        $(document).on("keydown", function(e) {
+            console.log(e.which);
+            if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
+                $("#tambah")[0].click();
+            }
+            if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-excel")[0].click();
+            }
+        });
+    })
+</script>
+
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Admin</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
     <div class="md:flex gap-4">
-        <a class="btn btn-primary mb-4" href="tambahBarang.php">Tambah Barang</a>
+        <a id="tambah" class="btn btn-primary mb-4" href="tambahBarang.php">Tambah Barang</a>
         <div class="">
             <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
             <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
@@ -25,7 +53,7 @@ include('shared/navadmin.php');
     <br><br>
 
     <div id="container" class="overflow-x-auto w-full mt-8">
-        <table class="table w-full">
+        <table id="table" class="table w-full">
             <!-- head -->
             <thead>
                 <tr>
@@ -34,6 +62,7 @@ include('shared/navadmin.php');
                     <th>Diskon</th>
                     <th>Harga/Margin</th>
                     <th>Garansi/Poin</th>
+                    <th>Golongan<br />/Subgolongan</th>
                     <th></th>
                 </tr>
             </thead>
@@ -80,6 +109,11 @@ include('shared/navadmin.php');
                             <span class="badge mb-2"><?= $b["GARANSI"]; ?></span>
                             <br>
                             <span class="badge badge-warning"><?= $b["POIN"]; ?></span>
+                        </th>
+                        <th>
+                            <span class="badge badge-sm mb-2"><?= query("SELECT KETERANGAN FROM golongan WHERE KODE = '" . $b['GOLONGAN_ID'] . "'")[0]['KETERANGAN']; ?></span>
+                            <br>
+                            <span class="badge badge-sm badge-warning"><?= query("SELECT KETERANGAN FROM sub_golongan WHERE KODE = '" . $b['SUB_GOLONGAN_ID'] . "'")[0]['KETERANGAN']; ?></span>
                         </th>
                         <td class="grid items-center gap-2">
                             <a href="editBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>

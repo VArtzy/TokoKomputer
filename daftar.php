@@ -32,7 +32,7 @@ if (isset($_SESSION["login"])) {
     exit;
 }
 
- $title = "Daftar";
+$title = "Daftar";
 include('shared/nav.php');
 ?>
 
@@ -58,6 +58,21 @@ include('shared/nav.php');
                 <label for="ALAMAT">Alamat: </label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="ALAMAT" id="ALAMAT">
             </li>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="WILAYAH_ID">Wilayah: </label>
+                </label>
+                <label class="input-group">
+                    <span>Wilayah:</span>
+                    <select class="input input-bordered" name="WILAYAH_ID" id="WILAYAH_ID">
+                        <?php
+                        $wilayah = query("SELECT * FROM wilayah");
+                        foreach ($wilayah as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="KONTAK">Kontak: </label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="KONTAK" id="KONTAK">

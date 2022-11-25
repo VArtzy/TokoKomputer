@@ -11,6 +11,26 @@ HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);
 ?>
+<script>
+    $(document).ready(function() {
+        var table = $('#table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
+
+        $(document).on("keydown", function(e) {
+            console.log(e.which);
+            if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
+                $("#tambah")[0].click();
+            }
+            if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-excel")[0].click();
+            }
+        });
+    })
+</script>
 
 <?php if (!empty($brg)) : ?>
     <table class="table w-full">
@@ -22,6 +42,7 @@ $brg = query($query);
                 <th>Diskon</th>
                 <th>Harga/Margin</th>
                 <th>Garansi/Poin</th>
+                <th>Golongan/Subgolongan</th>
                 <th></th>
             </tr>
         </thead>
@@ -68,6 +89,11 @@ $brg = query($query);
                         <span class="badge mb-2"><?= $b["GARANSI"]; ?></span>
                         <br>
                         <span class="badge badge-warning"><?= $b["POIN"]; ?></span>
+                    </th>
+                    <th>
+                        <span class="badge badge-sm mb-2"><?= query("SELECT KETERANGAN FROM golongan WHERE KODE = '" . $b['GOLONGAN_ID'] . "'")[0]['KETERANGAN']; ?></span>
+                        <br>
+                        <span class="badge badge-sm badge-warning"><?= query("SELECT KETERANGAN FROM sub_golongan WHERE KODE = '" . $b['SUB_GOLONGAN_ID'] . "'")[0]['KETERANGAN']; ?></span>
                     </th>
                     <td class="grid items-center gap-2">
                         <a href="editBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>

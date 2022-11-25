@@ -154,6 +154,21 @@ include('shared/navadmin.php');
                         </select>
                     </label>
                 </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Lokasi:</span>
+                        <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                            <?php
+                            $lokasi = query("SELECT * FROM lokasi");
+                            foreach ($lokasi as $l) : ?>
+                                <option value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
                 <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
                 </li>
             </ul>

@@ -22,7 +22,9 @@ include('shared/navadmin.php');
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Manajemen User & Admin dan Sales</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
-    <h2 class="text-xl mb-4">Customer</h2>
+    <h2 id="customer" class="text-xl mb-4">Customer</h2>
+
+    <a href="langganan.php" class="btn btn-primary mb-4">Tambah Customer</a>
 
     <div class="mb-4">
         <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Telepon/Alamat/Jenis Anggota user" autocomplete="off" id="keyword">
@@ -51,9 +53,9 @@ include('shared/navadmin.php');
                                     <div class="text-sm opacity-50"><?= $u['ALAMAT'] . ', ' . $u["KOTA"]; ?></div>
                                     <div class="text-sm opacity-50"><?= $u['ALAMAT2']; ?></div>
                                     <div class="text-sm opacity-50"><?php if (isset($u["WILAYAH_ID"])) {
-                                                                        echo $u["WILAYAH_ID"];
+                                                                        echo $u['WILAYAH_ID'] . ' - ' . query("SELECT KETERANGAN FROM wilayah WHERE KODE = '" . $u['WILAYAH_ID'] . "'")[0]["KETERANGAN"];
                                                                     } else {
-                                                                        echo 'belum memasukan kodepos';
+                                                                        echo 'belum memasukan wilayah';
                                                                     } ?></div>
                                 </div>
                             </div>
@@ -92,7 +94,7 @@ include('shared/navadmin.php');
         </table>
     </div>
 
-    <h2 class="text-xl mb-4">SALESMANS</h2>
+    <h2 class="text-xl mb-4" id="salesman">SALESMANS</h2>
 
     <a href="tambahSales.php" class="btn btn-primary mb-4">Tambah Salesman</a>
 

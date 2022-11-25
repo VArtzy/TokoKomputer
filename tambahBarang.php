@@ -23,10 +23,55 @@ include('shared/navadmin.php');
 
     <form action="" method="POST" enctype="multipart/form-data">
         <ul class="flex flex-col gap-6 mb-4 justify-center">
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="GOLONGAN_ID">Golongan: </label>
+                </label>
+                <label class="input-group">
+                    <span>Golongan:</span>
+                    <select required class="input input-bordered" name="GOLONGAN_ID" id="GOLONGAN_ID">
+                        <?php
+                        $GOLONGAN = query("SELECT * FROM GOLONGAN");
+                        foreach ($GOLONGAN as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="SUB_GOLONGAN_ID">Sub Golongan: </label>
+                </label>
+                <label class="input-group">
+                    <span>Sub Golongan:</span>
+                    <select class="input input-bordered" name="SUB_GOLONGAN_ID" id="SUB_GOLONGAN_ID">
+                        <?php
+                        $SUB_GOLONGAN = query("SELECT * FROM SUB_GOLONGAN");
+                        foreach ($SUB_GOLONGAN as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="NAMA">Nama Barang :</label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="text" name="NAMA" id="NAMA">
             </li>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="SUPPLIER_ID">Supplier: </label>
+                </label>
+                <label class="input-group">
+                    <span>Supplier:</span>
+                    <select class="input input-bordered" name="SUPPLIER_ID" id="SUPPLIER_ID">
+                        <?php
+                        $SUPPLIER = query("SELECT * FROM SUPPLIER");
+                        foreach ($SUPPLIER as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["NAMA"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="SATUAN_ID">Satuan :</label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="SATUAN_ID" id="SATUAN_ID">
@@ -79,6 +124,21 @@ include('shared/navadmin.php');
                 <label for="POIN">Poin: </label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="POIN" id="POIN">
             </li>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                </label>
+                <label class="input-group">
+                    <span>Lokasi:</span>
+                    <select required class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                        <?php
+                        $LOKASI = query("SELECT * FROM LOKASI");
+                        foreach ($LOKASI as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="MARGIN">Margin: </label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MARGIN" id="MARGIN">

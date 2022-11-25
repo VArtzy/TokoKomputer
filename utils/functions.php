@@ -33,6 +33,10 @@ function tambahBarang($data)
     $DISKON_GOLD = mysqli_real_escape_string($conn, $data["DISKON_GOLD"]);
     $POIN = mysqli_real_escape_string($conn, $data["POIN"]);
     $MARGIN = mysqli_real_escape_string($conn, $data["MARGIN"]);
+    $GOLONGAN_ID = mysqli_real_escape_string($conn, $data["GOLONGAN_ID"]);
+    $SUB_GOLONGAN_ID = mysqli_real_escape_string($conn, $data["SUB_GOLONGAN_ID"]);
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     // upload gambar
     $FOTO = upload();
@@ -40,8 +44,8 @@ function tambahBarang($data)
         return false;
     }
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
-     ('$KODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
+    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `KODE_BARCODE`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
+     ('$KODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$KODE', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
 
     return mysqli_affected_rows($conn);
 }
@@ -191,18 +195,21 @@ function ubahSales($userAdminID, $data)
     return mysqli_affected_rows($conn);
 }
 
-function tambahNota($nota, $id, $total)
+function tambahNota($nota, $id, $total, $data)
 {
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
     $NOTA = $nota;
     $CUSTOMER_ID = $id;
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = ' website'")[0]['ID'];
+    $SALESMAN_ID = query("SELECT KODE FROM `salesman` WHERE NAMA = ' website'")[0]['KODE'];
     $TOTAL_NOTA = $total;
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $TANGGAL = Date('Y-m-d');
 
-    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
-     ('$NOTA', '$CUSTOMER_ID','$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
+     ('$NOTA', '$CUSTOMER_ID', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }
@@ -218,9 +225,10 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $TANGGAL = Date('Y-m-d');
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
     $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $data["CUSTOMER_NAMA"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
-    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
-     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
+     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }
@@ -337,7 +345,10 @@ function editBarang($data)
     $POIN = mysqli_real_escape_string($conn, $data["POIN"]);
     $MARGIN = mysqli_real_escape_string($conn, $data["MARGIN"]);
     $gambarlama = mysqli_real_escape_string($conn, $data["gambarlama"]);
-
+    $GOLONGAN_ID = mysqli_real_escape_string($conn, $data["GOLONGAN_ID"]);
+    $SUB_GOLONGAN_ID = mysqli_real_escape_string($conn, $data["SUB_GOLONGAN_ID"]);
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     // upload gambar
     // check apakah user pilih gambar baru aatau tidak
@@ -363,7 +374,11 @@ function editBarang($data)
     DISKON_GOLD = '$DISKON_GOLD',
     POIN = '$POIN',
     FOTO = '$FOTO',
-    MARGIN = '$MARGIN'
+    MARGIN = '$MARGIN',
+    GOLONGAN_ID = '$GOLONGAN_ID',
+    SUB_GOLONGAN_ID = '$SUB_GOLONGAN_ID',
+    SUPPLIER_ID = '$SUPPLIER_ID',
+    LOKASI_ID = '$LOKASI_ID'
     WHERE KODE = '$id';
     ");
 
@@ -379,6 +394,7 @@ function registrasi($data)
     $PASSWORD = mysqli_real_escape_string($conn, $data["PASSWORD"]);
     $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
     $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
     $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
     $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
     $KOTA = mysqli_real_escape_string($conn, $data["KOTA"]);
@@ -401,7 +417,7 @@ function registrasi($data)
 
     // tambahkan user baru ke database
     mysqli_query($conn, "INSERT INTO `customer`(`KODE`, `NAMA`, `PASSWORD`, `ALAMAT`, `KONTAK`, `NPWP`, `JATUH_TEMPO`, `URUT`, `WILAYAH_ID`, `DEF`, `ALAMAT2`, `KODE_BARCODE`, `PLAFON_PIUTANG`, `TOTAL_PIUTANG`, `TOTAL_PEMBAYARAN_PIUTANG`, `KOTA`, `TELEPON`, `JENIS_ANGGOTA`) VALUES
-     ('$KODE','$NAMA','$PASSWORD','$ALAMAT','$KONTAK','$NPWP', NULL, NULL, NULL, NULL, NULL, NULL,0,0.00,0.00,'$KOTA','$TELEPON', NULL)");
+     ('$KODE','$NAMA','$PASSWORD','$ALAMAT', '$KONTAK','$NPWP', NULL, NULL, '$WILAYAH_ID', NULL, NULL, NULL, 0,0.00,0.00,'$KOTA','$TELEPON', NULL)");
 
     return mysqli_affected_rows($conn);
 }
@@ -419,11 +435,13 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
     $PROFIT = mysqli_real_escape_string($conn, $data["PROFIT"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TANGGAL = Date('Y-m-d');
 
     mysqli_query($conn, "UPDATE `jual` SET 
     `SALESMAN_ID`='$SALESMAN_ID', 
+    `LOKASI_ID`='$LOKASI_ID', 
     `STATUS_NOTA`='$STATUS_NOTA', 
     `STATUS_BAYAR`='$STATUS_BAYAR', 
     `TEMPO`='$TEMPO', 
@@ -622,6 +640,336 @@ function hapusSubgolongan($data)
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     mysqli_query($conn, "DELETE FROM sub_golongan WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahWilayah($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `Wilayah`(`KODE`, `KETERANGAN`) VALUES
+     ('$KODE', '$KETERANGAN')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahWilayah($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `Wilayah` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusWilayah($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Wilayah WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahBiaya($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `Biaya`(`KODE`, `KETERANGAN`) VALUES
+     ('$KODE', '$KETERANGAN')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahBiaya($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `Biaya` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusBiaya($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Biaya WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahJasa($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `Jasa`(`KODE`, `KETERANGAN`) VALUES
+     ('$KODE', '$KETERANGAN')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahJasa($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `Jasa` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusJasa($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Jasa WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahLokasi($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    if (isset($data['DEF'])) {
+        $DEF = mysqli_real_escape_string($conn, $data["DEF"]);
+    } else {
+        $DEF = 0;
+    }
+
+    mysqli_query($conn, "INSERT INTO `lokasi`(`KODE`, `KETERANGAN`, `DEF`) VALUES
+     ('$KODE', '$KETERANGAN', '$DEF')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahLokasi($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    if (isset($data['DEF'])) {
+        $DEF = mysqli_real_escape_string($conn, $data["DEF"]);
+    } else {
+        $DEF = 0;
+    }
+    $query = "UPDATE `lokasi` SET
+KODE = '$KODE',
+KETERANGAN = '$KETERANGAN',
+DEF = '$DEF'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusLokasi($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM lokasi WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahSupplier($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $ALAMAT2 = mysqli_real_escape_string($conn, $data["ALAMAT2"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
+    $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
+    $JATUH_TEMPO = mysqli_real_escape_string($conn, $data["JATUH_TEMPO"]);
+    $PLAFON_HUTANG = mysqli_real_escape_string($conn, $data["PLAFON_HUTANG"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+
+    if (isset($data['DEF'])) {
+        $DEF = mysqli_real_escape_string($conn, $data["DEF"]);
+    } else {
+        $DEF = 0;
+    }
+
+    mysqli_query($conn, "INSERT INTO `Supplier`(`KODE`, `NAMA`, `ALAMAT`, `KONTAK`, `NPWP`, `JATUH_TEMPO`, `WILAYAH_ID`, `DEF`, `ALAMAT2`, `KODE_BARCODE`, `PLAFON_HUTANG`, `TELEPON`) VALUES
+     ('$KODE', '$NAMA', '$ALAMAT', '$KONTAK', '$NPWP', '$JATUH_TEMPO', '$WILAYAH_ID', '$DEF', '$ALAMAT2', '$KODE_BARCODE', '$PLAFON_HUTANG', '$TELEPON')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahSupplier($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $ALAMAT2 = mysqli_real_escape_string($conn, $data["ALAMAT2"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
+    $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
+    $JATUH_TEMPO = mysqli_real_escape_string($conn, $data["JATUH_TEMPO"]);
+    $PLAFON_HUTANG = mysqli_real_escape_string($conn, $data["PLAFON_HUTANG"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+
+    if (isset($data['DEF'])) {
+        $DEF = mysqli_real_escape_string($conn, $data["DEF"]);
+    } else {
+        $DEF = 0;
+    }
+    $query = "UPDATE `Supplier` SET
+KODE = '$KODE',
+KODE_BARCODE = '$KODE_BARCODE',
+NAMA = '$NAMA',
+ALAMAT = '$ALAMAT',
+ALAMAT2 = '$ALAMAT2',
+WILAYAH_ID = '$WILAYAH_ID',
+KONTAK = '$KONTAK',
+NPWP = '$NPWP',
+JATUH_TEMPO = '$JATUH_TEMPO',
+PLAFON_HUTANG = '$PLAFON_HUTANG',
+TELEPON = '$TELEPON',
+DEF = '$DEF'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusSupplier($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Supplier WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahLangganan($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $ALAMAT2 = mysqli_real_escape_string($conn, $data["ALAMAT2"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
+    $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
+    $JATUH_TEMPO = mysqli_real_escape_string($conn, $data["JATUH_TEMPO"]);
+    $KOTA = mysqli_real_escape_string($conn, $data["KOTA"]);
+    $PLAFON_PIUTANG = mysqli_real_escape_string($conn, $data["PLAFON_PIUTANG"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+    $JENIS_ANGGOTA = mysqli_real_escape_string($conn, $data["JENIS_ANGGOTA"]);
+
+    mysqli_query($conn, "INSERT INTO `Customer`(`KODE`, `NAMA`, `ALAMAT`, `KONTAK`, `NPWP`, `JATUH_TEMPO`, `WILAYAH_ID`, `KOTA`, `ALAMAT2`, `KODE_BARCODE`, `PLAFON_PIUTANG`, `TELEPON`, `JENIS_ANGGOTA`) VALUES
+     ('$KODE', '$NAMA', '$ALAMAT', '$KONTAK', '$NPWP', '$JATUH_TEMPO', '$WILAYAH_ID', '$KOTA', '$ALAMAT2', '$KODE_BARCODE', '$PLAFON_PIUTANG', '$TELEPON', '$JENIS_ANGGOTA')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahLangganan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
+    $ALAMAT2 = mysqli_real_escape_string($conn, $data["ALAMAT2"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
+    $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
+    $JATUH_TEMPO = mysqli_real_escape_string($conn, $data["JATUH_TEMPO"]);
+    $KOTA = mysqli_real_escape_string($conn, $data["KOTA"]);
+    $PLAFON_PIUTANG = mysqli_real_escape_string($conn, $data["PLAFON_PIUTANG"]);
+    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
+    $JENIS_ANGGOTA = mysqli_real_escape_string($conn, $data["JENIS_ANGGOTA"]);
+
+    $query = "UPDATE `Customer` SET
+KODE = '$KODE',
+KODE_BARCODE = '$KODE_BARCODE',
+NAMA = '$NAMA',
+ALAMAT = '$ALAMAT',
+ALAMAT2 = '$ALAMAT2',
+WILAYAH_ID = '$WILAYAH_ID',
+KONTAK = '$KONTAK',
+NPWP = '$NPWP',
+JATUH_TEMPO = '$JATUH_TEMPO',
+KOTA = '$KOTA',
+PLAFON_PIUTANG = '$PLAFON_PIUTANG',
+JENIS_ANGGOTA = '$JENIS_ANGGOTA',
+TELEPON = '$TELEPON'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusLangganan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Customer WHERE KODE = '$KODE_LAMA'");
 
     return mysqli_affected_rows($conn);
 }

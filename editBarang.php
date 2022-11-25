@@ -29,6 +29,40 @@ include('shared/navadmin.php');
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="gambarlama" value="<?= $brg["FOTO"]; ?>">
         <ul class="flex flex-col gap-6 mb-4 justify-center">
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="GOLONGAN_ID">Golongan: </label>
+                </label>
+                <label class="input-group">
+                    <span>Golongan:</span>
+                    <select required class="input input-bordered" name="GOLONGAN_ID" id="GOLONGAN_ID">
+                        <?php
+                        $golongan = query("SELECT * FROM golongan");
+                        foreach ($golongan as $s) : ?>
+                            <option <?php if ($s['KODE'] === $brg['GOLONGAN_ID']) {
+                                        echo 'selected';
+                                    } ?> value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="SUB_GOLONGAN_ID">Sub Golongan: </label>
+                </label>
+                <label class="input-group">
+                    <span>Sub Golongan:</span>
+                    <select class="input input-bordered" name="SUB_GOLONGAN_ID" id="SUB_GOLONGAN_ID">
+                        <?php
+                        $subgolongan = query("SELECT * FROM sub_golongan");
+                        foreach ($subgolongan as $s) : ?>
+                            <option <?php if ($s['KODE'] === $brg['SUB_GOLONGAN_ID']) {
+                                        echo 'selected';
+                                    } ?> value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <div class="md:flex gap-6">
                 <li>
                     <label for="NAMA">Nama Barang :</label>
@@ -38,6 +72,23 @@ include('shared/navadmin.php');
                     <label for="SATUAN_ID">Satuan :</label>
                     <input value="<?= $brg["SATUAN_ID"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="SATUAN_ID" id="SATUAN_ID">
                 </li>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                </label>
+                <label class="input-group">
+                    <span>Lokasi:</span>
+                    <select required class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                        <?php
+                        $lokasi = query("SELECT * FROM lokasi");
+                        foreach ($lokasi as $s) : ?>
+                            <option <?php if ($s['KODE'] === $brg['LOKASI_ID']) {
+                                        echo 'selected';
+                                    } ?> value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
             </div>
             <div class="md:grid grid-cols-4">
                 <li>
@@ -91,6 +142,23 @@ include('shared/navadmin.php');
                 <label for="POIN">Poin: </label>
                 <input value="<?= $brg["POIN"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="POIN" id="POIN">
             </li>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="SUPPLIER_ID">Supplier: </label>
+                </label>
+                <label class="input-group">
+                    <span>Supplier:</span>
+                    <select class="input input-bordered" name="SUPPLIER_ID" id="SUPPLIER_ID">
+                        <?php
+                        $supplier = query("SELECT * FROM supplier");
+                        foreach ($supplier as $s) : ?>
+                            <option <?php if ($s['KODE'] === $brg['SUPPLIER_ID']) {
+                                        echo 'selected';
+                                    } ?> value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="MARGIN">Margin: </label>
                 <input value="<?= $brg["MARGIN"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MARGIN" id="MARGIN">

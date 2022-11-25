@@ -4,7 +4,7 @@ require_once 'utils/loggedAdmin.php';
 
 $nota = $_GET['nota'];
 
-$notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR FROM JUAL WHERE NOTA = '$nota'")[0];
+$notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR, LOKASI_ID FROM JUAL WHERE NOTA = '$nota'")[0];
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 $namaPelanggan = query("SELECT NAMA FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'");
 
@@ -44,11 +44,14 @@ include('shared/navadmin.php');
                                                         } else {
                                                             echo $notas['CUSTOMER_ID'];
                                                         }; ?></span></p>
-        <p>Salesman <span class="badge badge-primary"><?= $notas["SALESMAN_ID"]; ?></span></p>
         <p>Tanggal Pemesanan <span class="badge badge-primary"><?= $notas["TANGGAL"]; ?></span></p>
         <p>Total Pelunasan Nota <span class="badge badge-primary"><?= $notas["TOTAL_PELUNASAN_NOTA"]; ?></span></p>
         <p>Profit <span class="badge badge-primary"><?= $notas["PROFIT"]; ?></span></p>
-        <p>Operator <span class="badge badge-primary"><?= $notas["OPERATOR"]; ?></span></p>
+        <p>Lokasi <span class="badge badge-primary"><?= $notas["LOKASI_ID"]; ?></span></p>
+    </div>
+    <div class="flex gap-4">
+        <p>Salesman <span class="badge badge-primary"><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $notas['SALESMAN_ID'] . "'")[0]['NAMA']; ?></span>
+        <p>Operator <span class="badge badge-primary"><?= query("SELECT NAMA FROM user_admin WHERE ID = " . $notas['OPERATOR'])[0]['NAMA']; ?></span></p>
     </div>
 
     <div class="overflow-x-auto w-full mt-8 mb-4">
@@ -130,7 +133,9 @@ include('shared/navadmin.php');
                         <span>Salesman ID:</span>
                         <select class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
                             <?php foreach ($salesman as $s) : ?>
-                                <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
+                                <option <?php if ($s['KODE'] === $notas['SALESMAN_ID']) {
+                                            echo 'selected';
+                                        } ?> value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
@@ -169,6 +174,23 @@ include('shared/navadmin.php');
                     <label class="input-group">
                         <span>Keterangan:</span>
                         <input type="text" name="KETERANGAN" value="<?= $notas['KETERANGAN']; ?>" id="KETERANGAN" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Lokasi:</span>
+                        <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                            <?php
+                            $lokasi = query("SELECT * FROM lokasi");
+                            foreach ($lokasi as $l) : ?>
+                                <option <?php if ($l['KODE'] === $notas['LOKASI_ID']) {
+                                            echo 'selected';
+                                        } ?> value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </label>
                 </div>
                 <div class="form-control">
