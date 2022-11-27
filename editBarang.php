@@ -68,10 +68,21 @@ include('shared/navadmin.php');
                     <label for="NAMA">Nama Barang :</label>
                     <input value="<?= $brg["NAMA"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="text" name="NAMA" id="NAMA">
                 </li>
-                <li>
-                    <label for="SATUAN_ID">Satuan :</label>
-                    <input value="<?= $brg["SATUAN_ID"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="SATUAN_ID" id="SATUAN_ID">
-                </li>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="SATUAN_ID">Satuan: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Satuan:</span>
+                        <select class="input input-bordered" name="SATUAN_ID" id="SATUAN_ID">
+                            <?php
+                            $SATUAN = query("SELECT * FROM SATUAN");
+                            foreach ($SATUAN as $w) : ?>
+                                <option value="<?= $w['KODE']; ?>"><?= $w["NAMA"]; ?> - <?= $w["KONVERSI"]; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
             </div>
             <div class="form-control">
                 <label class="label">

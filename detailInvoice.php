@@ -6,7 +6,7 @@ $nota = $_GET['nota'];
 
 $notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR, LOKASI_ID FROM JUAL WHERE NOTA = '$nota'")[0];
 $salesman = query("SELECT KODE, NAMA FROM salesman");
-$namaPelanggan = query("SELECT NAMA FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'");
+$namaPelanggan = query("SELECT * FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'")[0];
 
 $item = query("SELECT * FROM ITEM_JUAL WHERE nota = '$nota'");
 
@@ -40,7 +40,7 @@ include('shared/navadmin.php');
         <p>Status Nota <span class="badge mb-2"><?= $notas["STATUS_NOTA"]; ?></span></p>
         <p>Status Bayar <span class="badge badge-warning"><?= $notas["STATUS_BAYAR"]; ?></span></p>
         <p>Pelanggan <span class="badge badge-primary"><?php if (!empty($namaPelanggan)) {
-                                                            echo $namaPelanggan[0]["NAMA"];
+                                                            echo $namaPelanggan["NAMA"];
                                                         } else {
                                                             echo $notas['CUSTOMER_ID'];
                                                         }; ?></span></p>
@@ -52,6 +52,18 @@ include('shared/navadmin.php');
     <div class="flex gap-4">
         <p>Salesman <span class="badge badge-primary"><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $notas['SALESMAN_ID'] . "'")[0]['NAMA']; ?></span>
         <p>Operator <span class="badge badge-primary"><?= query("SELECT NAMA FROM user_admin WHERE ID = " . $notas['OPERATOR'])[0]['NAMA']; ?></span></p>
+    </div>
+    <div class="flex gap-4">
+        <p>Alamat <span class="badge"><?= $namaPelanggan["ALAMAT"]; ?></span></p>
+        <p>Wilayah <span class="badge"><?= query("SELECT KETERANGAN FROM wilayah WHERE KODE ='" . $namaPelanggan['WILAYAH_ID'] . "'")[0]["KETERANGAN"]; ?></span></p>
+        <p>Kota <span class="badge"><?= $namaPelanggan["KOTA"]; ?></span></p>
+        <a href="https://wa.me/<?php
+                                if ($namaPelanggan['TELEPON'][0] === '0') {
+                                    echo '62' . substr($namaPelanggan['TELEPON'], 1) . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
+                                } else {
+                                    echo $namaPelanggan['TELEPON'] . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
+                                }
+                                ?>"><i class="fa-brands fa-whatsapp"> <span class=" badge"><?= $namaPelanggan["TELEPON"]; ?></span></a>
     </div>
 
     <div class="overflow-x-auto w-full mt-8 mb-4">

@@ -36,6 +36,21 @@ include('shared/nav.php');
     <form action="" method="POST">
         <input type="hidden" name="id" value="<?= $customer["KODE"]; ?>">
         <ul class="flex flex-col gap-6 mb-4 justify-center">
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="WILAYAH_ID">Wilayah: </label>
+                </label>
+                <label class="input-group">
+                    <span>Wilayah:</span>
+                    <select class="input input-bordered" name="WILAYAH_ID" id="WILAYAH_ID">
+                        <?php
+                        $wilayah = query("SELECT * FROM wilayah");
+                        foreach ($wilayah as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
             <li>
                 <label for="NAMA">Nama :</label>
                 <input value="<?= $customer["NAMA"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="text" name="NAMA" id="NAMA">

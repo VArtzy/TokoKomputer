@@ -138,15 +138,15 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Nama</span>
-                        <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan nama pelanggan...">
+                        <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan kode pelanggan...">
                     </label>
                 </div>
                 <div class="form-control">
                     <label class="label">
-                        <label class="label-text" for="SALESMAN_ID">Salesman ID: </label>
+                        <label class="label-text" for="SALESMAN_ID">Salesman: </label>
                     </label>
                     <label class="input-group">
-                        <span>Salesman ID:</span>
+                        <span>Salesman:</span>
                         <select class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
                             <?php foreach ($salesman as $s) : ?>
                                 <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>

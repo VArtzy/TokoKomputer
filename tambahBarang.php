@@ -59,6 +59,25 @@ include('shared/navadmin.php');
             </li>
             <div class="form-control">
                 <label class="label">
+                    <label class="label-text" for="SATUAN_ID">Satuan: </label>
+                </label>
+                <label class="input-group">
+                    <span>Satuan:</span>
+                    <select class="input input-bordered" name="SATUAN_ID" id="SATUAN_ID">
+                        <?php
+                        $SATUAN = query("SELECT * FROM SATUAN");
+                        foreach ($SATUAN as $w) : ?>
+                            <option value="<?= $w['KODE']; ?>"><?= $w["NAMA"]; ?> - <?= $w["KONVERSI"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <li>
+                <label for="HARGA_JUAL">Harga Jual: </label>
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="HARGA_JUAL" id="HARGA_JUAL">
+            </li>
+            <div class="form-control">
+                <label class="label">
                     <label class="label-text" for="SUPPLIER_ID">Supplier: </label>
                 </label>
                 <label class="input-group">
@@ -73,10 +92,6 @@ include('shared/navadmin.php');
                 </label>
             </div>
             <li>
-                <label for="SATUAN_ID">Satuan :</label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="SATUAN_ID" id="SATUAN_ID">
-            </li>
-            <li>
                 <label for="STOK">Stok :</label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="STOK" id="STOK">
             </li>
@@ -89,7 +104,7 @@ include('shared/navadmin.php');
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MAX_STOK" id="MAX_STOK">
             </li>
             <li>
-                <label for="HARGA_BELI">Harga: </label>
+                <label for="HARGA_BELI">Harga Beli: </label>
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="HARGA_BELI" id="HARGA_BELI">
             </li>
             <li>

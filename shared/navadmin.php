@@ -64,13 +64,14 @@
           <li><a href="supplier.php">Supplier</a></li>
           <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
           <hr />
+          <li><a href="satuan.php">Satuan</a></li>
           <li><a href="barang.php">Barang</a></li>
           <li><a href="multiprice.php">Multi Price</a></li>
           <li><i class="fa-solid fa-money-bills">Transaksi</i></li>
-          <li><a>Pembelian</a></li>
+          <li><a href="beli.php">Pembelian</a></li>
           <li><a>Pelunasan Hutang</a></li>
           <hr>
-          <li><a href="">Penjualan</a></li>
+          <li><a href="invoices.php">Penjualan</a></li>
           <li><a href="">Pembayaran Piutang</a></li>
         </ul>
       </div>
@@ -107,6 +108,7 @@
               <li><a href="supplier.php">Supplier</a></li>
               <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
               <hr />
+              <li><a href="satuan.php">Satuan</a></li>
               <li><a href="barang.php">Barang</a></li>
               <li><a href="multiprice.php">Multi Price</a></li>
             </ul>
@@ -116,10 +118,10 @@
           <div class="dropdown dropdown-bottom dropdown-hover">
             <label tabindex="0" class=""><i class="fa-solid fa-money-bills"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a>Pembelian</a></li>
+              <li><a href="beli.php">Pembelian</a></li>
               <li><a>Pelunasan Hutang</a></li>
               <hr>
-              <li><a href="">Penjualan</a></li>
+              <li><a href="invoices.php">Penjualan</a></li>
               <li><a href="">Pembayaran Piutang</a></li>
             </ul>
           </div>

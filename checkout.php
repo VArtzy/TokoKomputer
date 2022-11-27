@@ -73,7 +73,7 @@ include('shared/nav.php');
                 <tbody>
                     <?php
                     foreach ($data as $d) {
-                        $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO` FROM BARANG where KODE = " . $d['id']);
+                        $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `LOKASI_ID` FROM BARANG where KODE = " . $d['id']);
                         foreach ($brg as $b) : ?>
                             <tr>
                                 <td>
@@ -127,8 +127,12 @@ include('shared/nav.php');
 
 
         <form action="" method="post">
+            <?php
+            $customer = query("SELECT * FROM customer WHERE KODE = '" . $id . "'")[0];
+            ?>
+            <input type="hidden" name="LOKASI_ID" id="LOKASI_ID" value="GDG1">
             <ul>
-                <div class="form-control">
+                <div class="form-control flex gap-4">
                     <label class="label">
                         <label class="label-text" for="CUSTOMER_NAMA">Atas Nama: </label>
                     </label>
@@ -136,22 +140,20 @@ include('shared/nav.php');
                         <span>Nama</span>
                         <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" value="<?= $username; ?>">
                     </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                    <label class="input-group">
+                        <span>Alamat</span>
+                        <input readonly value="<?= $customer['ALAMAT']; ?>" type="text" name="ALAMAT" id="ALAMAT" class="input input-bordered">
                     </label>
                     <label class="input-group">
-                        <span>Lokasi:</span>
-                        <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
-                            <?php
-                            $lokasi = query("SELECT * FROM lokasi");
-                            foreach ($lokasi as $l) : ?>
-                                <option value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <span>Wilayah</span>
+                        <input readonly value="<?= query("SELECT KETERANGAN FROM wilayah WHERE KODE ='" . $customer['WILAYAH_ID'] . "'")[0]["KETERANGAN"]; ?>" type="text" name="WILAYAH_ID" id="WILAYAH_ID" class="input input-bordered">
+                    </label>
+                    <label class="input-group">
+                        <span>Telepon</span>
+                        <input readonly value="<?= $customer['TELEPON']; ?>" type="text" name="TELEPON" id="TELEPON" class="input input-bordered">
                     </label>
                 </div>
+                <a href="profile.php?id=<?= $id; ?>" class="btn btn-primary">Ubah Data</a>
                 <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
                 </li>
             </ul>

@@ -3,11 +3,11 @@ require_once('../utils/functions.php');
 
 $keyword = $_GET["keyword"];
 
-$query = "SELECT * FROM `barang`
+$query = "SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID
 WHERE
-NAMA LIKE '%$keyword%' OR
-KODE LIKE '%$keyword%' OR
-HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
+a.NAMA LIKE '%$keyword%' OR
+a.KODE LIKE '%$keyword%' OR
+b.HARGA_JUAL LIKE '%$keyword%' ORDER BY a.KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);
 ?>
@@ -23,7 +23,7 @@ $brg = query($query);
                               } else {
                                 echo 'badge-error';
                               } ?> badge-sm text-white"><?= round($b["STOK"]); ?></span>
-          <span class="badge badge-sm"><?= rupiah($b["HARGA_BELI"]); ?></span>
+          <span class="badge badge-sm"><?= rupiah($b["HARGA_JUAL"]); ?></span>
         </div>
         <p class="text-xs"></p>
         <div class="card-actions justify-end">
@@ -33,7 +33,7 @@ $brg = query($query);
                               } ?> btn-sm text-white add-to-cart" onclick="tambahBarang(event)" <?php if (round($b["STOK"]) > 0) {
                                                                                                 } else {
                                                                                                   echo 'disabled';
-                                                                                                } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                                                } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
         </div>
       </div>
     </div>

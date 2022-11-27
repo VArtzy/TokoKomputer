@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -33,6 +33,7 @@ function tambahBarang($data)
     $DISKON_GOLD = mysqli_real_escape_string($conn, $data["DISKON_GOLD"]);
     $POIN = mysqli_real_escape_string($conn, $data["POIN"]);
     $MARGIN = mysqli_real_escape_string($conn, $data["MARGIN"]);
+    $HARGA_JUAL = mysqli_real_escape_string($conn, $data["HARGA_JUAL"]);
     $GOLONGAN_ID = mysqli_real_escape_string($conn, $data["GOLONGAN_ID"]);
     $SUB_GOLONGAN_ID = mysqli_real_escape_string($conn, $data["SUB_GOLONGAN_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
@@ -47,18 +48,20 @@ function tambahBarang($data)
     mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `KODE_BARCODE`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
      ('$KODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$KODE', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
 
+    mysqli_query($conn, "INSERT INTO multi_price(`KODE_SATUAN`, `CUSTOMER_ID`, `BARANG_ID`, `HARGA_KE`, `JUMLAH_R1`, `JUMLAH_R2`, `HARGA_JUAL`) VALUES
+     ('$SATUAN_ID', '', '$KODE', 1, 1, 1000, '$HARGA_JUAL')");
+
     return mysqli_affected_rows($conn);
 }
 
 function cari($keyword)
 {
-    $query = "SELECT * FROM `barang`
-    WHERE
-    ID LIKE '%$keyword%' OR
-    NAMA LIKE '%$keyword%' OR
-    KODE LIKE '%$keyword%' OR
-    HARGA_BELI LIKE '%$keyword%'
-    ";
+    $query = "SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID
+WHERE
+a.NAMA LIKE '%$keyword%' OR
+a.KODE LIKE '%$keyword%' OR
+b.HARGA_JUAL LIKE '%$keyword%' ORDER BY a.KODE DESC LIMIT 0, 10
+";
     return query($query);
 }
 
@@ -304,6 +307,7 @@ function hapus($id)
 {
     global $conn;
     mysqli_query($conn, "DELETE FROM barang WHERE KODE = '$id'");
+    mysqli_query($conn, "DELETE FROM multi_price WHERE BARANG_ID = '$id'");
 
     return mysqli_affected_rows($conn);
 }
@@ -531,6 +535,7 @@ function ubahProfile($data)
     $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
     $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
     $KONTAK = mysqli_real_escape_string($conn, $data["KONTAK"]);
+    $WILAYAH_ID = mysqli_real_escape_string($conn, $data["WILAYAH_ID"]);
     $NPWP = mysqli_real_escape_string($conn, $data["NPWP"]);
     $KOTA = mysqli_real_escape_string($conn, $data["KOTA"]);
     $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
@@ -553,6 +558,7 @@ NPWP = '$NPWP',
 KOTA = '$KOTA',
 TELEPON = '$TELEPON',
 ALAMAT2 = '$ALAMAT2',
+WILAYAH_ID = '$WILAYAH_ID',
 JENIS_ANGGOTA = '$JENISANGOTA'
 WHERE KODE = '$id';";
 
@@ -767,6 +773,117 @@ function hapusJasa($data)
     return mysqli_affected_rows($conn);
 }
 
+function tambahBeli($data, $id)
+{
+    global $conn;
+
+    $NOTA = mysqli_real_escape_string($conn, $data["NOTA"]);
+    $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TANGGAL`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `USER_ADMIN`, `OPERATOR`) VALUES
+     ('$NOTA', '$STATUS_NOTA', '$TANGGAL', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$id', '$id')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahBeli($data, $id)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $NOTA = mysqli_real_escape_string($conn, $data["NOTA"]);
+    $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+    $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    $query = "UPDATE `Beli` SET
+NOTA = '$NOTA',
+STATUS_NOTA = '$STATUS_NOTA',
+TANGGAL = '$TANGGAL',
+LOKASI_ID = '$LOKASI_ID',
+SUPPLIER_ID = '$SUPPLIER_ID',
+KETERANGAN = '$KETERANGAN',
+USER_ADMIN = '$id',
+OPERATOR = '$id'
+WHERE NOTA = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusBeli($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Beli WHERE NOTA = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahMultiPrice($data)
+{
+    global $conn;
+
+    $BARANG_ID = mysqli_real_escape_string($conn, $data["BARANG_ID"]);
+    $KODE_SATUAN = mysqli_real_escape_string($conn, $data["KODE_SATUAN"]);
+    $CUSTOMER_ID = mysqli_real_escape_string($conn, $data["CUSTOMER_ID"]);
+    $HARGA_KE = mysqli_real_escape_string($conn, $data["HARGA_KE"]);
+    $JUMLAH_R1 = mysqli_real_escape_string($conn, $data["JUMLAH_R1"]);
+    $JUMLAH_R2 = mysqli_real_escape_string($conn, $data["JUMLAH_R2"]);
+    $HARGA_JUAL = mysqli_real_escape_string($conn, $data["HARGA_JUAL"]);
+
+    mysqli_query($conn, "INSERT INTO `Multi_price`(`BARANG_ID`, `KODE_SATUAN`, `HARGA_KE`, `CUSTOMER_ID`, `JUMLAH_R1`, `JUMLAH_R2`, `HARGA_JUAL`) VALUES
+     ('$BARANG_ID', '$KODE_SATUAN', '$HARGA_KE', '$CUSTOMER_ID', '$JUMLAH_R1', '$JUMLAH_R2', '$HARGA_JUAL')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahMultiPrice($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $BARANG_ID = mysqli_real_escape_string($conn, $data["BARANG_ID"]);
+    $KODE_SATUAN = mysqli_real_escape_string($conn, $data["KODE_SATUAN"]);
+    $CUSTOMER_ID = mysqli_real_escape_string($conn, $data["CUSTOMER_ID"]);
+    $HARGA_KE = mysqli_real_escape_string($conn, $data["HARGA_KE"]);
+    $JUMLAH_R1 = mysqli_real_escape_string($conn, $data["JUMLAH_R1"]);
+    $JUMLAH_R2 = mysqli_real_escape_string($conn, $data["JUMLAH_R2"]);
+    $HARGA_JUAL = mysqli_real_escape_string($conn, $data["HARGA_JUAL"]);
+
+    $query = "UPDATE `Multi_price` SET
+BARANG_ID = '$BARANG_ID',
+KODE_SATUAN = '$KODE_SATUAN',
+CUSTOMER_ID = '$CUSTOMER_ID',
+HARGA_KE = '$HARGA_KE',
+JUMLAH_R1 = '$JUMLAH_R1',
+JUMLAH_R2 = '$JUMLAH_R2',
+HARGA_JUAL = '$HARGA_JUAL'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusMultiPrice($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Multi_price WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
 function tambahLokasi($data)
 {
     global $conn;
@@ -816,6 +933,52 @@ function hapusLokasi($data)
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     mysqli_query($conn, "DELETE FROM lokasi WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahSatuan($data)
+{
+    global $conn;
+
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $KONVERSI = mysqli_real_escape_string($conn, $data["KONVERSI"]);
+
+
+    mysqli_query($conn, "INSERT INTO `Satuan`(`KODE`, `NAMA`, `KONVERSI`) VALUES
+     ('$KODE', '$NAMA', '$KONVERSI')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahSatuan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
+    $KONVERSI = mysqli_real_escape_string($conn, $data["KONVERSI"]);
+
+    $query = "UPDATE `Satuan` SET
+KODE = '$KODE',
+NAMA = '$NAMA',
+NAMA = '$NAMA',
+KONVERSI = '$KONVERSI'
+WHERE KODE = '$KODE_LAMA';";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusSatuan($data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    mysqli_query($conn, "DELETE FROM Satuan WHERE KODE = '$KODE_LAMA'");
 
     return mysqli_affected_rows($conn);
 }

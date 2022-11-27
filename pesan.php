@@ -2,7 +2,7 @@
 require_once 'utils/functions.php';
 require_once 'utils/logged.php';
 
-$brg = query("SELECT * FROM BARANG ORDER BY RAND() LIMIT 0, 20");
+$brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID ORDER BY RAND() LIMIT 0, 20");
 
 if (isset($_POST["cari"])) {
   $mahasiswa = cari($_POST["keyword"]);
@@ -36,7 +36,7 @@ include('shared/nav.php');
                                 } else {
                                   echo 'badge-error';
                                 } ?> badge-sm text-white"><?= round($b["STOK"]); ?></span>
-            <span class="badge badge-sm"><?= rupiah($b["HARGA_BELI"]); ?></span>
+            <span class="badge badge-sm"><?= rupiah($b["HARGA_JUAL"]); ?></span>
           </div>
           <p class="text-xs"></p>
           <div class="card-actions justify-end">
@@ -46,7 +46,7 @@ include('shared/nav.php');
                                 } ?> btn-sm text-white add-to-cart" <?php if (round($b["STOK"]) > 0) {
                                                                     } else {
                                                                       echo 'disabled';
-                                                                    } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                    } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
           </div>
         </div>
       </div>

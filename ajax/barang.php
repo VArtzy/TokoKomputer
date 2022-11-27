@@ -11,26 +11,6 @@ HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);
 ?>
-<script>
-    $(document).ready(function() {
-        var table = $('#table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'excel'
-            ]
-        });
-
-        $(document).on("keydown", function(e) {
-            console.log(e.which);
-            if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
-                $("#tambah")[0].click();
-            }
-            if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
-                $(".buttons-excel")[0].click();
-            }
-        });
-    })
-</script>
 
 <?php if (!empty($brg)) : ?>
     <table class="table w-full">

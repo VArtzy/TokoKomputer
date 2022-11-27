@@ -2,16 +2,16 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM Jasa ORDER BY KETERANGAN ASC");
+$item = query("SELECT * FROM Satuan ORDER BY NAMA ASC");
 
 if (isset($_POST["submit"])) {
 
     // cek apakah daata berhasil diubah
-    if (tambahJasa($_POST) > 0) {
+    if (tambahSatuan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Menambah Jasa Baru');
-        document.location.href = 'Jasa.php';
+        alert('Berhasil Menambah Satuan Baru');
+        document.location.href = 'Satuan.php';
         </script>
         ";
     } else {
@@ -22,11 +22,11 @@ if (isset($_POST["submit"])) {
 if (isset($_POST["ubah"])) {
 
     // cek apakah daata berhasil diubah
-    if (ubahJasa($_POST) > 0) {
+    if (ubahSatuan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Memperbaiki Jasa');
-        document.location.href = 'Jasa.php';
+        alert('Berhasil Memperbaiki Satuan');
+        document.location.href = 'Satuan.php';
         </script>
         ";
     } else {
@@ -37,11 +37,11 @@ if (isset($_POST["ubah"])) {
 if (isset($_POST["hapus"])) {
 
     // cek apakah daata berhasil diubah
-    if (hapusJasa($_POST) > 0) {
+    if (hapusSatuan($_POST) > 0) {
         echo "
         <script>
-        alert('Berhasil Menghapus Jasa');
-        document.location.href = 'Jasa.php';
+        alert('Berhasil Menghapus Satuan');
+        document.location.href = 'Satuan.php';
         </script>
         ";
     } else {
@@ -49,7 +49,7 @@ if (isset($_POST["hapus"])) {
     }
 }
 
-$title = "Jasa - $username";
+$title = "Satuan - $username";
 include('shared/navadmin.php');
 ?>
 
@@ -90,11 +90,11 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl font-semibold">Jasa</h1>
+    <h1 class="text-2xl font-semibold">Satuan</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <label for="my-modal-6" class="btn btn-success mb-4">Tambah Jasa</label>
+        <label for="my-modal-6" class="btn btn-success mb-4">Tambah Satuan</label>
     </div>
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
@@ -106,7 +106,8 @@ include('shared/navadmin.php');
                 <tr>
                     <th>No. </th>
                     <th>Kode</th>
-                    <th>Keterangan</th>
+                    <th>Nama</th>
+                    <th>Konversi</th>
                     <th></th>
                 </tr>
             </thead>
@@ -115,10 +116,11 @@ include('shared/navadmin.php');
                     <tr>
                         <td><?= $key + 1; ?></td>
                         <td><?= $i['KODE']; ?></td>
-                        <td><?= $i['KETERANGAN']; ?></td>
+                        <td><?= $i['NAMA']; ?></td>
+                        <td><?= $i['KONVERSI']; ?></td>
                         <td>
                             <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
-                                <a tabindex="1" href="Jasa.php?kode=<?= $i['KODE']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                                <a tabindex="1" href="Satuan.php?kode=<?= $i['KODE']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -133,7 +135,7 @@ include('shared/navadmin.php');
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
-                <h3 class="font-bold text-lg">Jasa</h3>
+                <h3 class="font-bold text-lg">Satuan</h3>
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KODE">Kode: </label>
@@ -145,11 +147,20 @@ include('shared/navadmin.php');
                 </div>
                 <div class="form-control">
                     <label class="label">
-                        <label class="label-text" for="KETERANGAN">Keterangan: </label>
+                        <label class="label-text" for="NAMA">Nama: </label>
                     </label>
                     <label class="input-group">
-                        <span>Keterangan:</span>
-                        <input type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                        <span>Nama:</span>
+                        <input type="text" name="NAMA" id="NAMA" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="KONVERSI">Konversi: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Konversi:</span>
+                        <input type="text" name="KONVERSI" id="KONVERSI" class="input input-bordered">
                     </label>
                 </div>
                 <div class="modal-action">
@@ -168,14 +179,14 @@ include('shared/navadmin.php');
 <?php if (isset($_GET['kode'])) : ?>
     <?php
     $kode = $_GET['kode'];
-    $item = query("SELECT * FROM Jasa WHERE KODE = '$kode'")[0];
+    $item = query("SELECT * FROM Satuan WHERE KODE = '$kode'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['KODE']; ?>" name="KODE_LAMA">
-                <h3 class="font-bold text-lg">Aksi Jasa</h3>
+                <h3 class="font-bold text-lg">Aksi Satuan</h3>
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KODE">Kode: </label>
@@ -187,11 +198,20 @@ include('shared/navadmin.php');
                 </div>
                 <div class="form-control">
                     <label class="label">
-                        <label class="label-text" for="KETERANGAN">Keterangan: </label>
+                        <label class="label-text" for="NAMA">Nama: </label>
                     </label>
                     <label class="input-group">
-                        <span>Keterangan:</span>
-                        <input value="<?= $item['KETERANGAN']; ?>" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                        <span>Nama:</span>
+                        <input value="<?= $item['NAMA']; ?>" type="text" name="NAMA" id="NAMA" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="KONVERSI">Konversi: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Konversi:</span>
+                        <input value="<?= $item['KONVERSI']; ?>" type="text" name="KONVERSI" id="KONVERSI" class="input input-bordered">
                     </label>
                 </div>
                 <div class="modal-action">
@@ -199,7 +219,7 @@ include('shared/navadmin.php');
                         <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
                     </div>
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="Jasa.php" for="my-modal-edit" class="btn">Batal</a>
+                        <a id="batal" href="Satuan.php" for="my-modal-edit" class="btn">Batal</a>
                     </div>
                     <div class="tooltip tooltip-success" data-tip="CTRL + A">
                         <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>

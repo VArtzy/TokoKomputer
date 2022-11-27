@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$brg = query("SELECT * FROM BARANG ORDER BY KODE DESC LIMIT 0, 20");
+$brg = query("SELECT * FROM BARANG ORDER BY NAMA ASC LIMIT 0, 20");
 
 if (isset($_POST["cari"])) {
     $mahasiswa = cari($_POST["keyword"]);
@@ -13,38 +13,28 @@ include('shared/navadmin.php');
 ?>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
 <script>
-    $(document).ready(function() {
-        var table = $('#table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'excel'
-            ]
-        });
-
-        $(document).on("keydown", function(e) {
-            console.log(e.which);
-            if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
-                $("#tambah")[0].click();
-            }
-            if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
-                $(".buttons-excel")[0].click();
-            }
-        });
-    })
+    $(document).on("keydown", function(e) {
+        console.log(e.which);
+        if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
+            $("#tambah")[0].click();
+        }
+        if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
+            $(".buttons-excel")[0].click();
+        }
+    });
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Admin</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
     <div class="md:flex gap-4">
-        <a id="tambah" class="btn btn-primary mb-4" href="tambahBarang.php">Tambah Barang</a>
+        <div class="tooltip tooltip-bottom" data-tip="CTRL + A">
+            <a id="tambah" class="btn btn-primary" href="tambahBarang.php">Tambah Barang</a>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="CTRL + E">
+            <a class="btn btn-success buttons-excel" href="cetakbarang.php">Export Barang</a>
+        </div>
         <div class="">
             <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Kode/Harga" autocomplete="off" id="keyword">
             <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
@@ -53,7 +43,7 @@ include('shared/navadmin.php');
     <br><br>
 
     <div id="container" class="overflow-x-auto w-full mt-8">
-        <table id="table" class="table w-full">
+        <table id="table" class="table w-full text-sm">
             <!-- head -->
             <thead>
                 <tr>
@@ -84,7 +74,7 @@ include('shared/navadmin.php');
                             </div>
                         </td>
                         <td>
-                            Satuan: <?= $b["SATUAN_ID"]; ?>
+                            Satuan: <?= query("SELECT NAMA FROM satuan WHERE KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?> - <?= query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $b['SATUAN_ID'] . "'")[0]['KONVERSI']; ?>
                             <br />
                             Stok: <?= round($b["STOK"]); ?>
                             <br />

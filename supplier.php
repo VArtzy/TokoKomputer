@@ -65,7 +65,7 @@ include('shared/navadmin.php');
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
-            dom: 'Bfrtip',
+            dom: 'Blfrtip',
             buttons: [
                 'excel'
             ]
