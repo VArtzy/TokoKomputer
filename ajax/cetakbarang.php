@@ -75,9 +75,9 @@ $columns = array(
 
 // SQL server connection information
 $sql_details = array(
-    'user' => 'root',
-    'pass' => '',
-    'db'   => 'tokokomputer',
+    'user' => 'admin',
+    'pass' => 'admin789',
+    'db'   => 'web_joga_comp',
     'host' => 'localhost'
 );
 
