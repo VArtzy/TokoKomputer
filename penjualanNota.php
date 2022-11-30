@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM item_pelunasan_piutang LIMIT 20");
+$item = query("SELECT * FROM item_pelunasan_piutang");
 
 if (isset($_POST["cari"])) {
     $mahasiswa = cariPelunasan($_POST["keyword"]);

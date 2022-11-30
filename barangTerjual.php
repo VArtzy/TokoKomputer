@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM item_jual ORDER BY NOTA DESC LIMIT 0, 20");
+$item = query("SELECT * FROM item_jual ORDER BY NOTA DESC");
 
 if (isset($_POST["cari"])) {
     $mahasiswa = cariItem($_POST["keyword"]);
