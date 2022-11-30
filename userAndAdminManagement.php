@@ -50,6 +50,7 @@ include('shared/navadmin.php');
                             <div class="flex items-center space-x-3">
                                 <div>
                                     <div class="font-bold"><?= $u['NAMA']; ?></div>
+                                    <div class="text-sm opacity-50">Kode: <?= $u['KODE'] ?></div>
                                     <div class="text-sm opacity-50"><?= $u['ALAMAT'] . ', ' . $u["KOTA"]; ?></div>
                                     <div class="text-sm opacity-50"><?= $u['ALAMAT2']; ?></div>
                                     <div class="text-sm opacity-50"><?php if (isset($u["WILAYAH_ID"])) {

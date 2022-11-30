@@ -46,7 +46,7 @@ include('shared/nav.php');
                                 } ?> btn-sm text-white add-to-cart" <?php if (round($b["STOK"]) > 0) {
                                                                     } else {
                                                                       echo 'disabled';
-                                                                    } ?> data-id="<?= $b["KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                    } ?> data-id="<?= $b["BARANG_ID"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ include('shared/navadmin.php');
                                 } else {
                                     echo $namaPelanggan['TELEPON'] . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
                                 }
-                                ?>"><i class="fa-brands fa-whatsapp"> <span class=" badge"><?= $namaPelanggan["TELEPON"]; ?></span></a>
+                                ?>"><i class="fa-brands fa-whatsapp"></i> <span class=" badge"><?= $namaPelanggan["TELEPON"]; ?></span></a>
     </div>
 
     <div class="overflow-x-auto w-full mt-8 mb-4">
@@ -81,7 +81,7 @@ include('shared/navadmin.php');
             <tbody>
                 <?php
                 foreach ($item as $i) {
-                    $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO` FROM BARANG where KODE = " . $i['BARANG_ID']);
+                    $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $i['BARANG_ID']);
                     foreach ($brg as $b) : ?>
                         <tr>
                             <td>
@@ -115,9 +115,9 @@ include('shared/navadmin.php');
                                 <span class="badge badge-warning badge-sm">Diskon Gold: <?= $b["DISKON_GOLD"]; ?></span>
                             </td>
                             <th>
-                                <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"]); ?></span>
+                                <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"]); ?></span>
                                 <br>
-                                <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"] * $i["JUMLAH"]); ?></span>
+                                <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"] * $i["JUMLAH"]); ?></span>
                                 <br>
                             </th>
                             <th>

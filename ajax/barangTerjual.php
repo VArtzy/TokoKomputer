@@ -17,9 +17,11 @@ $item = query($query);
     <?php foreach ($item as $i) : ?>
         <tr>
             <td><?= $i['NOTA']; ?></td>
-            <td><?= $i['BARANG_ID']; ?></td>
+            <td><?= query("SELECT NAMA FROM barang WHERE KODE =" . $i['BARANG_ID'])[0]["NAMA"]; ?></td>
             <td><?= $i['JUMLAH']; ?></td>
             <td><?= $i['HARGA_BELI']; ?></td>
+            <td><?= $i['HARGA_JUAL']; ?></td>
+            <td><?= $i['HARGA_JUAL'] * $i['JUMLAH']; ?></td>
         </tr>
     <?php endforeach; ?>
 <?php endif ?>

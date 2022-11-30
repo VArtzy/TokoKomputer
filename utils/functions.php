@@ -243,10 +243,11 @@ function tambahItemNota($nota, $id, $jumlah, $harga)
     $NOTA = $nota;
     $BARANG_ID = $id;
     $JUMLAH = $jumlah;
-    $HARGA_BELI = $harga;
+    $HARGA_BELI = query("SELECT HARGA_BELI FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["HARGA_BELI"];
+    $HARGA_JUAL = $harga;
 
-    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `HARGA_BELI`) VALUES
-     ('$NOTA', '$BARANG_ID','$JUMLAH', '$HARGA_BELI')");
+    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
+     ('$NOTA', '$BARANG_ID','$JUMLAH', '$HARGA_BELI', '$HARGA_JUAL')");
 
     return mysqli_affected_rows($conn);
 }

@@ -26,7 +26,7 @@ include('shared/nav.php');
                         </h2>
                         <div class="badge badge-secondary"><?= $n['TANGGAL']; ?></div>
                         <p>Salesman ID: <?= $n['SALESMAN_ID']; ?></p>
-                        <p>Total: <?= $n['TOTAL_NOTA']; ?></p>
+                        <p>Total: <?= rupiah($n['TOTAL_NOTA']); ?></p>
                         <div class="card-actions justify-end">
                             <div class="badge badge-outline"><?= $n['STATUS_BAYAR']; ?></div>
                             <div class="badge badge-outline"><?= $n['STATUS_NOTA']; ?></div>

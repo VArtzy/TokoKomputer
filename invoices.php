@@ -53,7 +53,7 @@ include('shared/navadmin.php');
                                                                                 }
                                                                             } ?></span></p>
                         <p>Operator: <span class="badge"><?= query("SELECT NAMA FROM user_admin WHERE ID = " . $n['OPERATOR'])[0]['NAMA']; ?></span></p>
-                        <p>Total: <?= $n['TOTAL_NOTA']; ?></p>
+                        <p>Total: <?= rupiah($n['TOTAL_NOTA']); ?></p>
                         <div class="card-actions justify-end">
                             <div class="badge badge-outline"><?= $n['STATUS_BAYAR']; ?></div>
                             <div class="badge badge-outline"><?= $n['STATUS_NOTA']; ?></div>

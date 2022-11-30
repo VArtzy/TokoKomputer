@@ -7,7 +7,7 @@ $data = json_decode($cart, true);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 foreach ($data as $d) {
-    $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO` FROM BARANG where KODE = " . $d['id']);
+    $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $d['id']);
     foreach ($brg as $b) {
         if ($d['count'] > round($b["STOK"])) {
             $d['count'] = 1;
@@ -53,6 +53,13 @@ if (isset($_POST["cari"])) {
     $mahasiswa = cari($_POST["keyword"]);
 }
 
+if (isset($_POST["carinama"])) {
+    $namaPelanggan = query("SELECT NAMA FROM customer WHERE KODE = '" . $_POST['CUSTOMER_NAMA'] . "'")[0]["NAMA"];
+    echo  "<script>
+        alert('Nama Pelanggan dari id itu adalah $namaPelanggan');
+        </script>";
+}
+
 $title = "Tambah Nota - $username";
 include('shared/navadmin.php');
 ?>
@@ -77,7 +84,7 @@ include('shared/navadmin.php');
                 <tbody>
                     <?php
                     foreach ($data as $d) {
-                        $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO` FROM BARANG where KODE = " . $d['id']);
+                        $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $d['id']);
                         foreach ($brg as $b) : ?>
                             <tr>
                                 <td>
@@ -111,9 +118,9 @@ include('shared/navadmin.php');
                                     <span class="badge badge-warning badge-sm">Diskon Gold: <?= $b["DISKON_GOLD"]; ?></span>
                                 </td>
                                 <th>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"]); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"]); ?></span>
                                     <br>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"] * $d['count']); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"] * $d['count']); ?></span>
                                     <br>
                                 </th>
                                 <th>
@@ -139,6 +146,7 @@ include('shared/navadmin.php');
                     <label class="input-group">
                         <span>Nama</span>
                         <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan kode pelanggan...">
+                        <button class="btn" type="submit" name="carinama">Cari Pelanggan</button>
                     </label>
                 </div>
                 <div class="form-control">

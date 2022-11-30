@@ -6,7 +6,7 @@ $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
 
 foreach ($data as $d) {
-    $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO` FROM BARANG where KODE = " . $d['id']);
+    $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $d['id']);
     foreach ($brg as $b) {
         if ($d['count'] > round($b["STOK"])) {
             $d['count'] = 1;
@@ -73,7 +73,7 @@ include('shared/nav.php');
                 <tbody>
                     <?php
                     foreach ($data as $d) {
-                        $brg = query("SELECT `KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`,`STOK_AWAL`, `DISKON_RP`, `GARANSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `LOKASI_ID` FROM BARANG where KODE = " . $d['id']);
+                        $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $d['id']);
                         foreach ($brg as $b) : ?>
                             <tr>
                                 <td>
@@ -107,9 +107,9 @@ include('shared/nav.php');
                                     <span class="badge badge-warning badge-sm">Diskon Gold: <?= $b["DISKON_GOLD"]; ?></span>
                                 </td>
                                 <th>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"]); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"]); ?></span>
                                     <br>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"] * $d['count']); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"] * $d['count']); ?></span>
                                     <br>
                                 </th>
                                 <th>
