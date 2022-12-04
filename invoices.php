@@ -20,6 +20,7 @@ include('shared/navadmin.php');
 
     <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
     <a class="btn btn-warning mb-8" href="admin.php">Kembali</a>
+    <a class="btn btn-info text-sm mb-8" href="jual.php">Lihat Records Nota</a>
     <a class="btn btn-info text-sm mb-8" href="barangTerjual.php">Lihat Records Barang Terjual</a>
     <a class="btn btn-info text-sm mb-8" href="penjualanNota.php">Lihat Records Penjualan Nota</a>
 

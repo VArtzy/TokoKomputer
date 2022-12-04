@@ -245,9 +245,29 @@ function tambahItemNota($nota, $id, $jumlah, $harga)
     $JUMLAH = $jumlah;
     $HARGA_BELI = query("SELECT HARGA_BELI FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["HARGA_BELI"];
     $HARGA_JUAL = $harga;
+    $SATUAN_ID = query("SELECT SATUAN_ID FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["SATUAN_ID"];
+    $JUMLAH2 = query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $SATUAN_ID . "'")[0]["KONVERSI"];
 
-    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
-     ('$NOTA', '$BARANG_ID','$JUMLAH', '$HARGA_BELI', '$HARGA_JUAL')");
+    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `JUMLAH2`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
+     ('$NOTA', '$BARANG_ID','$JUMLAH', '$JUMLAH2', '$HARGA_BELI', '$HARGA_JUAL')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahBeliItemNota($nota, $id, $jumlah, $harga)
+{
+    global $conn;
+
+    $NOTA = $nota;
+    $BARANG_ID = $id;
+    $JUMLAH = $jumlah;
+    $HARGA_BELI = query("SELECT HARGA_BELI FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["HARGA_BELI"];
+    $HARGA_JUAL = $harga;
+    $SATUAN_ID = query("SELECT SATUAN_ID FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["SATUAN_ID"];
+    $JUMLAH2 = query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $SATUAN_ID . "'")[0]["KONVERSI"];
+
+    mysqli_query($conn, "INSERT INTO `item_beli`(`NOTA`, `BARANG_ID`, `JUMLAH`, `JUMLAH2`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
+     ('$NOTA', '$BARANG_ID','$JUMLAH', '$JUMLAH2', '$HARGA_BELI', '$HARGA_JUAL')");
 
     return mysqli_affected_rows($conn);
 }
@@ -774,39 +794,44 @@ function hapusJasa($data)
     return mysqli_affected_rows($conn);
 }
 
-function tambahBeli($data, $id)
+function tambahBeli($nota, $username, $total, $data)
 {
+    date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
-    $NOTA = mysqli_real_escape_string($conn, $data["NOTA"]);
+    $NOTA = $nota;
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
-    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+    $TOTAL_NOTA = $total;
+    $TANGGAL = Date('Y-m-d');
+    $TEMPO = mysqli_real_escape_string($conn, $data["TANGGAL"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
 
-    mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TANGGAL`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `USER_ADMIN`, `OPERATOR`) VALUES
-     ('$NOTA', '$STATUS_NOTA', '$TANGGAL', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$id', '$id')");
+    mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `USER_ADMIN`, `OPERATOR`) VALUES
+     ('$NOTA', '$STATUS_NOTA', '$TOTAL_NOTA', '$TANGGAL', '$TEMPO', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$USER_ADMIN', '$USER_ADMIN')");
 
     return mysqli_affected_rows($conn);
 }
 
 function ubahBeli($data, $id)
 {
+    date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
-    $NOTA = mysqli_real_escape_string($conn, $data["NOTA"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
-    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+    $TANGGAL = Date('Y-m-d');
+    $TEMPO = mysqli_real_escape_string($conn, $data["TANGGAL"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
 
     $query = "UPDATE `Beli` SET
-NOTA = '$NOTA',
 STATUS_NOTA = '$STATUS_NOTA',
 TANGGAL = '$TANGGAL',
+TEMPO = '$TEMPO',
 LOKASI_ID = '$LOKASI_ID',
 SUPPLIER_ID = '$SUPPLIER_ID',
 KETERANGAN = '$KETERANGAN',

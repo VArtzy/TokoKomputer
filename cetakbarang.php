@@ -16,6 +16,7 @@ include('shared/navadmin.php');
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
+            "pageLength": 50,
             lengthMenu: [
                 [10, 25, 50, -1],
                 ['10 rows', '25 rows', '50 rows', 'Tampilkan Semua']
@@ -24,6 +25,17 @@ include('shared/navadmin.php');
             buttons: [{
                 extend: 'excel',
                 text: 'Export to Excel',
+                exportOptions: {
+                    modifier: {
+                        // DataTables core
+                        order: 'original', // 'current', 'applied', 'index',  'original'
+                        page: 'all', // 'all',     'current'
+                        search: 'applied' // 'none',    'applied', 'removed'
+                    }
+                }
+            }, {
+                extend: 'pdf',
+                text: 'Export to PDF',
                 exportOptions: {
                     modifier: {
                         // DataTables core
@@ -46,6 +58,9 @@ include('shared/navadmin.php');
             if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
                 $(".buttons-excel")[0].click();
             }
+            if (e.which === 70 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-pdf")[0].click();
+            }
         });
     })
 </script>
@@ -59,6 +74,8 @@ include('shared/navadmin.php');
 
     <div id="container" class="overflow-x-auto w-full mt-8">
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
+        <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
+
         <table id="table" class="table w-full">
             <!-- head -->
             <thead>

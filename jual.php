@@ -2,13 +2,9 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM item_jual ORDER BY NOTA DESC");
+$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a, customer b where a.customer_id = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
-if (isset($_POST["cari"])) {
-    $mahasiswa = cariItem($_POST["keyword"]);
-}
-
-$title = "Records Barang Terjual - $username";
+$title = "Records Nota Jual - $username";
 include('shared/navadmin.php');
 ?>
 
@@ -44,14 +40,9 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl font-semibold">Halaman Track Records Barang Terjual</h1>
+    <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
     <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
-
-    <div class="">
-        <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2 mb-4" autofocus placeholder="Masukkan Keyword Kode Barang, Nota atau Jumlah/Harga Beli" autocomplete="off" id="keyword">
-        <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
-    </div>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
@@ -60,31 +51,39 @@ include('shared/navadmin.php');
         <table id="table" class="table table-compact w-full">
             <thead>
                 <tr>
-                    <th>Kode Nota</th>
-                    <th>Barang</th>
-                    <th>Jumlah</th>
-                    <th>Harga Beli</th>
-                    <th>Harga Jual</th>
-                    <th>Total</th>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Nota</th>
+                    <th>Langganan</th>
+                    <th>Keterangan</th>
+                    <th>Piutang</th>
+                    <th>Sisa Piutang</th>
+                    <th>Tempo (Nota)</th>
+                    <th>Salesman</th>
+                    <th>Operator</th>
                 </tr>
             </thead>
             <tbody id="container">
-                <?php foreach ($item as $i) : ?>
+                <?php foreach ($item as $key => $i) {
+                ?>
                     <tr>
+                        <th><?= $key + 1; ?></th>
+                        <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= query("SELECT NAMA FROM barang WHERE KODE =" . $i['BARANG_ID'])[0]["NAMA"]; ?></td>
-                        <td><?= $i['JUMLAH']; ?></td>
-                        <td><?= $i['HARGA_BELI']; ?></td>
-                        <td><?= $i['HARGA_JUAL']; ?></td>
-                        <td><?= $i['HARGA_JUAL'] * $i['JUMLAH']; ?></td>
+                        <td><?= query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]["NAMA"]; ?></td>
+                        <td><?= $i['KETERANGAN']; ?></td>
+                        <td><?= rupiah($i['PIUTANG']); ?></td>
+                        <td><?= rupiah($i['SISA_PIUTANG']); ?></td>
+                        <td><?= $i['TEMPO']; ?></td>
+                        <td><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $i['SALESMAN_ID'] . "'")[0]["NAMA"]; ?></td>
+                        <td><?= query("SELECT NAMA FROM user_admin WHERE id = '" . $i['OPERATOR'] . "'")[0]["NAMA"]; ?></td>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
+                <?php } ?>
         </table>
     </div>
 </main>
 
-<script src="script/cariItem.js"></script>
+<script src="script/cariPelunasan.js"></script>
 
 <?php
 include('shared/footer.php');

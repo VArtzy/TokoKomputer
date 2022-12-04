@@ -65,9 +65,13 @@ include('shared/navadmin.php');
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
+            "pageLength": 50,
             dom: 'Blfrtip',
             buttons: [
-                'excel'
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
             ]
         });
 
@@ -78,6 +82,9 @@ include('shared/navadmin.php');
             }
             if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
                 $(".buttons-excel")[0].click();
+            }
+            if (e.which === 70 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-pdf")[0].click();
             }
             if (e.which === 81 && (e.ctrlKey || e.metaKey)) {
                 $("#hapus")[0].click();
@@ -95,12 +102,14 @@ include('shared/navadmin.php');
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
         <label for="my-modal-6" class="btn btn-success">Tambah Pelanggan</label>
-        <a href="userAndAdminManagement.php" class="btn btn-primary mb-4">Kembali ke Managemen</a>
     </div>
+    <a href="userAndAdminManagement.php" class="btn btn-primary mb-4">Kembali ke Managemen</a>
+
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
         <p class="badge badge-sm">Previous Row (Shift + Tab)</p>
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
+        <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
         <table id="table" class="display table w-full" style="width:100%">
             <thead>
@@ -292,13 +301,13 @@ include('shared/navadmin.php');
 <?php if (isset($_GET['kode'])) : ?>
     <?php
     $kode = $_GET['kode'];
-    $item = query("SELECT * FROM customer WHERE KODE = '$kode'")[0];
+    $i = query("SELECT * FROM customer WHERE KODE = '$kode'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
-                <input type="hidden" value="<?= $item['KODE']; ?>" name="KODE_LAMA">
+                <input type="hidden" value="<?= $i['KODE']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Pelanggan</h3>
                 <div class="form-control">
                     <label class="label">
@@ -310,7 +319,7 @@ include('shared/navadmin.php');
                             <?php
                             $wilayah = query("SELECT * FROM wilayah");
                             foreach ($wilayah as $w) : ?>
-                                <option <?php if ($w === $item['WILAYAH_ID']) {
+                                <option <?php if ($w === $i['WILAYAH_ID']) {
                                             echo 'seleceted';
                                         } ?> value="<?= $w['KODE']; ?>"><?= $w["KETERANGAN"]; ?></option>
                             <?php endforeach; ?>

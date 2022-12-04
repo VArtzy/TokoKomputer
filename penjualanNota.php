@@ -22,9 +22,13 @@ include('shared/navadmin.php');
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
+            "pageLength": 50,
             dom: 'Blfrtip',
             buttons: [
-                'excel'
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
             ]
         });
 
@@ -32,10 +36,12 @@ include('shared/navadmin.php');
             if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
                 $(".buttons-excel")[0].click();
             }
+            if (e.which === 70 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-pdf")[0].click();
+            }
         });
     })
 </script>
-
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
@@ -47,6 +53,9 @@ include('shared/navadmin.php');
     </div>
 
     <div class="overflow-x-auto">
+        <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
+        <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
+
         <table id="table" class="table table-compact w-full">
             <thead>
                 <tr>

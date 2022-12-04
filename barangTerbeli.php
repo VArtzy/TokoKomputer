@@ -2,13 +2,9 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM item_jual ORDER BY NOTA DESC");
+$item = query("SELECT * FROM item_beli ORDER BY NOTA DESC");
 
-if (isset($_POST["cari"])) {
-    $mahasiswa = cariItem($_POST["keyword"]);
-}
-
-$title = "Records Barang Terjual - $username";
+$title = "Records Barang Terbeli - $username";
 include('shared/navadmin.php');
 ?>
 
@@ -44,14 +40,9 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl font-semibold">Halaman Track Records Barang Terjual</h1>
-    <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
-    <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
-
-    <div class="">
-        <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2 mb-4" autofocus placeholder="Masukkan Keyword Kode Barang, Nota atau Jumlah/Harga Beli" autocomplete="off" id="keyword">
-        <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
-    </div>
+    <h1 class="text-2xl font-semibold">Halaman Track Records Barang Terbeli</h1>
+    <a class="btn btn-primary mb-8" href="pilihBarangBeli.php">Tambah Beli</a>
+    <a class="btn btn-warning mb-8" href="beli.php">Kembali</a>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>

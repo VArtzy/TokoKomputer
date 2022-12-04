@@ -4,21 +4,6 @@ require_once('utils/loggedAdmin.php');
 
 $item = query("SELECT * FROM Beli ORDER BY TANGGAL DESC");
 
-if (isset($_POST["submit"])) {
-
-    // cek apakah daata berhasil diubah
-    if (tambahBeli($_POST, $id) > 0) {
-        echo "
-        <script>
-        alert('Berhasil Menambah Beli Baru');
-        document.location.href = 'Beli.php';
-        </script>
-        ";
-    } else {
-        echo mysqli_error($conn);
-    }
-}
-
 if (isset($_POST["ubah"])) {
 
     // cek apakah daata berhasil diubah
@@ -65,9 +50,13 @@ include('shared/navadmin.php');
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
-            dom: 'Bfrtip',
+            "pageLength": 50,
+            dom: 'Blfrtip',
             buttons: [
-                'excel'
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
             ]
         });
 
@@ -79,11 +68,14 @@ include('shared/navadmin.php');
             if (e.which === 69 && (e.ctrlKey || e.metaKey)) {
                 $(".buttons-excel")[0].click();
             }
+            if (e.which === 70 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-pdf")[0].click();
+            }
             if (e.which === 81 && (e.ctrlKey || e.metaKey)) {
                 $("#hapus")[0].click();
             }
             if (e.key === "Escape") {
-                $("#batal")[0].click();
+                $("#pilihbarang")[0].click();
             }
         });
     })
@@ -94,12 +86,15 @@ include('shared/navadmin.php');
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <label for="my-modal-6" class="btn btn-success mb-4">Tambah Beli</label>
+        <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
     </div>
+    <a class="btn btn-info text-sm mb-8" href="barangTerbeli.php">Lihat Records Barang Terbeli</a>
+
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
         <p class="badge badge-sm">Previous Row (Shift + Tab)</p>
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
+        <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
         <table id="table" class="display table w-full" style="width:100%">
             <thead>
@@ -140,96 +135,6 @@ include('shared/navadmin.php');
     </div>
 </main>
 
-<?php if (!isset($_GET['nota'])) : ?>
-    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-    <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
-            <form action="" method="POST">
-                <h3 class="font-bold text-lg">Beli</h3>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="NOTA">Nota: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Nota:</span>
-                        <input required type="text" name="NOTA" id="NOTA" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="STATUS_NOTA">Status: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Status:</span>
-                            <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
-                                <option value="T">Tunai</option>
-                                <option value="K">Kredit</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="TANGGAL">Tanggal: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Tanggal:</span>
-                            <input type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
-                        </label>
-                    </div>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="LOKASI_ID">Lokasi: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Lokasi:</span>
-                        <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
-                            <?php
-                            $Lokasi = query("SELECT * FROM Lokasi");
-                            foreach ($Lokasi as $s) : ?>
-                                <option value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="SUPPLIER_ID">Supplier: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Supplier:</span>
-                        <select class="input input-bordered" name="SUPPLIER_ID" id="SUPPLIER_ID">
-                            <?php
-                            $Supplier = query("SELECT * FROM Supplier");
-                            foreach ($Supplier as $s) : ?>
-                                <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="KETERANGAN">Keterangan: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Keterangan:</span>
-                        <input required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="modal-action">
-                    <div class="tooltip" data-tip="ESC">
-                        <label for="my-modal-6" id="batal" class="btn">Batal</label>
-                    </div>
-                    <div class="tooltip tooltip-success" data-tip="CTRL + A">
-                        <button id="tambah" name="submit" class="btn btn-success" type="submit">Tambah</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-<?php endif; ?>
-
 <?php if (isset($_GET['nota'])) : ?>
     <?php
     $nota = $_GET['nota'];
@@ -241,15 +146,6 @@ include('shared/navadmin.php');
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="NOTA">Nota: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Nota:</span>
-                        <input value="<?= $item['NOTA']; ?>" required type="text" name="NOTA" id="NOTA" class="input input-bordered">
-                    </label>
-                </div>
                 <div class="flex gap-4">
                     <div class="form-control">
                         <label class="label">
@@ -269,11 +165,11 @@ include('shared/navadmin.php');
                     </div>
                     <div class="form-control">
                         <label class="label">
-                            <label class="label-text" for="TANGGAL">Tanggal: </label>
+                            <label class="label-text" for="TANGGAL">Tempo: </label>
                         </label>
                         <label class="input-group">
-                            <span>Tanggal:</span>
-                            <input value="<?= $item['TANGGAL']; ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
+                            <span>Tempo:</span>
+                            <input value="<?= $item['TEMPO']; ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
                         </label>
                     </div>
                 </div>
@@ -325,7 +221,7 @@ include('shared/navadmin.php');
                         <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
                     </div>
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="Jasa.php" for="my-modal-edit" class="btn">Batal</a>
+                        <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
                     </div>
                     <div class="tooltip tooltip-success" data-tip="CTRL + A">
                         <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>

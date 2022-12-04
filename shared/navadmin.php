@@ -95,7 +95,7 @@
           <div class="dropdown dropdown-bottom dropdown-hover">
             <label tabindex="0" class=""><i class="fa-solid fa-user-tie"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a href="golongan.php">Gologan</a></li>
+              <li><a href="golongan.php">Golongan</a></li>
               <li><a href="subgolongan.php">Subgolongan</a></li>
               <hr />
               <li><a href="wilayah.php">Wilayah</a></li>

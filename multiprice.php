@@ -51,10 +51,7 @@ if (isset($_POST["hapus"])) {
 
 if (isset($_POST["caribarang"])) {
     $keyword = $_POST['BARANG_ID'];
-    $query = "SELECT NAMA FROM `barang`
-    WHERE
-    KODE LIKE '%$keyword%'
-    ";
+    $query = "SELECT NAMA FROM barang WHERE KODE = '$keyword'";
     $barang = query($query);
 }
 
@@ -78,6 +75,7 @@ include('shared/navadmin.php');
 
     $(document).ready(function() {
         var table = $('#table').DataTable({
+            "pageLength": 50,
             dom: 'Blfrtip',
             buttons: [{
                 extend: 'excel',
@@ -85,7 +83,18 @@ include('shared/navadmin.php');
                 exportOptions: {
                     modifier: {
                         // DataTables core
-                        order: 'current', // 'current', 'applied', 'index',  'original'
+                        order: 'original', // 'current', 'applied', 'index',  'original'
+                        page: 'all', // 'all',     'current'
+                        search: 'applied' // 'none',    'applied', 'removed'
+                    }
+                }
+            }, {
+                extend: 'pdf',
+                text: 'Export to PDF',
+                exportOptions: {
+                    modifier: {
+                        // DataTables core
+                        order: 'original', // 'current', 'applied', 'index',  'original'
                         page: 'all', // 'all',     'current'
                         search: 'applied' // 'none',    'applied', 'removed'
                     }
@@ -107,6 +116,9 @@ include('shared/navadmin.php');
             if (e.key === "Escape") {
                 $("#batal")[0].click();
             }
+            if (e.which === 70 && (e.ctrlKey || e.metaKey)) {
+                $(".buttons-pdf")[0].click();
+            }
         });
     })
 </script>
@@ -122,6 +134,7 @@ include('shared/navadmin.php');
         <p class="badge badge-sm">Next Row (Tab)</p>
         <p class="badge badge-sm">Previous Row (Shift + Tab)</p>
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
+        <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
         <table id="table" class="display table w-full" style="width:100%">
             <thead>
