@@ -130,9 +130,9 @@ include('shared/navadmin.php');
                                     <span class="badge badge-warning badge-sm">Diskon Gold: <?= $b["DISKON_GOLD"]; ?></span>
                                 </td>
                                 <th>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"]); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"]); ?></span>
                                     <br>
-                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_JUAL"] * $d['count']); ?></span>
+                                    <span class="text-sm font-semibold opacity-70"><?= rupiah($b["HARGA_BELI"] * $d['count']); ?></span>
                                     <br>
                                 </th>
                                 <th>
