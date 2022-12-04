@@ -2,12 +2,14 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("SELECT * FROM Beli ORDER BY TANGGAL DESC");
+$item = query("select a.TANGGAL, a.TEMPO, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a, supplier b where a.SUPPLIER_ID = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
+
+if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
 if (isset($_POST["ubah"])) {
 
     // cek apakah daata berhasil diubah
-    if (ubahBeli($_POST, $id) > 0) {
+    if (ubahBeli($nota, $username, $_POST) > 0) {
         echo "
         <script>
         alert('Berhasil Memperbaiki Beli');
@@ -89,6 +91,7 @@ include('shared/navadmin.php');
         <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
     </div>
     <a class="btn btn-info text-sm mb-8" href="barangTerbeli.php">Lihat Records Barang Terbeli</a>
+    <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Lihat Records Pembelian Nota</a>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
@@ -119,8 +122,12 @@ include('shared/navadmin.php');
                         <td><?= $i['NOTA']; ?></td>
                         <td><?= query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA']; ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
-                        <td><?= $i['NOTA']; ?></td>
-                        <td><?= $i['NOTA']; ?></td>
+                        <td><?= rupiah($i['HUTANG']); ?></td>
+                        <td><?php if ($i['SISA_HUTANG']) {
+                                echo rupiah($i['SISA_HUTANG']);
+                            } else {
+                                echo rupiah($i['HUTANG']);
+                            } ?></td>
                         <td><?= $i['TEMPO']; ?></td>
                         <td><?= query("SELECT NAMA FROM user_admin WHERE ID = " . $i['OPERATOR'])[0]['NAMA']; ?></td>
                         <td>
@@ -146,6 +153,15 @@ include('shared/navadmin.php');
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="TOTAL_PELUNASAN_NOTA">Total Pelunasan: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Total Pelunasan:</span>
+                        <input value="<?= $item['TOTAL_PELUNASAN_NOTA']; ?>" required type="text" name="TOTAL_PELUNASAN_NOTA" id="KETERANGAN" class="input input-bordered">
+                    </label>
+                </div>
                 <div class="flex gap-4">
                     <div class="form-control">
                         <label class="label">
