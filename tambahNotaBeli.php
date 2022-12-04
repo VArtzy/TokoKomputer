@@ -78,7 +78,7 @@ include('shared/navadmin.php');
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold mb-4">Tambah Beli</h1>
-    <a class="btn btn-warning mb-8" href="pilihBarang.php">Kembali</a>
+    <a class="btn btn-warning mb-8" href="pilihBarangBeli.php">Kembali</a>
 
     <?php if (!empty($data)) { ?>
         <div class="overflow-x-auto w-full mt-8 mb-4">
