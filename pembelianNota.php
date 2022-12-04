@@ -4,10 +4,6 @@ require_once('utils/loggedAdmin.php');
 
 $item = query("SELECT * FROM item_pelunasan_hutang");
 
-if (isset($_POST["cari"])) {
-    $mahasiswa = cariPelunasan($_POST["keyword"]);
-}
-
 $title = "Records Nota Pelunasan - $username";
 include('shared/navadmin.php');
 ?>
@@ -46,11 +42,6 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <a class="btn btn-primary mb-8" href="pilihBarangBeli.php">Tambah Nota</a>
     <a class="btn btn-warning mb-8" href="beli.php">Kembali</a>
-
-    <div class="">
-        <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2 mb-4" autofocus placeholder="Masukkan Keyword Tanggal, Keterangan, Operator, No Pelunasan" autocomplete="off" id="keyword">
-        <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
-    </div>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
