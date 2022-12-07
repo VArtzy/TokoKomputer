@@ -8,16 +8,6 @@ $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 foreach ($data as $d) {
     $brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID where a.KODE = " . $d['id']);
-    foreach ($brg as $b) {
-        if ($d['count'] > round($b["STOK"])) {
-            $d['count'] = 1;
-            $d['stok'] = round($b["STOK"]);
-            $dataEncoded = json_encode($d);
-            echo "<script>alert('Maaf, barang " . $d['name'] . " beberapa stoknya sudah dibeli. Silahkan ulangi isi keranjang 🤗.')</script>";
-            echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
-            echo "<script>window.location.href = 'pesan.php'</script>";
-        }
-    }
 }
 
 if (isset($_POST["submit"])) {

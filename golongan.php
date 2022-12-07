@@ -97,7 +97,7 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xscl font-semibold">Golongan</h1>
+    <h1 class="text-2xl font-semibold">Golongan</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">

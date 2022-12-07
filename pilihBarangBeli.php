@@ -27,7 +27,7 @@ include('shared/navadmin.php');
 </main>
 
 <script src="script/cariBarangBeli.js"></script>
-<script src="script/cart.js"></script>
+<script src="script/cartBeli.js"></script>
 <?php
 include('shared/footer.php')
 ?>

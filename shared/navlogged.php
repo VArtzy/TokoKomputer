@@ -26,7 +26,7 @@
         <div class="dropdown dropdown-end">
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
-              <img src="img/images.png" />
+              <img id="profile" src="img/images.png" />
             </div>
           </label>
           <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
@@ -48,6 +48,7 @@
             <li><a href="logout.php">Logout</a></li>
           </ul>
         </div>
+        <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
       </div>
     </nav>
 

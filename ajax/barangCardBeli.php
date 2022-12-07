@@ -18,22 +18,12 @@ $brg = query($query);
       <div class="card-body">
         <h2 class="card-title text-sm"><?= $b["NAMA"]; ?></h2>
         <div class="flex gap-2">
-          <span class="badge <?php if (round($b["STOK"]) > 0) {
-                                echo 'badge-accent';
-                              } else {
-                                echo 'badge-error';
-                              } ?> badge-sm text-white"><?= round($b["STOK"]); ?></span>
+          <span class="badge badge-accent badge-sm text-white"><?= round($b["STOK"]); ?></span>
           <span class="badge badge-sm"><?= rupiah($b["HARGA_BELI"]); ?></span>
         </div>
         <p class="text-xs"></p>
         <div class="card-actions justify-end">
-          <button class="btn <?php if (round($b["STOK"]) > 0) {
-                                echo 'btn-success';
-                              } else {
-                              } ?> btn-sm text-white add-to-cart" onclick="tambahBarang(event)" <?php if (round($b["STOK"]) > 0) {
-                                                                                                } else {
-                                                                                                  echo 'disabled';
-                                                                                                } ?> data-id="<?= $b["BARANG_ID"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+          <button class="btn btn-success btn-sm text-white add-to-cart" onclick="tambahBarang(event)" data-id="<?= $b["BARANG_ID"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
         </div>
       </div>
     </div>

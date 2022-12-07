@@ -29,12 +29,60 @@
   <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./styles/index.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+  <script defer src="script/nav.js"></script>
   <title><?php if (isset($title)) {
             echo 'Toko Komputer - ' . $title;
           } else {
             echo "Toko Komputer";
           } ?></title>
 </head>
+
+<script>
+  window.addEventListener("keydown", function(e) {
+    if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 75)) {
+      e.preventDefault();
+      document.getElementById('searchlg').focus();
+    }
+  })
+
+  function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myMenu");
+    li = ul.getElementsByTagName("li");
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i].getElementsByTagName("a")[0];
+      if (a.textContent.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+
+  function search() {
+    // Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("searchlg");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myMenulg");
+    li = ul.getElementsByTagName("li");
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i].getElementsByTagName("a")[0];
+      if (a.textContent.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+</script>
 
 <body class="font-dm">
   <nav class="navbar bg-base-100 max-w-6xl mx-auto">
@@ -46,33 +94,36 @@
           </svg>
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
-          <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
-          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
-          <li><i class="fa-solid fa-user-tie">Master</i></li>
-          <li><a href="golongan.php">Gologan</a></li>
-          <li><a href="subgolongan.php">Subgolongan</a></li>
-          <hr />
-          <li><a href="wilayah.php">Wilayah</a></li>
-          <li><a href="lokasi.php">Lokasi</a></li>
-          <hr />
-          <li><a href="biaya.php">Biaya</a></li>
-          <li><a href="jasa.php">Jasa</a></li>
-          <hr />
-          <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
-          <li><a href="supplier.php">Supplier</a></li>
-          <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
-          <hr />
-          <li><a href="satuan.php">Satuan</a></li>
-          <li><a href="barang.php">Barang</a></li>
-          <li><a href="multiprice.php">Multi Price</a></li>
-          <li><i class="fa-solid fa-money-bills">Transaksi</i></li>
-          <li><a href="beli.php">Pembelian</a></li>
-          <li><a>Pelunasan Hutang</a></li>
-          <hr>
-          <li><a href="invoices.php">Penjualan</a></li>
-          <li><a href="">Pembayaran Piutang</a></li>
+          <input type="text" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()" class="input input-bordered lg:hidden" />
+          <ul id="myMenu" class="shadow-lg lg:hidden">
+            <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
+            <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
+            <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
+            <li><a class="fa-solid fa-user-tie">Master</a></li>
+            <li><a href="golongan.php">Golongan</a></li>
+            <li><a href="subgolongan.php">Subgolongan</a></li>
+            <hr />
+            <li><a href="wilayah.php">Wilayah</a></li>
+            <li><a href="lokasi.php">Lokasi</a></li>
+            <hr />
+            <li><a href="biaya.php">Biaya</a></li>
+            <li><a href="jasa.php">Jasa</a></li>
+            <hr />
+            <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+            <li><a href="supplier.php">Supplier</a></li>
+            <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
+            <hr />
+            <li><a href="satuan.php">Satuan</a></li>
+            <li><a href="barang.php">Barang</a></li>
+            <li><a href="multiprice.php">Multi Price</a></li>
+            <li><a class="fa-solid fa-money-bills">Transaksi</a></li>
+            <li><a href="beli.php">Pembelian</a></li>
+            <li><a>Pelunasan Hutang</a></li>
+            <hr>
+            <li><a href="invoices.php">Penjualan</a></li>
+            <li><a href="">Pembayaran Piutang</a></li>
+          </ul>
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl">Joga Computer Admin</a>
@@ -129,10 +180,50 @@
       </ul>
     </div>
     <div class="navbar-end">
+      <div class="group form-control hidden md:block">
+        <input type="text" autocomplete="off" placeholder="Search (ctrl + K)" onkeyup="search()" type="search" id="searchlg" class="input input-bordered" />
+        <ul id="myMenulg" class="absolute bg-base-100 flex flex-col gap-4 p-8 mt-2 shadow-lg z-50 hidden group-focus-within:flex">
+          <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
+          <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
+          <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
+          <li><a href="golongan.php">Golongan</a></li>
+          <li><a href="subgolongan.php">Subgolongan</a></li>
+          <li><a>
+              <hr />
+            </a></li>
+          <li><a href="wilayah.php">Wilayah</a></li>
+          <li><a href="lokasi.php">Lokasi</a></li>
+          <li><a>
+              <hr />
+            </a></li>
+          <li><a href="biaya.php">Biaya</a></li>
+          <li><a href="jasa.php">Jasa</a></li>
+          <li><a>
+              <hr />
+            </a></li>
+          <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+          <li><a href="supplier.php">Supplier</a></li>
+          <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
+          <li><a>
+              <hr />
+            </a></li>
+          <li><a href="satuan.php">Satuan</a></li>
+          <li><a href="barang.php">Barang</a></li>
+          <li><a href="multiprice.php">Multi Price</a></li>
+          <li><a href="beli.php">Pembelian</a></li>
+          <li><a>Pelunasan Hutang</a></li>
+          <li><a>
+              <hr />
+            </a></li>
+          <li><a href="invoices.php">Penjualan</a></li>
+          <li><a href="">Pembayaran Piutang</a></li>
+        </ul>
+      </div>
       <div class="dropdown dropdown-end">
         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <img src="img/images.png" />
+            <img id="profile" src="img/images.png" />
           </div>
         </label>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
@@ -142,6 +233,7 @@
           <li><a href="logoutAdmin.php">Logout</a></li>
         </ul>
       </div>
+      <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
     </div>
   </nav>
 </body>

@@ -23,8 +23,12 @@
         <div class="lg:flex navbar-end gap-4">
             <a class="btn btn-success rounded-lg text-white" href="login.php">Login</a>
             <a class="hidden lg:inline-flex btn rounded-lg text-white" href="daftar.php">Register</a>
+            <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
         </div>
     </nav>
+    <div class="">
+        <marquee behavior="" direction="right">Terima Jasa Pembuatan Website Toko ONLINE mulai dari <span class="font-bold">Rp.100.000</span>* <a class="link link-success" href="https://wa.me/62085100948472">WA Sekarang</a>.</marquee>
+    </div>
     <div class="toast toast-end z-50">
         <div>
             <a aria-label="Chat on WhatsApp" href="https://wa.me/6289665805560?text=Hallo%20min,%20bisa%20minta%20bantuannya%20dong..."><img alt="Chat on WhatsApp" src="img/WhatsAppButtonGreenSmall.svg" /> </a>

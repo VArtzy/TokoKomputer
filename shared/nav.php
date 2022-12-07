@@ -27,6 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script defer src="https://kit.fontawesome.com/cbe188b5fc.js" crossorigin="anonymous"></script>
+    <script defer src="script/nav.js"></script>
     <link rel="stylesheet" href="./styles/index.css">
     <title><?php if (isset($title)) {
                 echo 'Joga Computer - ' . $title;
