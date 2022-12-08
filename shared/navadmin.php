@@ -115,7 +115,6 @@
             <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
             <hr />
             <li><a href="satuan.php">Satuan</a></li>
-            <li><a href="barang.php">Barang</a></li>
             <li><a href="multiprice.php">Multi Price</a></li>
             <li><a class="fa-solid fa-money-bills">Transaksi</a></li>
             <li><a href="beli.php">Pembelian</a></li>
@@ -209,7 +208,6 @@
               <hr />
             </a></li>
           <li><a href="satuan.php">Satuan</a></li>
-          <li><a href="barang.php">Barang</a></li>
           <li><a href="multiprice.php">Multi Price</a></li>
           <li><a href="beli.php">Pembelian</a></li>
           <li><a>Pelunasan Hutang</a></li>

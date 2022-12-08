@@ -7,6 +7,7 @@ $query = "SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID
 WHERE
 a.NAMA LIKE '%$keyword%' OR
 a.KODE LIKE '%$keyword%' OR
+a.KODE_BARCODE LIKE '%$keyword%' OR
 b.HARGA_JUAL LIKE '%$keyword%' ORDER BY a.KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);

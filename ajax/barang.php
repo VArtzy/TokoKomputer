@@ -7,6 +7,7 @@ $query = "SELECT * FROM `barang`
 WHERE
 NAMA LIKE '%$keyword%' OR
 KODE LIKE '%$keyword%' OR
+KODE_BARCODE LIKE '%$keyword%' OR
 HARGA_BELI LIKE '%$keyword%' ORDER BY KODE DESC LIMIT 0, 10
 ";
 $brg = query($query);

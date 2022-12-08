@@ -60,6 +60,7 @@ function cari($keyword)
 WHERE
 a.NAMA LIKE '%$keyword%' OR
 a.KODE LIKE '%$keyword%' OR
+a.KODE_BARCODE LIKE '%$keyword%' OR
 b.HARGA_JUAL LIKE '%$keyword%' ORDER BY a.KODE DESC LIMIT 0, 10
 ";
     return query($query);
@@ -226,9 +227,17 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
+    $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
     $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $data["CUSTOMER_NAMA"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
+
+    if ($STATUS_NOTA === 'T') {
+        $NO_PELUNASAN = uniqid();
+        mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
+    ('$NO_PELUNASAN', '$nota', '$TOTAL_NOTA', '$KETERANGAN')");
+    }
 
     mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
      ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
@@ -847,6 +856,12 @@ function tambahBeli($nota, $username, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+
+    if ($STATUS_NOTA === 'T') {
+        $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"];
+        mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
+    ('$NO_PELUNASAN', '$nota', '$TOTAL_NOTA', '$KETERANGAN')");
+    }
 
     mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `USER_ADMIN`, `OPERATOR`) VALUES
      ('$NOTA', '$STATUS_NOTA', '$TOTAL_NOTA', '$TANGGAL', '$TEMPO', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$USER_ADMIN', '$USER_ADMIN')");

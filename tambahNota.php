@@ -141,6 +141,18 @@ include('shared/navadmin.php');
             <ul>
                 <div class="form-control">
                     <label class="label">
+                        <label class="label-text" for="STATUS_NOTA">Status: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Status:</span>
+                        <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
+                            <option value="T">Tunai</option>
+                            <option value="K">Kredit</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
                         <label class="label-text" for="CUSTOMER_NAMA">Atas Nama: </label>
                     </label>
                     <label class="input-group">
@@ -175,6 +187,15 @@ include('shared/navadmin.php');
                                 <option value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="KETERANGAN">Keterangan: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Keterangan:</span>
+                        <input required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
                 <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>

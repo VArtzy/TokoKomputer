@@ -34,7 +34,7 @@ include('shared/navadmin.php');
       </div>
       <div class="stat">
         <div class="stat-figure text-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current fill-success">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
           </svg>
         </div>
@@ -56,8 +56,14 @@ include('shared/navadmin.php');
 
   </div>
   <div class="grid lg:grid-cols-2 gap-8 shadow rounded">
-    <canvas style="width:100%;max-width:500px" id="pembelian"></canvas>
-    <canvas style="width:100%;max-width:500px" id="penjualan"></canvas>
+    <div>
+      <h2 class="text-xl mb-4 text-sucess">Sales vs Budget</h2>
+      <canvas style="width:100%;max-width:500px" id="pembelian"></canvas>
+    </div>
+    <div>
+      <h2 class="text-xl mb-4 text-sucess">Order & Invoices Minggu Ini</h2>
+      <canvas style="width:100%;max-width:500px" id="penjualan"></canvas>
+    </div>
   </div>
 </main>
 
@@ -108,28 +114,33 @@ include('shared/navadmin.php');
     }
   ];
 
-  var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-  var yValues = [55, 49, 44, 24, 15];
-  var barColors = ["red", "green", "blue", "orange", "brown"];
+  fetch('ajax/jual.php').then(function(response) {
+    return response.json()
+  }).then(function(data) {
+    var xValues = data.hari;
+    var yValues = data.jumlah;
+    var barColors = ["rgba(74,233,176,1)", "#8FDC97", "#DBEBC0", "rgba(217,38,169,1)", "#E06C9F", "#F283B6", "#EDBFB7"];
+    new Chart("penjualan", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {}
+    });
+  })
 
-  new Chart("penjualan", {
-    type: "bar",
-    data: {
-      labels: xValues,
-      datasets: [{
-        backgroundColor: barColors,
-        data: yValues
-      }]
-    },
-    options: {}
-  });
+
 
   new Chart("pembelian", {
     type: "scatter",
     data: {
       datasets: [{
         pointRadius: 4,
-        pointBackgroundColor: "rgba(0,0,255,1)",
+        pointBackgroundColor: "rgba(54,211,153,1)",
         data: xyValues
       }]
     },
@@ -138,7 +149,7 @@ include('shared/navadmin.php');
 
 <script defer>
   const tip = document.querySelector('#tip');
-  let tips = ['Gunakan tab index untuk memasukan input lebih cepat 🤫', 'Minum air 8 Gelas sehari bisa buat kamu jadi fokus 🥛', 'Kontak dengan pelanggan dapat meningkat konversi hingga 89% 😱', 'Gunakan Laptop/PC untuk exprience administratif terbaik 💻']
+  let tips = ['Gunakan tab index untuk memasukan input lebih cepat 🤫', 'Minum air 8 Gelas sehari bisa buat kamu jadi fokus 🥛', 'Kontak dengan pelanggan dapat meningkat konversi hingga 89% 😱', 'Gunakan Laptop/PC untuk exprience administratif terbaik 💻', 'Gunakan DarkMode di malam hari 🌚', 'Navigasi cepat dengan CTRL + K ⚡']
   let t = tips[Math.floor(Math.random() * tips.length)]
   tip.textContent = t
   const motivasi = document.querySelector('#motivasi');
