@@ -2,6 +2,8 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+$barang = query('select BARANG_ID, sum(JUMLAH) as JUMLAH from item_jual group by BARANG_ID ORDER BY sum(JUMLAH) DESC LIMIT 5;');
+
 $title = "Admin - $username";
 include('shared/navadmin.php');
 ?>
@@ -63,6 +65,64 @@ include('shared/navadmin.php');
     <div>
       <h2 class="text-xl mb-4 text-sucess">Order & Invoices Minggu Ini</h2>
       <canvas style="width:100%;max-width:500px" id="penjualan"></canvas>
+    </div>
+    <div class="">
+      <h2 class="text-xl mb-4 text-sucess">TOP 5 Barang</h2>
+      <?php if (isset($barang)) { ?>
+        <div class="overflow-x-auto w-full">
+          <table class="table w-full">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($barang as $key => $b) : ?>
+                <tr>
+                  <td>
+                    <h2 class="text-xl"><?= $key + 1; ?></h2>
+                  </td>
+                  <td>
+                    <div class="flex items-center space-x-3">
+                      <div class="avatar">
+                        <div class="mask mask-squircle w-12 h-12">
+                          <img src="<?= query("SELECT FOTO FROM barang where KODE = '" . $b['BARANG_ID'] . "'")[0]['FOTO']; ?>" alt="Gambar Barang" />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-bold"><?= query("SELECT NAMA FROM barang where KODE = '" . $b['BARANG_ID'] . "'")[0]['NAMA']; ?></div>
+                        <div class="text-sm opacity-50"><?= $b['BARANG_ID']; ?></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <?= rupiah(query("SELECT HARGA_BELI FROM barang where KODE = '" . $b['BARANG_ID'] . "'")[0]['HARGA_BELI']); ?>
+                    <br />
+                    <span class="badge badge-ghost badge-sm"><?= rupiah(query("SELECT HARGA_JUAL FROM multi_price where BARANG_ID = '" . $b['BARANG_ID'] . "'")[0]['HARGA_JUAL']); ?></span>
+                  </td>
+                  <td><?= $b['JUMLAH']; ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+            <!-- foot -->
+            <tfoot>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Sales</th>
+              </tr>
+            </tfoot>
+
+          </table>
+        </div>
+      <?php } else { ?>
+        <h4>Kamu masih belum memiliki barang yang dibeli :(</h4>
+      <?php } ?>
     </div>
   </div>
 </main>

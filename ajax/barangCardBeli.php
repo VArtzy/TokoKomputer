@@ -3,7 +3,7 @@ require_once('../utils/functions.php');
 
 $keyword = $_GET["keyword"];
 
-$query = "SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID
+$query = "SELECT *, a.KODE as BARANG_KODE FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID
 WHERE
 a.NAMA LIKE '%$keyword%' OR
 a.KODE LIKE '%$keyword%' OR
@@ -24,7 +24,7 @@ $brg = query($query);
         </div>
         <p class="text-xs"></p>
         <div class="card-actions justify-end">
-          <button class="btn btn-success btn-sm text-white add-to-cart" onclick="tambahBarang(event)" data-id="<?= $b["BARANG_ID"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+          <button class="btn btn-success btn-sm text-white add-to-cart" onclick="tambahBarang(event)" data-id="<?= $b["BARANG_KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
         </div>
       </div>
     </div>

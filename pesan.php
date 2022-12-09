@@ -1,8 +1,8 @@
 <?php
 require_once 'utils/functions.php';
 require_once 'utils/logged.php';
-
-$brg = query("SELECT * FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID ORDER BY RAND() LIMIT 0, 20");
+// kalo mau tamplilin yang ada harganya doang pake INNER JOIN dan ganti BARANG_KODE jadi BARANG_ID
+$brg = query("SELECT *, a.KODE as BARANG_KODE FROM BARANG a LEFT JOIN multi_price b ON a.KODE = b.BARANG_ID ORDER BY RAND() LIMIT 0, 20");
 
 if (isset($_POST["cari"])) {
   $mahasiswa = cari($_POST["keyword"]);
@@ -46,7 +46,7 @@ include('shared/nav.php');
                                 } ?> btn-sm text-white add-to-cart" <?php if (round($b["STOK"]) > 0) {
                                                                     } else {
                                                                       echo 'disabled';
-                                                                    } ?> data-id="<?= $b["BARANG_ID"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
+                                                                    } ?> data-id="<?= $b["BARANG_KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_JUAL"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
           </div>
         </div>
       </div>

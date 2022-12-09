@@ -159,7 +159,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Total Pelunasan:</span>
-                        <input value="<?= $item['TOTAL_PELUNASAN_NOTA']; ?>" required type="text" name="TOTAL_PELUNASAN_NOTA" id="KETERANGAN" class="input input-bordered">
+                        <input value="<?= $item['TOTAL_PELUNASAN_NOTA']; ?>" max="<?= $item['TOTAL_NOTA']; ?>" required type="number" name="TOTAL_PELUNASAN_NOTA" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="flex gap-4">

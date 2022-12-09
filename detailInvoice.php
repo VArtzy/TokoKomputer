@@ -211,7 +211,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Total Pelunasan:</span>
-                        <input type="number" name="TOTAL_PELUNASAN_NOTA" value="<?= $notas['TOTAL_PELUNASAN_NOTA']; ?>" id="TOTAL_PELUNASAN_NOTA" class="input input-bordered">
+                        <input type="number" name="TOTAL_PELUNASAN_NOTA" max="<?= $notas['TOTAL_NOTA']; ?>" value="<?= $notas['TOTAL_PELUNASAN_NOTA']; ?>" id="TOTAL_PELUNASAN_NOTA" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
