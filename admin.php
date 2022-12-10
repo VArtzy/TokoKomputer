@@ -57,27 +57,29 @@ include('shared/navadmin.php');
     </div>
 
   </div>
-  <div class="grid lg:grid-cols-2 gap-8 shadow rounded">
-    <div>
+
+  <h2 class="text-2xl tracking-normal mb-2">Statistics</h2>
+  <div class="grid lg:grid-cols-2 gap-8 ">
+    <div class="shadow rounded" style="padding: 2em;">
       <h2 class="text-xl mb-4 text-sucess">Sales vs Budget</h2>
       <canvas style="width:100%;max-width:500px" id="pembelian"></canvas>
     </div>
-    <div>
+    <div class="shadow rounded" style="padding: 2em;">
       <h2 class="text-xl mb-4 text-sucess">Order & Invoices Minggu Ini</h2>
       <canvas style="width:100%;max-width:500px" id="penjualan"></canvas>
     </div>
     <div class="">
       <h2 class="text-xl mb-4 text-sucess">TOP 5 Barang</h2>
       <?php if (isset($barang)) { ?>
-        <div class="overflow-x-auto w-full">
+        <div class="overflow-x-auto w-full shadow rounded p-4">
           <table class="table w-full">
             <!-- head -->
             <thead>
               <tr>
                 <th>No</th>
                 <th>Nama</th>
-                <th>Harga</th>
                 <th>Sales</th>
+                <th>Harga</th>
               </tr>
             </thead>
             <tbody>
@@ -99,12 +101,12 @@ include('shared/navadmin.php');
                       </div>
                     </div>
                   </td>
+                  <td><?= $b['JUMLAH']; ?></td>
                   <td>
                     <?= rupiah(query("SELECT HARGA_BELI FROM barang where KODE = '" . $b['BARANG_ID'] . "'")[0]['HARGA_BELI']); ?>
                     <br />
                     <span class="badge badge-ghost badge-sm"><?= rupiah(query("SELECT HARGA_JUAL FROM multi_price where BARANG_ID = '" . $b['BARANG_ID'] . "'")[0]['HARGA_JUAL']); ?></span>
                   </td>
-                  <td><?= $b['JUMLAH']; ?></td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -113,8 +115,8 @@ include('shared/navadmin.php');
               <tr>
                 <th>No</th>
                 <th>Nama</th>
-                <th>Harga</th>
                 <th>Sales</th>
+                <th>Harga</th>
               </tr>
             </tfoot>
 

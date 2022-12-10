@@ -9514,6 +9514,10 @@ html {
   padding: 2rem;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+
 .p-10 {
   padding: 2.5rem;
 }
@@ -9636,6 +9640,11 @@ html {
   line-height: 1.75rem;
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -9747,6 +9756,10 @@ html {
 
 .tracking-wider {
   letter-spacing: 0.05em;
+}
+
+.tracking-normal {
+  letter-spacing: 0em;
 }
 
 .text-secondary {

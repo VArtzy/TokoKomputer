@@ -27,7 +27,7 @@
         </div>
     </nav>
     <div class="">
-        <marquee behavior="" direction="right">Terima Jasa Pembuatan Website Toko ONLINE mulai dari <span class="font-bold">Rp.99.900</span>* <span class="font-bold line-through">Rp.199.900</span> <a class="link link-success" href="https://wa.me/62085100948472">WA Sekarang</a>.</marquee>
+        <marquee behavior="" direction="right">Terima Jasa Pembuatan Website Toko ONLINE mulai dari <span class="font-bold">Rp.99.900</span>* <span class="font-bold line-through">Rp.399.900</span> <a class="link link-success" href="https://wa.me/62085100948472">WA Sekarang</a>.</marquee>
     </div>
     <div class="toast toast-end z-50">
         <div>
