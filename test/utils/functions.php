@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "admin", "admin789", "web_joga_comp_test");
 // $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
@@ -150,7 +150,7 @@ function tambahAdmin($data)
     }
 
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `user_`(`NAMA`, `PASS`, `IS_AKTIF`, `ALAMAT`, `WILAYAH_ID`, `TELEPON`, `NO_REKENING`, `GAJI_POKOK`) VALUES
+    mysqli_query($conn, "INSERT INTO `user_admin`(`NAMA`, `PASS`, `IS_AKTIF`, `ALAMAT`, `WILAYAH_ID`, `TELEPON`, `NO_REKENING`, `GAJI_POKOK`) VALUES
      ('$NAMA','$PASS','$IS_AKTIF','$ALAMAT','$WILAYAH_ID','$TELEPON', '$NO_REKENING', '$GAJI_POKOK')");
 
     return mysqli_affected_rows($conn);
@@ -206,8 +206,8 @@ function tambahNota($nota, $id, $total, $data)
 
     $NOTA = $nota;
     $CUSTOMER_ID = $id;
-    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = ' website'")[0]['ID'];
-    $SALESMAN_ID = query("SELECT KODE FROM `salesman` WHERE NAMA = ' website'")[0]['KODE'];
+    $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = 'admin website'")[0]['ID'];
+    $SALESMAN_ID = query("SELECT KODE FROM `salesman` WHERE NAMA = 'admin website'")[0]['KODE'];
     $TOTAL_NOTA = $total;
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $TANGGAL = Date('Y-m-d');
@@ -224,7 +224,7 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     global $conn;
 
     $NOTA = $nota;
-    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
+    $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = '$username'")[0]['ID'];
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
@@ -356,7 +356,7 @@ function hapusSales($id)
 function hapusAdmin($id)
 {
     global $conn;
-    mysqli_query($conn, "DELETE FROM user_ WHERE ID = '$id'");
+    mysqli_query($conn, "DELETE FROM user_admin WHERE ID = '$id'");
 
     return mysqli_affected_rows($conn);
 }
@@ -473,7 +473,7 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     $PROFIT = mysqli_real_escape_string($conn, $data["PROFIT"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
-    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TANGGAL = Date('Y-m-d');
 
     mysqli_query($conn, "UPDATE `jual` SET 
@@ -523,7 +523,7 @@ function ubahAdmin($data)
     $GROUP_HAK_AKSES_ID = mysqli_real_escape_string($conn, $data["GROUP_HAK_AKSES_ID"]);
     $GAJI_POKOK = mysqli_real_escape_string($conn, $data["GAJI_POKOK"]);
 
-    $query = "UPDATE `user_` SET
+    $query = "UPDATE `user_admin` SET
 IS_AKTIF = '$IS_AKTIF',
 GROUP_HAK_AKSES_ID = '$GROUP_HAK_AKSES_ID',
 GAJI_POKOK = '$GAJI_POKOK'
@@ -545,7 +545,7 @@ function ubahAdminSendiri($data)
     $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
     $NO_REKENING = mysqli_real_escape_string($conn, $data["NO_REKENING"]);
 
-    $query = "UPDATE `user_` SET
+    $query = "UPDATE `user_admin` SET
 IS_AKTIF = '$IS_AKTIF',
 ALAMAT = '$ALAMAT',
 WILAYAH_ID = '$WILAYAH_ID',
@@ -812,7 +812,7 @@ function tambahBeli($nota, $username, $total, $data)
     global $conn;
 
     $NOTA = $nota;
-    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
+    $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = '$username'")[0]['ID'];
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
@@ -846,7 +846,7 @@ function ubahBeli($nota, $userAdmin, $data)
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $TANGGAL = Date('Y-m-d');
-    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TEMPO = mysqli_real_escape_string($conn, $data["TANGGAL"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
