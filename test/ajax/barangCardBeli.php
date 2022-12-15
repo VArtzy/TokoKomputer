@@ -23,7 +23,8 @@ $brg = query($query);
           <span class="badge badge-sm"><?= rupiah($b["HARGA_BELI"]); ?></span>
         </div>
         <p class="text-xs"></p>
-        <div class="card-actions justify-end">
+        <div class="card-actions flex justify-end">
+          <input id="input-angka" type="number" value="1">
           <button class="btn btn-success btn-sm text-white add-to-cart" onclick="tambahBarang(event)" data-id="<?= $b["BARANG_KODE"]; ?>" data-name="<?= $b["NAMA"]; ?>" data-price="<?= $b["HARGA_BELI"]; ?>" data-stok="<?= $b["STOK"]; ?>">TAMBAH</button>
         </div>
       </div>

@@ -27,7 +27,8 @@ $brg = query($query);
           <span class="badge badge-sm"><?= rupiah($b["HARGA_JUAL"]); ?></span>
         </div>
         <p class="text-xs"></p>
-        <div class="card-actions justify-end">
+        <div class="card-actions flex justify-end">
+          <input id="input-angka" type="number" value="1">
           <button class="btn <?php if (round($b["STOK"]) > 0) {
                                 echo 'btn-success';
                               } else {

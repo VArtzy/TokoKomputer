@@ -820,6 +820,8 @@ function tambahBeli($nota, $username, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $DISKON = mysqli_real_escape_string($conn, $data["DISKON"]);
+    $PPN = mysqli_real_escape_string($conn, $data["PPN"]);
 
     if ($STATUS_NOTA === 'T') {
         $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"];
@@ -830,8 +832,8 @@ function tambahBeli($nota, $username, $total, $data)
     ('$NO_PELUNASAN', '$nota', '$TOTAL_NOTA', '$KETERANGAN')");
     }
 
-    mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `USER_ADMIN`, `OPERATOR`) VALUES
-     ('$NOTA', '$STATUS_NOTA', '$TOTAL_NOTA', '$TANGGAL', '$TEMPO', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$USER_ADMIN', '$USER_ADMIN')");
+    mysqli_query($conn, "INSERT INTO `Beli`(`NOTA`, `STATUS_NOTA`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`, `LOKASI_ID`, `SUPPLIER_ID`, `KETERANGAN`, `DISKON`, `PPN`, `USER_ADMIN`, `OPERATOR`) VALUES
+     ('$NOTA', '$STATUS_NOTA', '$TOTAL_NOTA', '$TANGGAL', '$TEMPO', '$LOKASI_ID', '$SUPPLIER_ID', '$KETERANGAN', '$DISKON', '$PPN', '$USER_ADMIN', '$USER_ADMIN')");
 
     return mysqli_affected_rows($conn);
 }
@@ -851,6 +853,8 @@ function ubahBeli($nota, $userAdmin, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $DISKON = mysqli_real_escape_string($conn, $data["DISKON"]);
+    $PPN = mysqli_real_escape_string($conn, $data["PPN"]);
 
 
     $query = "UPDATE `Beli` SET
@@ -860,6 +864,7 @@ TEMPO = '$TEMPO',
 LOKASI_ID = '$LOKASI_ID',
 SUPPLIER_ID = '$SUPPLIER_ID',
 KETERANGAN = '$KETERANGAN',
+DISKON = '$DISKON',
 USER_ADMIN = '$USER_ADMIN',
 TOTAL_PELUNASAN_NOTA = '$TOTAL_PELUNASAN_NOTA',
 OPERATOR = '$USER_ADMIN'
@@ -883,7 +888,15 @@ function hapusBeli($data)
     global $conn;
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+
     mysqli_query($conn, "DELETE FROM Beli WHERE NOTA = '$KODE_LAMA'");
+    mysqli_query($conn, "DELETE FROM ITEM_BELI WHERE NOTA = '$KODE_LAMA'");
+    mysqli_query($conn, "DELETE FROM ITEM_PELUNASAN_HUTANG WHERE NOTA_BELI = '$KODE_LAMA'");
+
+    $item = query("SELECT NO_PELUNASAN FROM item_pelunasan_hutang WHERE NOTA_BELI = '$KODE_LAMA'");
+    foreach ($item as $i) {
+        mysqli_query($conn, "DELETE FROM PELUNASAN_HUTANG WHERE NO_PELUNASAN = '" . $i['NO_PELUNASAN'] . "'");
+    }
 
     return mysqli_affected_rows($conn);
 }

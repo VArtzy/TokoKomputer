@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a, supplier b where a.SUPPLIER_ID = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$item = query("select a.TANGGAL, a.TEMPO, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a, supplier b ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
@@ -33,6 +33,11 @@ if (isset($_POST["hapus"])) {
         ";
     } else {
         echo mysqli_error($conn);
+        echo "<script>
+        alert('Berhasil Menghapus Beli');
+        document.location.href = 'Beli.php';
+        </script>
+        ";
     }
 }
 
@@ -120,7 +125,7 @@ include('shared/navadmin.php');
                         <td><?= $key + 1; ?></td>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA']; ?></td>
+                        <td><?= $i['SUPPLIER_ID'] ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['HUTANG']); ?></td>
                         <td><?php if ($i['SISA_HUTANG']) {
@@ -212,15 +217,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Supplier:</span>
-                        <select class="input input-bordered" name="SUPPLIER_ID" id="SUPPLIER_ID">
-                            <?php
-                            $Supplier = query("SELECT * FROM Supplier");
-                            foreach ($Supplier as $s) : ?>
-                                <option <?php if ($s['KODE'] === $item['SUPPLIER_ID']) {
-                                            echo 'selected';
-                                        } ?> value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <input value="<?= $item['SUPPLIER_ID'] ?>" required type="text" name="SUPPLIER_ID" id="SUPPLIER_ID" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
@@ -230,6 +227,24 @@ include('shared/navadmin.php');
                     <label class="input-group">
                         <span>Keterangan:</span>
                         <input value="<?= $item['KETERANGAN']; ?>" required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="PPN">PPN: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>PPN:</span>
+                        <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="DISKON">Diskon: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Diskon:</span>
+                        <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
                     </label>
                 </div>
                 <div class="modal-action">

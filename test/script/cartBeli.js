@@ -166,8 +166,8 @@ document.querySelectorAll(".add-to-cart").forEach((a) => {
         var name = a.getAttribute("data-name")
         var price = Number(a.getAttribute("data-price"))
         var stok = Number(a.getAttribute("data-stok"))
-        shoppingCart.addItemToCart(id, name, price, stok, 1)
-        displayCart()
+        var count = Number(a.previousElementSibling.value)
+        shoppingCart.addItemToCart(id, name, price, stok, count)
     })
 })
 
@@ -177,8 +177,8 @@ tambahBarang = (e) => {
     var name = e.target.getAttribute("data-name")
     var price = Number(e.target.getAttribute("data-price"))
     var stok = Number(e.target.getAttribute("data-stok"))
-    shoppingCart.addItemToCart(id, name, price, stok, 1)
-    displayCart()
+    var count = Number(e.target.previousElementSibling.value)
+    shoppingCart.addItemToCart(id, name, price, stok, count)
 }
 
 document.querySelector(".btn-clear-cart").addEventListener("click", () => {

@@ -157,7 +157,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Nama</span>
-                        <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan kode pelanggan...">
+                        <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan nama/kode pelanggan...">
                         <button class="btn" type="submit" name="carinama">Cari Pelanggan</button>
                     </label>
                 </div>

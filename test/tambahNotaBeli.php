@@ -185,13 +185,7 @@ include('shared/navadmin.php');
                 </label>
                 <label class="input-group">
                     <span>Supplier:</span>
-                    <select class="input input-bordered" name="SUPPLIER_ID" id="SUPPLIER_ID">
-                        <?php
-                        $Supplier = query("SELECT * FROM Supplier");
-                        foreach ($Supplier as $s) : ?>
-                            <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <input required type="text" name="SUPPLIER_ID" id="SUPPLIER_ID" class="input input-bordered">
                 </label>
             </div>
             <div class="form-control">
@@ -201,6 +195,24 @@ include('shared/navadmin.php');
                 <label class="input-group">
                     <span>Keterangan:</span>
                     <input required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="PPN">PPN: </label>
+                </label>
+                <label class="input-group">
+                    <span>PPN:</span>
+                    <input type="text" name="PPN" id="PPN" class="input input-bordered">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="DISKON">Diskon: </label>
+                </label>
+                <label class="input-group">
+                    <span>Diskon:</span>
+                    <input type="text" name="DISKON" id="DISKON" class="input input-bordered">
                 </label>
             </div>
             <div class="modal-action">
