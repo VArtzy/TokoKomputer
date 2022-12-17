@@ -137,9 +137,9 @@ include('shared/navadmin.php');
                                         <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
                                     </td>
                                     <th>
-                                        <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                                        <input name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
                                         <br>
-                                        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL']); ?>"></input>
+                                        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70" value="<?= isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL']); ?>"></input>
                                         <br>
                                     </th>
                                     <th>
@@ -228,7 +228,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Diskon:</span>
-                        <input type="text" name="DISKON" id="DISKON" class="input input-bordered">
+                        <input type="number" name="DISKON" id="DISKON" class="input input-bordered">
                     </label>
                 </div>
                 <div class="modal-action">
