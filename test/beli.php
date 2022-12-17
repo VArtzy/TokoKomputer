@@ -8,8 +8,33 @@ if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
 if (isset($_POST["ubah"])) {
 
+    $TOTAL = 0;
+
+    foreach ($_POST['BARANG_ID'] as $i => $d) {
+        $BARANG_ID = $_POST['BARANG_ID'][$i];
+        $IMEI = $_POST['IMEI'][$i];
+        $JUMLAH_BARANG = $_POST['JUMLAH_BARANG'][$i];
+        $HARGA_BELI = $_POST['HARGA_BELI'][$i];
+        $DISKON1 = $_POST['DISKON1'][$i];
+        $DISKON2 = $_POST['DISKON2'][$i];
+        $DISKON3 = $_POST['DISKON3'][$i];
+        $DISKON4 = $_POST['DISKON4'][$i];
+        $DISKON_RP = $_POST['DISKON_RP'][$i];
+        $HARGA_JUAL = $_POST['HARGA_JUAL'][$i];
+        $KET1 = $_POST['KET1'][$i];
+        $KET2 = $_POST['KET2'][$i];
+        $SATUAN = $_POST['SATUAN'][$i];
+
+        $TOTAL = $TOTAL + $JUMLAH_BARANG * $HARGA_BELI;
+
+        if (ubahBeliItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $_POST['KETERANGAN'], $KET1, $KET2, $IMEI) > 0) {
+        } else {
+            echo mysqli_error($conn);
+        }
+    }
+
     // cek apakah daata berhasil diubah
-    if (ubahBeli($nota, $username, $_POST) > 0) {
+    if (ubahBeli($nota, $username, $TOTAL, $_POST) > 0) {
         echo "
         <script>
         alert('Berhasil Memperbaiki Beli');
@@ -247,19 +272,80 @@ include('shared/navadmin.php');
                         <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
                     </label>
                 </div>
-                <div class="modal-action">
-                    <div class="tooltip tooltip-error" data-tip="CTRL + Q">
-                        <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
-                    </div>
-                    <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
-                    </div>
-                    <div class="tooltip tooltip-success" data-tip="CTRL + A">
-                        <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
-                    </div>
+                <div class="overflow-x-auto w-full mt-8 mb-4">
+                    <table class="table w-full">
+                        <!-- head -->
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Stok/Satuan</th>
+                                <th>Diskon</th>
+                                <th>Harga Beli/Jual</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $item_beli = query("SELECT * FROM item_beli where NOTA = '$nota'");
+                            foreach ($item_beli as $b) :
+                            ?>
+                                <tr>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $b["BARANG_ID"]; ?>" type="hidden">
+                                            <div class="text-sm opacity-50"><?= $b["BARANG_ID"]; ?></div>
+                                        </div>
                 </div>
-            </form>
         </div>
+        </td>
+        <td>
+            IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
+            <br />
+            Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>">
+            <br />
+            Satuan: <input type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['DAFTAR_SATUAN']; ?>">
+            <br />
+        </td>
+        <td>
+            % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
+            <br />
+            <span class="badge badge-ghost badge-sm">%1: <input value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%2: <input value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%3: <input value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+        </td>
+        <th>
+            <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+            <br>
+            <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_JUAL"]; ?>"></input>
+            <br>
+        </th>
+        <th>
+            KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
+            <br>
+            KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
+        </th>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+    </table>
+    </div>
+    <div class="modal-action">
+        <div class="tooltip tooltip-error" data-tip="CTRL + Q">
+            <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
+        </div>
+        <div class="tooltip" data-tip="ESC (Tekan Lama)">
+            <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
+        </div>
+        <div class="tooltip tooltip-success" data-tip="CTRL + A">
+            <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
+        </div>
+    </div>
+    </form>
+    </div>
     </div>
 <?php endif; ?>
 <?php
