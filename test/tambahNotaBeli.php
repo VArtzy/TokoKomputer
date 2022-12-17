@@ -139,7 +139,11 @@ include('shared/navadmin.php');
                                     <th>
                                         <input name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
                                         <br>
-                                        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70" value="<?= isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL']); ?>"></input>
+                                        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
+                                                                                                                                                        echo query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'];
+                                                                                                                                                    } else {
+                                                                                                                                                        echo '0';
+                                                                                                                                                    }; ?>"></input>
                                         <br>
                                     </th>
                                     <th>
@@ -219,7 +223,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>PPN:</span>
-                        <input type="text" name="PPN" id="PPN" class="input input-bordered">
+                        <input type="number" value="0" name="PPN" id="PPN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
@@ -228,7 +232,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Diskon:</span>
-                        <input type="number" name="DISKON" id="DISKON" class="input input-bordered">
+                        <input type="number" value="0" name="DISKON" id="DISKON" class="input input-bordered">
                     </label>
                 </div>
                 <div class="modal-action">
