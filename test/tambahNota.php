@@ -21,7 +21,7 @@ foreach ($data as $d) {
 }
 
 if (isset($_POST["checkout"])) {
-    $nota = uniqid();
+    $nota = $_POST['NOTA'];
     $total = 0;
     foreach ($data as $d) {
         $total = $total + ($d['price'] * $d['count']);
@@ -139,6 +139,15 @@ include('shared/navadmin.php');
 
         <form action="" method="post">
             <ul>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="NOTA">Nota: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Nota:</span>
+                        <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"]; ?>" required type="text" name="NOTA" id="NOTA" class="input input-bordered">
+                    </label>
+                </div>
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="STATUS_NOTA">Status: </label>

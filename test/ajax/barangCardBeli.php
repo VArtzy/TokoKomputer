@@ -18,6 +18,7 @@ $brg = query($query);
       <figure><img class="aspect-video object-cover" src="<?= $b["FOTO"]; ?>" alt="<?= $b["NAMA"]; ?>" /></figure>
       <div class="card-body">
         <h2 class="card-title text-sm"><?= $b["NAMA"]; ?></h2>
+        <h3 class="card-subtitle opcaticy-50 text-xs"><?= $b["KODE_BARCODE"]; ?></h3>
         <div class="flex gap-2">
           <span class="badge badge-accent badge-sm text-white"><?= round($b["STOK"]); ?></span>
           <span class="badge badge-sm"><?= rupiah($b["HARGA_BELI"]); ?></span>

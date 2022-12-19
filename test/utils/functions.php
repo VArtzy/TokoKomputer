@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "admin", "admin789", "web_joga_comp_test");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "admin", "admin789", "web_joga_comp_test");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -17,7 +17,7 @@ function tambahBarang($data)
 {
     global $conn;
 
-    $KODE = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"];
+    $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
     $NAMA = stripslashes($data["NAMA"]);
     $SATUAN_ID = mysqli_real_escape_string($conn, $data["SATUAN_ID"]);
     $STOK = mysqli_real_escape_string($conn, $data["STOK"]);
@@ -234,7 +234,7 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     if ($STATUS_NOTA === 'T') {
-        $NO_PELUNASAN = uniqid();
+        $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM item_pelunasan_piutang")[0]["COUNT"];
         mysqli_query($conn, "INSERT INTO `pelunasan_piutang`(`NO_PELUNASAN`, `CUSTOMER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
     ('$NO_PELUNASAN', '$CUSTOMER_NAMA', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
 
