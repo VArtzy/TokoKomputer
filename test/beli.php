@@ -79,6 +79,9 @@ include('shared/navadmin.php');
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 <script>
     $(document).ready(function() {
         var table = $('#table').DataTable({
@@ -111,6 +114,23 @@ include('shared/navadmin.php');
             }
         });
     })
+
+    $(function() {
+        $("#SUPPLIER_ID").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "ajax/supplierid.php",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">

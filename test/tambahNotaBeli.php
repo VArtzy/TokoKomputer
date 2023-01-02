@@ -11,7 +11,7 @@ foreach ($data as $d) {
 }
 
 if (isset($_POST["submit"])) {
-    $nota = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"];
+    $nota = $_POST['NOTA'];
     $TOTAL = 0;
 
     foreach ($data as $i => $d) {
@@ -67,6 +67,9 @@ include('shared/navadmin.php');
 ?>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 <script>
     $(document).on("keydown", function(e) {
         if (e.which === 65 && (e.ctrlKey || e.metaKey)) {
@@ -75,6 +78,23 @@ include('shared/navadmin.php');
         if (e.key === "Escape") {
             location.href = 'pilihBarangBeli.php'
         }
+    });
+
+    $(function() {
+        $("#SUPPLIER_ID").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "ajax/supplierid.php",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            }
+        });
     });
 </script>
 
@@ -159,46 +179,55 @@ include('shared/navadmin.php');
             </div>
             <span class="text-info text-info-cart">Subtotal: Rp. 0.00</span>
 
-            <form action="" method="post">
-                <h3 class="font-bold text-lg">Beli</h3>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="STATUS_NOTA">Status: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Status:</span>
-                            <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
-                                <option value="T">Tunai</option>
-                                <option value="K">Kredit</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="TANGGAL">Tempo: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Tempo:</span>
-                            <input type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
-                        </label>
-                    </div>
-                </div>
+            <h3 class="font-bold text-lg">Beli</h3>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="NOTA">Nota: </label>
+                </label>
+                <label class="input-group">
+                    <span>Nota:</span>
+                    <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
+                </label>
+            </div>
+            <div class="flex gap-4">
                 <div class="form-control">
                     <label class="label">
-                        <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                        <label class="label-text" for="STATUS_NOTA">Status: </label>
                     </label>
                     <label class="input-group">
-                        <span>Lokasi:</span>
-                        <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
-                            <?php
-                            $Lokasi = query("SELECT * FROM Lokasi");
-                            foreach ($Lokasi as $s) : ?>
-                                <option value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
-                            <?php endforeach; ?>
+                        <span>Status:</span>
+                        <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
+                            <option value="T">Tunai</option>
+                            <option value="K">Kredit</option>
                         </select>
                     </label>
                 </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="TANGGAL">Tempo: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Tempo:</span>
+                        <input value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
+                    </label>
+                </div>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                </label>
+                <label class="input-group">
+                    <span>Lokasi:</span>
+                    <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                        <?php
+                        $Lokasi = query("SELECT * FROM Lokasi");
+                        foreach ($Lokasi as $s) : ?>
+                            <option value="<?= $s['KODE']; ?>"><?= $s["KETERANGAN"]; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <div class="flex gap-4">
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="SUPPLIER_ID">Supplier: </label>
@@ -217,36 +246,37 @@ include('shared/navadmin.php');
                         <input required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="PPN">PPN: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>PPN:</span>
-                        <input type="number" value="0" name="PPN" id="PPN" class="input input-bordered">
-                    </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="PPN">PPN: </label>
+                </label>
+                <label class="input-group">
+                    <span>PPN:</span>
+                    <input type="number" value="0" name="PPN" id="PPN" class="input input-bordered">
+                </label>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <label class="label-text" for="DISKON">Diskon: </label>
+                </label>
+                <label class="input-group">
+                    <span>Diskon:</span>
+                    <input type="number" value="0" name="DISKON" id="DISKON" class="input input-bordered">
+                </label>
+            </div>
+            <div class="modal-action">
+                <div class="tooltip" data-tip="ESC">
+                    <label for="my-modal-6" id="batal" class="btn">Batal</label>
                 </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="DISKON">Diskon: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Diskon:</span>
-                        <input type="number" value="0" name="DISKON" id="DISKON" class="input input-bordered">
-                    </label>
+                <div class="tooltip tooltip-success" data-tip="CTRL + A">
+                    <button onclick="return confirm('yakin ingin membeli barang?')" id="tambah" name="submit" class="btn btn-success" type="submit">Tambah</button>
                 </div>
-                <div class="modal-action">
-                    <div class="tooltip" data-tip="ESC">
-                        <label for="my-modal-6" id="batal" class="btn">Batal</label>
-                    </div>
-                    <div class="tooltip tooltip-success" data-tip="CTRL + A">
-                        <button onclick="return confirm('yakin ingin membeli barang?')" id="tambah" name="submit" class="btn btn-success" type="submit">Tambah</button>
-                    </div>
-                </div>
-            </form>
-        <?php } else { ?>
-            <p>Kamu belum mengisi keranjang kamu 😅.</p>
-        <?php } ?>
+            </div>
+        </form>
+    <?php } else { ?>
+        <p>Kamu belum mengisi keranjang kamu 😅.</p>
+    <?php } ?>
 </main>
 <?php
 include('shared/footer.php')

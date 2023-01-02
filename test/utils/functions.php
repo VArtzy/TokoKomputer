@@ -1,6 +1,6 @@
 <?php
-// $conn = mysqli_connect("localhost", "admin", "admin789", "web_joga_comp_test");
-$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+$conn = mysqli_connect("localhost", "admin", "admin789", "web_joga_comp_test");
+// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -248,20 +248,17 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     return mysqli_affected_rows($conn);
 }
 
-function tambahItemNota($nota, $id, $jumlah, $harga)
+function tambahItemNota($nota, $id, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
 
     $NOTA = $nota;
     $BARANG_ID = $id;
-    $JUMLAH = $jumlah;
-    $HARGA_BELI = query("SELECT HARGA_BELI FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["HARGA_BELI"];
-    $HARGA_JUAL = $harga;
     $SATUAN_ID = query("SELECT SATUAN_ID FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["SATUAN_ID"];
     $JUMLAH2 = query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $SATUAN_ID . "'")[0]["KONVERSI"];
 
-    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `JUMLAH2`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
-     ('$NOTA', '$BARANG_ID','$JUMLAH', '$JUMLAH2', '$HARGA_BELI', '$HARGA_JUAL')");
+    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `JUMLAH2`, `HARGA_BELI`, `DISKON_1`, `DISKON_2`, `DISKON_3`, `DISKON_4`, `HARGA_JUAL`, `KETERANGAN`, `DISKON_RP`, `DAFTAR_SATUAN`, `KET1`, `KET2`, `IMEI`) VALUES
+     ('$NOTA', '$BARANG_ID','$JUMLAH_BARANG', '$JUMLAH2', '$HARGA_BELI', '$DISKON1', '$DISKON2', '$DISKON3', '$DISKON4', '$HARGA_JUAL', '$KETERANGAN', '$DISKON_RP', '$SATUAN', '$KET1', '$KET2', '$IMEI')");
 
     return mysqli_affected_rows($conn);
 }

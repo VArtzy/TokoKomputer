@@ -2,7 +2,7 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
-$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a, customer b where a.customer_id = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 if (isset($_POST["cari"])) {
@@ -37,7 +37,11 @@ include('shared/navadmin.php');
                         <h2 class="card-title">
                             <?= $n['NOTA']; ?>
                         </h2>
-                        <div class="badge badge-lg badge-secondary"><?= $n["NAMA"]; ?></div>
+                        <div class="badge badge-lg badge-secondary"><?php if (isset(query("SELECT NAMA FROM customer WHERE KODE = '" . $n['CUSTOMER_ID'] . "'")[0]['NAMA'])) {
+                                                                        echo query("SELECT NAMA FROM customer WHERE KODE = '" . $n['CUSTOMER_ID'] . "'")[0]['NAMA'];
+                                                                    } else {
+                                                                        echo $n['CUSTOMER_ID'];
+                                                                    } ?></div>
                         <div class="flex gap-2 mb-2">
                             <div class="badge badge-secondary"><?= $n['TANGGAL']; ?></div>=>
                             <div class="badge badge-primary"><?= $n['TEMPO']; ?></div>
