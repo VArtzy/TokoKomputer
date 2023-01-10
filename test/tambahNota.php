@@ -15,7 +15,7 @@ foreach ($data as $d) {
             $dataEncoded = json_encode($d);
             echo "<script>alert('Maaf, barang " . $d['name'] . " beberapa stoknya sudah dibeli. Silahkan ulangi isi keranjang 🤗.')</script>";
             echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
-            echo "<script>window.location.href = 'pesan.php'</script>";
+            echo "<script>window.location.href = 'pilihBarang.php'</script>";
         }
     }
 }
@@ -58,31 +58,6 @@ if (isset($_POST["checkout"])) {
         document.location.href = 'invoices.php';
         </script>";
     }
-
-    // foreach ($data as $d) {
-    //     $total = $total + ($d['price'] * $d['count']);
-    // }
-
-    // foreach ($data as $d) {
-    //     if (tambahItemNota($nota, $d['id'], $d['count'], $d['price']) > 0) {
-    //     } else {
-    //         echo mysqli_error($conn);
-    //     }
-    // }
-
-    // if (tambahNotaAdmin($nota, $username, $total, $_POST) > 0) {
-    //     echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
-    //     echo  "<script>
-    //     alert('Berhasil Menambah Nota!');
-    //     document.location.href = 'invoices.php';
-    //     </script>";
-    // } else {
-    //     echo mysqli_error($conn);
-    //     echo  "<script>
-    //     alert('Gagal Menambah Nota!');
-    //     document.location.href = 'invoices.php';
-    //     </script>";
-    // }
 }
 
 if (isset($_POST["cari"])) {
@@ -124,12 +99,119 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl font-semibold mb-4">Tambah Nota</h1>
-    <a class="btn btn-warning mb-8" href="pilihBarang.php">Kembali</a>
+    <div class="flex justify-between items-center w-full mb-2">
+        <h1 class="text-2xl font-semibold">Tambah Nota</h1>
+        <div class="tooltip" data-tip="ESC">
+            <a href="pilihBarang.php" class="badge">x</a>
+        </div>
+    </div>
+    <div class="flex justify-between items-center w-full mb-8">
+        <h2 class="text-4xl font-bold">TOTAL</h2>
+        <h3 class="text-2xl font-bold text-info text-info-total"></h3>
+    </div>
 
     <?php if (!empty($data)) { ?>
         <form action="" method="post">
-            <div class="overflow-x-auto w-full mt-8 mb-4">
+            <div class="md:flex justify-between">
+                <div class="">
+                    <div class="form-control">
+                        <label class="label">
+                            <label class="label-text" for="NOTA">Nota: </label>
+                        </label>
+                        <label class="input-group">
+                            <span>Nota:</span>
+                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
+                        </label>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="STATUS_NOTA">Status: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Status:</span>
+                                <select tabindex="1" class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
+                                    <option value="T">Tunai</option>
+                                    <option value="K">Kredit</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="TANGGAL">Tempo: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Tempo:</span>
+                                <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="CUSTOMER_NAMA">Atas Nama: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Nama</span>
+                                <input tabindex="1" type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan nama/kode pelanggan...">
+                                <button class="btn" type="submit" name="carinama">Cari Pelanggan</button>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Lokasi:</span>
+                                <select tabindex="1" class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                                    <?php
+                                    $lokasi = query("SELECT * FROM lokasi");
+                                    foreach ($lokasi as $l) : ?>
+                                        <option value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="SALESMAN_ID">Salesman: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Salesman:</span>
+                                <select tabindex="1" class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
+                                    <?php foreach ($salesman as $s) : ?>
+                                        <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="KETERANGAN">Keterangan: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Keterangan:</span>
+                                <input tabindex="1" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="HISTORIHARGA">Histori Harga: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Histori Harga: </span>
+                        <textarea readonly type="text" name="HISTORIHARGA" id="HISTORIHARGA" class="input input-bordered h-full" rows="12"></textarea>
+                    </label>
+                </div>
+            </div>
+
+            <h2 class="font-bold mt-8 mb-4">Rincian Pembelian</h2>
+
+            <div class="overflow-x-auto w-full mb-4">
                 <table class="table w-full">
                     <!-- head -->
                     <thead>
@@ -161,40 +243,40 @@ include('shared/navadmin.php');
                                         </div>
                                     </td>
                                     <td>
-                                        IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
+                                        IMEI: <input tabindex="1" type="text" name="IMEI[]" id="IMEI[]">
                                         <br />
-                                        Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $d['count']; ?>">
+                                        Jumlah: <input tabindex="1" type="number" class="jumlah-barang" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $d['count']; ?>">
                                         <br />
                                         Stok: <?= round($b["STOK"]); ?>
                                         <br />
-                                        Satuan: <input type="text" name="SATUAN[]" id="SATUAN[]" value="<?= query("SELECT NAMA FROM satuan where KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?>">
+                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= query("SELECT NAMA FROM satuan where KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?>">
                                         <br />
                                     </td>
                                     <td>
-                                        % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
+                                        % Rupiah: <input tabindex="1" value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
                                         <br />
-                                        <span class="badge badge-ghost badge-sm">%1: <input value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+                                        <span class="badge badge-ghost badge-sm">%1: <input tabindex="1" value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
                                         <br />
-                                        <span class="badge badge-ghost badge-sm">%2: <input value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+                                        <span class="badge badge-ghost badge-sm">%2: <input tabindex="1" value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
                                         <br />
-                                        <span class="badge badge-ghost badge-sm">%3: <input value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+                                        <span class="badge badge-ghost badge-sm">%3: <input tabindex="1" value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
                                         <br />
-                                        <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+                                        <span class="badge badge-ghost badge-sm">%4: <input tabindex="1" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
                                     </td>
                                     <th>
-                                        <input name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                                        <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
                                         <br>
-                                        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
-                                                                                                                                                        echo query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'];
-                                                                                                                                                    } else {
-                                                                                                                                                        echo '0';
-                                                                                                                                                    }; ?>"></input>
+                                        <input tabindex="1" name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70 harga-jual" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
+                                                                                                                                                                                echo query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'];
+                                                                                                                                                                            } else {
+                                                                                                                                                                                echo '0';
+                                                                                                                                                                            }; ?>"></input>
                                         <br>
                                     </th>
                                     <th>
-                                        KET1: <input type="text" name="KET1[]" id="KET1[]" class="text-sm opacity-70"></input>
+                                        KET1: <input tabindex="1" type="text" name="KET1[]" id="KET1[]" class="text-sm opacity-70"></input>
                                         <br>
-                                        KET2: <input type="text" name="KET2[]" id="KET2[]" class="text-sm opacity-70"></input>
+                                        KET2: <input tabindex="1" type="text" name="KET2[]" id="KET2[]" class="text-sm opacity-70"></input>
                                     </th>
                                 </tr>
                             <?php endforeach; ?>
@@ -202,119 +284,80 @@ include('shared/navadmin.php');
                     </tbody>
                 </table>
             </div>
-            <span class="text-info text-info-cart">Subtotal: Rp. 0.00</span>
 
+            <div class="md:flex justify-between w-full">
+                <div class="">
+                    <label class="input-group gap-2">
+                        <input tabindex="1" type="checkbox" name="cetak" id="cetak">
+                        <label class="label-text" for="cetak">Cetak Nota Penjualan</label>
+                    </label>
+                    <p>Tab: untuk pindah baris/item berikutnya</p>
+                </div>
+                <div class="">
+                    <div class="form-control">
+                        <label class="label">
+                            <label class="label-text" for="DISKON">Diskon: </label>
+                        </label>
+                        <label class="input-group">
+                            <span>Diskon:</span>
+                            <input tabindex="1" type="number" value="0" name="DISKON" id="DISKON" class="input input-bordered">
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <label class="label-text" for="PPN">PPN: </label>
+                        </label>
+                        <label class="input-group">
+                            <span>PPN:</span>
+                            <input tabindex="1" type="number" value="0" name="PPN" id="PPN" class="input input-bordered">
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-            <ul>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="NOTA">Nota: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Nota:</span>
-                        <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
-                    </label>
+            <div class="modal-action">
+                <div class="tooltip" data-tip="ESC">
+                    <a tabindex="1" href="pilihBarang.php" for="my-modal-6" id="batal" class="btn">Batal</a>
                 </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="STATUS_NOTA">Status: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Status:</span>
-                            <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
-                                <option value="T">Tunai</option>
-                                <option value="K">Kredit</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="TANGGAL">Tempo: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Tempo:</span>
-                            <input value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
-                        </label>
-                    </div>
+                <div class="tooltip tooltip-success" data-tip="CTRL + A">
+                    <button tabindex="1" class="btn btn-success" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
                 </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="CUSTOMER_NAMA">Atas Nama: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Nama</span>
-                            <input type="text" name="CUSTOMER_NAMA" id="CUSTOMER_NAMA" class="input input-bordered" placeholder="berikan nama/kode pelanggan...">
-                            <button class="btn" type="submit" name="carinama">Cari Pelanggan</button>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="LOKASI_ID">Lokasi: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Lokasi:</span>
-                            <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
-                                <?php
-                                $lokasi = query("SELECT * FROM lokasi");
-                                foreach ($lokasi as $l) : ?>
-                                    <option value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="SALESMAN_ID">Salesman: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Salesman:</span>
-                            <select class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
-                                <?php foreach ($salesman as $s) : ?>
-                                    <option value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="KETERANGAN">Keterangan: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Keterangan:</span>
-                            <input required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
-                        </label>
-                    </div>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="PPN">PPN: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>PPN:</span>
-                        <input type="number" value="0" name="PPN" id="PPN" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="DISKON">Diskon: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Diskon:</span>
-                        <input type="number" value="0" name="DISKON" id="DISKON" class="input input-bordered">
-                    </label>
-                </div>
-                <button class="btn btn-success mt-4" onclick="return confirm('Apakah anda yakin ingin memesan?'); shoppingCart.clearCart()" type="submit" name="checkout">CHECKOUT</button>
-                </li>
-            </ul>
+            </div>
+            </li>
         </form>
     <?php } else { ?>
         <p>Kamu belum mengisi keranjang kamu 😅.</p>
     <?php } ?>
 </main>
+
+<script>
+    const textInfoTotal = document.querySelector('.text-info-total');
+    const hargaJual = document.querySelectorAll('.harga-jual');
+    const jumlahBarang = document.querySelectorAll('.jumlah-barang');
+    let harga = 0;
+
+    const updateUI = () => {
+        let hargaSementara = 0
+        hargaJual.forEach((h, i) => hargaSementara += (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0))
+
+        textInfoTotal.textContent = rupiah(hargaSementara)
+    }
+
+    hargaJual.forEach((h, i) => {
+        harga += parseInt(h.value) * parseInt(jumlahBarang[i].value)
+
+        jumlahBarang[i].addEventListener('keyup', updateUI)
+        h.addEventListener('keyup', updateUI)
+    })
+
+    const rupiah = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+        }).format(number)
+    }
+    textInfoTotal.textContent = rupiah(harga)
+</script>
 <?php
 include('shared/footer.php')
 ?>

@@ -5,3 +5,9 @@
 h1 {
     @apply text-success;
 }
+
+@keyframes pulse {
+    50% {
+        @apply bg-gray-400;
+    }
+}

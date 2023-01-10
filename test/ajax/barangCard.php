@@ -15,7 +15,7 @@ $brg = query($query);
 
 <?php if (!empty($brg)) : ?>
   <?php foreach ($brg as $b) : ?> <div class="card max-w-lg bg-base-100 shadow-xl">
-      <figure><img class="aspect-video object-cover" src="<?= $b["FOTO"]; ?>" alt="<?= $b["NAMA"]; ?>" /></figure>
+      <figure><img class="aspect-video w-full h-full object-cover animate-pulse bg-gray-300" src="<?= $b["FOTO"]; ?>" alt="<?= $b["NAMA"]; ?>" /></figure>
       <div class="card-body">
         <h2 class="card-title text-sm"><?= $b["NAMA"]; ?></h2>
         <h3 class="card-subtitle opcaticy-50 text-xs"><?= $b["KODE_BARCODE"]; ?></h3>

@@ -12,7 +12,7 @@
               <span class="badge badge-sm indicator-item">...</span>
             </div>
           </label>
-          <div tabindex="0" class="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow">
+          <div tabindex="0" class="mt-3 cards card-compact dropdown-content w-52 bg-base-100 shadow">
             <div class="card-body">
               <span class="font-bold text-lg text-info-total">0 Barang</span>
               <span class="text-info text-info-cart">Subtotal: Rp. 0.00</span>

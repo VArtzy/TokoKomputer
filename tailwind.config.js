@@ -4,10 +4,13 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                'dm': ['DM Sans', 'system-ui', 'arial'],
-                'rb': ['Roboto', 'arial']
-            }
+                dm: ["DM Sans", "system-ui", "arial"],
+                rb: ["Roboto", "arial"],
+            },
         },
     },
     plugins: [require("daisyui")],
+    daisyui: {
+        themes: ["light", "dark"],
+    },
 }
