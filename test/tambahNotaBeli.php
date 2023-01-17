@@ -14,6 +14,20 @@ if (isset($_POST["submit"])) {
     $nota = $_POST['NOTA'];
     $TOTAL = 0;
 
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $_POST["SUPPLIER_ID"]);
+    $isSupplier = mysqli_query($conn, "SELECT NAMA, KODE FROM supplier WHERE NAMA = '$SUPPLIER_ID' OR KODE = '$SUPPLIER_ID'");
+
+    if (!mysqli_fetch_assoc($isSupplier)) {
+        echo "<script>
+        if (confirm('Nama atau Kode Supplier belum didaftarkan. Silahkan daftar terlebih dahulu.') == true) {
+            document.location.href = 'supplier.php'
+        } else {
+            document.location.href = 'tambahNotaBeli.php'
+        }
+        </script>";
+        return false;
+    }
+
     foreach ($data as $i => $d) {
         $IMEI = $_POST['IMEI'][$i];
         $JUMLAH_BARANG = $_POST['JUMLAH_BARANG'][$i];

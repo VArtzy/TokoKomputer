@@ -24,6 +24,20 @@ if (isset($_POST["checkout"])) {
     $nota = $_POST['NOTA'];
     $TOTAL = 0;
 
+    $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $_POST["CUSTOMER_NAMA"]);
+    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_NAMA' OR KODE = '$CUSTOMER_NAMA'");
+
+    if (!mysqli_fetch_assoc($isCustomer)) {
+        echo "<script>
+        if (confirm('Nama atau Kode Customer belum didaftarkan. Silahkan daftar terlebih dahulu.') == true) {
+            document.location.href = 'userAndAdminManagement.php#customer'
+        } else {
+            document.location.href = 'tambahNota.php'
+        }
+        </script>";
+        return false;
+    }
+
     foreach ($data as $i => $d) {
         $IMEI = $_POST['IMEI'][$i];
         $JUMLAH_BARANG = $_POST['JUMLAH_BARANG'][$i];
