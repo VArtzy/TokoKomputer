@@ -179,6 +179,7 @@ tambahBarang = (e) => {
     var stok = Number(e.target.getAttribute("data-stok"))
     var count = Number(e.target.previousElementSibling.value)
     shoppingCart.addItemToCart(id, name, price, stok, count)
+    displayCart()
 }
 
 document.querySelector(".btn-clear-cart").addEventListener("click", () => {
@@ -239,6 +240,7 @@ plusItem = (e) => {
     var price = e.target.getAttribute("data-price")
     var stok = e.target.getAttribute("data-stok")
     var count = e.target.getAttribute("data-count")
+    shoppingCart.addItemToCart(id, name, price, stok, 1)
     displayCart()
 }
 
