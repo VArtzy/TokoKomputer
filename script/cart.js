@@ -173,10 +173,15 @@ document.querySelectorAll(".add-to-cart").forEach((a) => {
                 count = cartArray[i].count
             }
         }
+
+        if (Number(a.previousElementSibling.value) > stok)
+            return alert(`Jumlah barang ${name} melebihi stok yang dimiliki 😢`)
+
         if (count >= stok) {
             return alert(`Jumlah barang ${name} melebihi stok yang dimiliki 😢`)
         } else {
-            shoppingCart.addItemToCart(id, name, price, stok, 1)
+            count = Number(a.previousElementSibling.value)
+            shoppingCart.addItemToCart(id, name, price, stok, count)
         }
         displayCart()
     })
@@ -195,10 +200,14 @@ tambahBarang = (e) => {
             count = cartArray[i].count
         }
     }
+
+    if (Number(e.target.previousElementSibling.value) > stok)
+        return alert(`Jumlah barang ${name} melebihi stok yang dimiliki 😢`)
     if (count >= stok) {
         return alert(`Jumlah barang ${name} melebihi stok yang dimiliki 😢`)
     } else {
-        shoppingCart.addItemToCart(id, name, price, stok, 1)
+        count = Number(e.target.previousElementSibling.value)
+        shoppingCart.addItemToCart(id, name, price, stok, count)
     }
     displayCart()
 }

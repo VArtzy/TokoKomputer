@@ -6,7 +6,9 @@ $nota = $_GET['nota'];
 
 $notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR, LOKASI_ID FROM JUAL WHERE NOTA = '$nota'")[0];
 $salesman = query("SELECT KODE, NAMA FROM salesman");
-$namaPelanggan = query("SELECT * FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'")[0];
+if (!empty(query("SELECT * FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'")[0])) {
+    $namaPelanggan = query("SELECT * FROM CUSTOMER WHERE KODE = '" . $notas['CUSTOMER_ID'] . "'")[0];
+}
 
 $item = query("SELECT * FROM ITEM_JUAL WHERE nota = '$nota'");
 
@@ -53,18 +55,24 @@ include('shared/navadmin.php');
         <p>Salesman <span class="badge badge-primary"><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $notas['SALESMAN_ID'] . "'")[0]['NAMA']; ?></span>
         <p>Operator <span class="badge badge-primary"><?= query("SELECT NAMA FROM user_admin WHERE ID = " . $notas['OPERATOR'])[0]['NAMA']; ?></span></p>
     </div>
-    <div class="flex gap-4">
-        <p>Alamat <span class="badge"><?= $namaPelanggan["ALAMAT"]; ?></span></p>
-        <p>Wilayah <span class="badge"><?= query("SELECT KETERANGAN FROM wilayah WHERE KODE ='" . $namaPelanggan['WILAYAH_ID'] . "'")[0]["KETERANGAN"]; ?></span></p>
-        <p>Kota <span class="badge"><?= $namaPelanggan["KOTA"]; ?></span></p>
-        <a href="https://wa.me/<?php
-                                if ($namaPelanggan['TELEPON'][0] === '0') {
-                                    echo '62' . substr($namaPelanggan['TELEPON'], 1) . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
-                                } else {
-                                    echo $namaPelanggan['TELEPON'] . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
-                                }
-                                ?>"><i class="fa-brands fa-whatsapp"></i> <span class=" badge"><?= $namaPelanggan["TELEPON"]; ?></span></a>
-    </div>
+    <?php if (!empty($namaPelanggan)) : ?>
+        <div class="flex gap-4">
+            <p>Alamat <span class="badge"><?= $namaPelanggan["ALAMAT"]; ?></span></p>
+            <p>Wilayah <span class="badge"><?= query("SELECT KETERANGAN FROM wilayah WHERE KODE ='" . $namaPelanggan['WILAYAH_ID'] . "'")[0]["KETERANGAN"]; ?></span></p>
+            <p>Kota <span class="badge"><?= $namaPelanggan["KOTA"]; ?></span></p>
+            <a href="https://wa.me/<?php
+                                    if ($namaPelanggan['TELEPON'][0] === '0') {
+                                        echo '62' . substr($namaPelanggan['TELEPON'], 1) . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
+                                    } else {
+                                        echo $namaPelanggan['TELEPON'] . "/?text=Hai%20pelangan%20" . $namaPelanggan['NAMA'] . ",%20...";
+                                    }
+                                    ?>"><i class="fa-brands fa-whatsapp"></i> <span class=" badge"><?= $namaPelanggan["TELEPON"]; ?></span></a>
+        </div>
+    <?php else : ?>
+
+        <p><span class="text-rose-600">Sepertinya Customer belum terdaftar</span>. Untuk memenuhi Informasi, silahkan <a href="langganan.php" class="link link-success">daftarkan customer</a>.</p>
+
+    <?php endif; ?>
 
     <div class="overflow-x-auto w-full mt-8 mb-4">
         <table class="table w-full">

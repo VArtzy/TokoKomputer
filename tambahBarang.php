@@ -23,6 +23,10 @@ include('shared/navadmin.php');
 
     <form action="" method="POST" enctype="multipart/form-data">
         <ul class="flex flex-col gap-6 mb-4 justify-center">
+            <li>
+                <label for="KODE">Kode: </label>
+                <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="KODE" id="KODE">
+            </li>
             <div class="form-control">
                 <label class="label">
                     <label class="label-text" for="GOLONGAN_ID">Golongan: </label>

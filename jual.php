@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a, customer b where a.customer_id = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 $title = "Records Nota Jual - $username";
 include('shared/navadmin.php');
@@ -70,7 +70,7 @@ include('shared/navadmin.php');
                         <th><?= $key + 1; ?></th>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]["NAMA"]; ?></td>
+                        <td><?= $i['CUSTOMER_ID']; ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['PIUTANG']); ?></td>
                         <td><?= rupiah($i['SISA_PIUTANG']); ?></td>

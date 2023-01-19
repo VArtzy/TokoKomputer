@@ -2,7 +2,7 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
-$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a, customer b where a.customer_id = b.kode ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 if (isset($_POST["cari"])) {
@@ -18,11 +18,7 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Order & Invoices.</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
-    <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
-    <a class="btn btn-warning mb-8" href="admin.php">Kembali</a>
     <a class="btn btn-info text-sm mb-8" href="jual.php">Lihat Records Nota</a>
-    <a class="btn btn-info text-sm mb-8" href="barangTerjual.php">Lihat Records Barang Terjual</a>
-    <a class="btn btn-info text-sm mb-8" href="penjualanNota.php">Lihat Records Penjualan Nota</a>
 
     <div class="">
         <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Harga, Salesman, Harga" autocomplete="off" id="keyword">
@@ -41,7 +37,11 @@ include('shared/navadmin.php');
                         <h2 class="card-title">
                             <?= $n['NOTA']; ?>
                         </h2>
-                        <div class="badge badge-lg badge-secondary"><?= $n["NAMA"]; ?></div>
+                        <div class="badge badge-lg badge-secondary"><?php if (isset(query("SELECT NAMA FROM customer WHERE KODE = '" . $n['CUSTOMER_ID'] . "'")[0]['NAMA'])) {
+                                                                        echo query("SELECT NAMA FROM customer WHERE KODE = '" . $n['CUSTOMER_ID'] . "'")[0]['NAMA'];
+                                                                    } else {
+                                                                        echo $n['CUSTOMER_ID'];
+                                                                    } ?></div>
                         <div class="flex gap-2 mb-2">
                             <div class="badge badge-secondary"><?= $n['TANGGAL']; ?></div>=>
                             <div class="badge badge-primary"><?= $n['TEMPO']; ?></div>
@@ -65,6 +65,9 @@ include('shared/navadmin.php');
     <?php } else { ?>
         <p class="text-lg">Belum ada yang pesan... 😩</a>.</p>
     <?php } ?>
+
+    <a class="btn btn-primary mt-8" href="pilihBarang.php">Tambah Nota</a>
+    <a class="btn btn-warning mt-8" href="admin.php">Kembali</a>
 </main>
 
 <script src="script/cariNota.js"></script>

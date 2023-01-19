@@ -20,7 +20,7 @@ foreach ($data as $d) {
 }
 
 if (isset($_POST["checkout"])) {
-    $nota = uniqid();
+    $nota = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"];
     $total = 0;
     foreach ($data as $d) {
         $total = $total + ($d['price'] * $d['count']);
