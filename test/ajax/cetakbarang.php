@@ -77,7 +77,7 @@ $columns = array(
 $sql_details = array(
     'user' => 'admin',
     'pass' => 'admin789',
-    'db'   => 'web_joga_comp_test',
+    'db'   => 'web_joga_comp',
     'host' => 'localhost'
 );
 

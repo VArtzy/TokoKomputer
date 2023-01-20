@@ -93,7 +93,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
           </svg>
         </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 overflow-hidden">
           <input type="text" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()" class="input input-bordered lg:hidden" />
           <ul id="myMenu" class="shadow-lg lg:hidden">
             <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>

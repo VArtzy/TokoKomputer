@@ -71,7 +71,7 @@ include('shared/navadmin.php');
     <div class="">
       <h2 class="text-xl mb-4 text-sucess">TOP 5 Barang</h2>
       <?php if (isset($barang)) { ?>
-        <div class="overflow-x-auto w-full shadow rounded p-4">
+        <div class="overflow-x-auto shadow rounded p-4">
           <table class="table w-full">
             <!-- head -->
             <thead>
