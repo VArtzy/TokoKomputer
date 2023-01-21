@@ -170,7 +170,11 @@ include('shared/navadmin.php');
                         <td><?= $key + 1; ?></td>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= $i['SUPPLIER_ID'] ?></td>
+                        <td><?php if (isset(query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'])) {
+                                echo query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'];
+                            } else {
+                                echo $i['SUPPLIER_ID'];
+                            } ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['HUTANG']); ?></td>
                         <td><?php if ($i['SISA_HUTANG']) {

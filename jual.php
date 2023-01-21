@@ -70,7 +70,11 @@ include('shared/navadmin.php');
                         <th><?= $key + 1; ?></th>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= $i['CUSTOMER_ID']; ?></td>
+                        <td><?php if (isset(query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]['NAMA'])) {
+                                echo query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]['NAMA'];
+                            } else {
+                                echo $i['CUSTOMER_ID'];
+                            } ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['PIUTANG']); ?></td>
                         <td><?= rupiah($i['SISA_PIUTANG']); ?></td>

@@ -66,7 +66,11 @@ include('shared/navadmin.php');
                     <tr>
                         <th><?= $i['NO_PELUNASAN']; ?></th>
                         <td><?= $i['NOTA_BELI']; ?></td>
-                        <td><?= $p['SUPPLIER_ID']; ?></td>
+                        <td><?php if (isset(query("SELECT NAMA FROM supplier WHERE KODE = '" . $p['SUPPLIER_ID'] . "'")[0]['NAMA'])) {
+                                echo query("SELECT NAMA FROM supplier WHERE KODE = '" . $p['SUPPLIER_ID'] . "'")[0]['NAMA'];
+                            } else {
+                                echo $p['SUPPLIER_ID'];
+                            } ?></td>
                         <td><?= $p['TANGGAL']; ?></td>
                         <td><?= $i['NOMINAL']; ?></td>
                         <td><?= $i['KETERANGAN']; ?></td>
