@@ -226,7 +226,7 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $NOTA = $nota;
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$username'")[0]['ID'];
     $TOTAL_NOTA = $total;
-    $TANGGAL = Date('Y-m-d');
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
@@ -840,6 +840,7 @@ function tambahBeli($nota, $username, $total, $data)
     $TOTAL_NOTA = $total;
     $TANGGAL = Date('Y-m-d');
     $TEMPO = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
 
