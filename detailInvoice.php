@@ -187,6 +187,15 @@ include('shared/navadmin.php');
                 </div>
                 <div class="form-control">
                     <label class="label">
+                        <label class="label-text" for="TANGGAL">Tanggal: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Tanggal:</span>
+                        <input type="date" name="TANGGAL" id="TANGGAL" value="<?= $notas['TANGGAL']; ?>" class="input input-bordered">
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label class="label">
                         <label class="label-text" for="KETERANGAN">Keterangan: </label>
                     </label>
                     <label class="input-group">

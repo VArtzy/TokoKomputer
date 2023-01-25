@@ -159,6 +159,15 @@ include('shared/navadmin.php');
                                 <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
                             </label>
                         </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="TANGGAL2">Tanggal: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Tanggal:</span>
+                                <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
+                            </label>
+                        </div>
                     </div>
                     <div class="form-control">
                         <label class="label">

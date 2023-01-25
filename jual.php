@@ -61,6 +61,7 @@ include('shared/navadmin.php');
                     <th>Tempo (Nota)</th>
                     <th>Salesman</th>
                     <th>Operator</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="container">
@@ -81,6 +82,11 @@ include('shared/navadmin.php');
                         <td><?= $i['TEMPO']; ?></td>
                         <td><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $i['SALESMAN_ID'] . "'")[0]["NAMA"]; ?></td>
                         <td><?= query("SELECT NAMA FROM user_admin WHERE id = '" . $i['OPERATOR'] . "'")[0]["NAMA"]; ?></td>
+                        <td>
+                            <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
+                                <a tabindex="1" href="detailinvoice.php?nota=<?= $i['NOTA']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 <?php } ?>
         </table>

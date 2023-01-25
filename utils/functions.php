@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -497,7 +497,7 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
-    $TANGGAL = Date('Y-m-d');
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
 
     mysqli_query($conn, "UPDATE `jual` SET 
     `SALESMAN_ID`='$SALESMAN_ID', 
@@ -505,6 +505,7 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     `STATUS_NOTA`='$STATUS_NOTA', 
     `STATUS_BAYAR`='$STATUS_BAYAR', 
     `TEMPO`='$TEMPO', 
+    `TANGGAL`='$TANGGAL', 
     `KETERANGAN` = '$KETERANGAN', 
     `USER_ADMIN`='$USER_ADMIN', 
     `OPERATOR`='$USER_ADMIN', 
@@ -874,7 +875,7 @@ function ubahBeli($nota, $userAdmin, $TOTAL_NOTA, $data)
     $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"];
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
-    $TANGGAL = Date('Y-m-d');
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TEMPO = mysqli_real_escape_string($conn, $data["TANGGAL"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);

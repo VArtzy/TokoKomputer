@@ -2,7 +2,7 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$item = query("select a.TANGGAL, a.TEMPO, a.TANGGAL, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
@@ -223,14 +223,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Status:</span>
-                            <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
-                                <option <?php if ($item['STATUS_NOTA'] === 'T') {
-                                            echo 'selected';
-                                        } ?> value="T">Tunai</option>
-                                <option <?php if ($item['STATUS_NOTA'] === 'K') {
-                                            echo 'selected';
-                                        } ?> value="K">Kredit</option>
-                            </select>
+                            <input readonly class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA" value="<?= $item['STATUS_NOTA']; ?>">
                         </label>
                     </div>
                     <div class="form-control">
@@ -240,6 +233,15 @@ include('shared/navadmin.php');
                         <label class="input-group">
                             <span>Tempo:</span>
                             <input value="<?= $item['TEMPO']; ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <label class="label-text" for="TANGGAL2">Tanggal: </label>
+                        </label>
+                        <label class="input-group">
+                            <span>Tempo:</span>
+                            <input value="<?= $item['TANGGAL']; ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
                         </label>
                     </div>
                 </div>
@@ -275,7 +277,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Keterangan:</span>
-                        <input value="<?= $item['KETERANGAN']; ?>" required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
+                        <input value="<?= $item['KETERANGAN']; ?>" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
