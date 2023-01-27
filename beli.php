@@ -130,6 +130,7 @@ include('shared/navadmin.php');
                 });
             }
         });
+        $('#ui-id-1').css('z-index', 1000)
     });
 </script>
 
@@ -141,7 +142,7 @@ include('shared/navadmin.php');
         <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
     </div>
     <a class="btn btn-info text-sm mb-8" href="barangTerbeli.php">Lihat Records Barang Terbeli</a>
-    <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Lihat Records Pembelian Nota</a>
+    <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Pelunasan Hutang</a>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
@@ -235,15 +236,15 @@ include('shared/navadmin.php');
                             <input value="<?= $item['TEMPO']; ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
                         </label>
                     </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="TANGGAL2">Tanggal: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Tempo:</span>
-                            <input value="<?= $item['TANGGAL']; ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
-                        </label>
-                    </div>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="TANGGAL2">Tanggal: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Tanggal:</span>
+                        <input value="<?= $item['TANGGAL']; ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
+                    </label>
                 </div>
                 <div class="form-control">
                     <label class="label">

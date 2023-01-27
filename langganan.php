@@ -2,6 +2,8 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+if (!strpos($hakAkses, '8')) return header('Location: admin.php');
+
 $item = query("SELECT * FROM customer ORDER BY NAMA ASC");
 
 if (isset($_POST["submit"])) {

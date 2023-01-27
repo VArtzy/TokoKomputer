@@ -134,7 +134,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Nota:</span>
-                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
+                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"]; ?>" required type="text" name="NOTA" id="NOTA" class="input input-bordered">
                         </label>
                     </div>
                     <div class="md:flex gap-4">
@@ -257,7 +257,7 @@ include('shared/navadmin.php');
                                         <br />
                                         Stok: <?= round($b["STOK"]); ?>
                                         <br />
-                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= query("SELECT NAMA FROM satuan where KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?>">
+                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['SATUAN_ID'] ?>">
                                         <br />
                                     </td>
                                     <td>

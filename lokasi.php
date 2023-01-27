@@ -2,6 +2,8 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+if (!strpos($hakAkses, '5')) return header('Location: admin.php');
+
 $item = query("SELECT * FROM lokasi ORDER BY KETERANGAN ASC");
 
 if (isset($_POST["submit"])) {

@@ -872,7 +872,7 @@ function ubahBeli($nota, $userAdmin, $TOTAL_NOTA, $data)
     global $conn;
 
     $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
-    $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"];
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
@@ -902,11 +902,13 @@ WHERE NOTA = '$KODE_LAMA';";
 
     mysqli_query($conn, $query);
 
-    mysqli_query($conn, "INSERT INTO `pelunasan_hutang`(`NO_PELUNASAN`, `SUPPLIER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
+    if ($TOTAL_PELUNASAN_NOTA !== null) {
+        mysqli_query($conn, "INSERT INTO `pelunasan_hutang`(`NO_PELUNASAN`, `SUPPLIER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
     ('$NO_PELUNASAN', '$SUPPLIER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
 
-    mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
+        mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
     ('$NO_PELUNASAN', '$nota', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN')");
+    }
 
     return mysqli_affected_rows($conn);
 }
@@ -1351,6 +1353,128 @@ function hapusTandaKeluarBarang($data)
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     mysqli_query($conn, "DELETE FROM tanda_keluar_barang WHERE NOTA = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahPelunasan($userAdmin, $data)
+{
+    global $conn;
+
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
+    $NOTA_BELI = mysqli_real_escape_string($conn, $data["NOTA_BELI"]);
+    $RETUR = mysqli_real_escape_string($conn, $data["RETUR"]);
+    $DISKON_PELUNASAN = mysqli_real_escape_string($conn, $data["DISKON_PELUNASAN"]);
+    $KETERANGAN_PELUNASAN = mysqli_real_escape_string($conn, $data["KETERANGAN_PELUNASAN"]);
+
+    if (!is_numeric($SUPPLIER_ID)) $SUPPLIER_ID = query("SELECT KODE FROM `supplier` WHERE NAMA = '$SUPPLIER_ID'")[0]['KODE'];
+
+    mysqli_query($conn, "INSERT INTO `pelunasan_hutang`(`NO_PELUNASAN`, `SUPPLIER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
+    ('$NO_PELUNASAN', '$SUPPLIER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
+
+    mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`, `DISKON`, `RETUR`) VALUES 
+    ('$NO_PELUNASAN', '$NOTA_BELI', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN_PELUNASAN', '$DISKON_PELUNASAN', '$RETUR')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahPelunasan($userAdmin, $data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
+    $NOTA_BELI = mysqli_real_escape_string($conn, $data["NOTA_BELI"]);
+    $RETUR = mysqli_real_escape_string($conn, $data["RETUR"]);
+    $DISKON_PELUNASAN = mysqli_real_escape_string($conn, $data["DISKON_PELUNASAN"]);
+    $KETERANGAN_PELUNASAN = mysqli_real_escape_string($conn, $data["KETERANGAN_PELUNASAN"]);
+
+    if (!is_numeric($SUPPLIER_ID)) $SUPPLIER_ID = query("SELECT KODE FROM `supplier` WHERE NAMA = '$SUPPLIER_ID'")[0]['KODE'];
+
+    mysqli_query($conn, "UPDATE `item_pelunasan_hutang` SET `NO_PELUNASAN`='$NO_PELUNASAN',`NOTA_BELI`='$NOTA_BELI',`NOMINAL`='$TOTAL_PELUNASAN_NOTA',`KETERANGAN`='$KETERANGAN_PELUNASAN',`DISKON`='$DISKON_PELUNASAN',`RETUR`='$RETUR' WHERE NO_PELUNASAN = '$KODE_LAMA'");
+    mysqli_query($conn, "UPDATE `pelunasan_hutang` SET `NO_PELUNASAN`='$NO_PELUNASAN',`SUPPLIER_ID`='$SUPPLIER_ID',`TANGGAL`='$TANGGAL',`KETERANGAN`='$KETERANGAN',`OPERATOR`='$USER_ADMIN' WHERE NO_PELUNASAN = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusPelunasan($data)
+{
+    global $conn;
+
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    mysqli_query($conn, "DELETE FROM `pelunasan_hutang` WHERE NO_PELUNASAN = '$NO_PELUNASAN'");
+    mysqli_query($conn, "DELETE FROM `item_pelunasan_hutang` WHERE NO_PELUNASAN = '$NO_PELUNASAN'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahPelunasanP($userAdmin, $data)
+{
+    global $conn;
+
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $CUSTOMER_ID = mysqli_real_escape_string($conn, $data["CUSTOMER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
+    $NOTA_JUAL = mysqli_real_escape_string($conn, $data["NOTA_JUAL"]);
+    $RETUR = mysqli_real_escape_string($conn, $data["RETUR"]);
+    $DISKON_PELUNASAN = mysqli_real_escape_string($conn, $data["DISKON_PELUNASAN"]);
+    $KETERANGAN_PELUNASAN = mysqli_real_escape_string($conn, $data["KETERANGAN_PELUNASAN"]);
+
+    if (!is_numeric($CUSTOMER_ID)) $CUSTOMER_ID = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_ID'")[0]['KODE'];
+
+    mysqli_query($conn, "INSERT INTO `pelunasan_piutang`(`NO_PELUNASAN`, `CUSTOMER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
+    ('$NO_PELUNASAN', '$CUSTOMER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
+
+    mysqli_query($conn, "INSERT INTO `item_pelunasan_piutang`(`NO_PELUNASAN`, `NOTA_JUAL`, `NOMINAL`, `KETERANGAN`, `DISKON`, `RETUR`) VALUES 
+    ('$NO_PELUNASAN', '$NOTA_JUAL', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN_PELUNASAN', '$DISKON_PELUNASAN', '$RETUR')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahPelunasanP($userAdmin, $data)
+{
+    global $conn;
+
+    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
+    $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
+    $CUSTOMER_ID = mysqli_real_escape_string($conn, $data["CUSTOMER_ID"]);
+    $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
+    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
+    $NOTA_JUAL = mysqli_real_escape_string($conn, $data["NOTA_JUAL"]);
+    $RETUR = mysqli_real_escape_string($conn, $data["RETUR"]);
+    $DISKON_PELUNASAN = mysqli_real_escape_string($conn, $data["DISKON_PELUNASAN"]);
+    $KETERANGAN_PELUNASAN = mysqli_real_escape_string($conn, $data["KETERANGAN_PELUNASAN"]);
+
+    if (!is_numeric($CUSTOMER_ID)) $CUSTOMER_ID = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_ID'")[0]['KODE'];
+
+    mysqli_query($conn, "UPDATE `item_pelunasan_piutang` SET `NO_PELUNASAN`='$NO_PELUNASAN',`NOTA_JUAL`='$NOTA_JUAL',`NOMINAL`='$TOTAL_PELUNASAN_NOTA',`KETERANGAN`='$KETERANGAN_PELUNASAN',`DISKON`='$DISKON_PELUNASAN',`RETUR`='$RETUR' WHERE NO_PELUNASAN = '$KODE_LAMA'");
+    mysqli_query($conn, "UPDATE `pelunasan_piutang` SET `NO_PELUNASAN`='$NO_PELUNASAN',`CUSTOMER_ID`='$CUSTOMER_ID',`TANGGAL`='$TANGGAL',`KETERANGAN`='$KETERANGAN',`OPERATOR`='$USER_ADMIN' WHERE NO_PELUNASAN = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusPelunasanP($data)
+{
+    global $conn;
+
+    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
+    mysqli_query($conn, "DELETE FROM `pelunasan_piutang` WHERE NO_PELUNASAN = '$NO_PELUNASAN'");
+    mysqli_query($conn, "DELETE FROM `item_pelunasan_piutang` WHERE NO_PELUNASAN = '$NO_PELUNASAN'");
 
     return mysqli_affected_rows($conn);
 }

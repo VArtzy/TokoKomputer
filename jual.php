@@ -42,6 +42,7 @@ include('shared/navadmin.php');
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
+    <a class="btn btn-success mb-4" href="penjualanNota.php">Pembayaran Piutang</a>
     <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
 
     <div class="overflow-x-auto">

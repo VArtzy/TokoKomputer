@@ -85,6 +85,7 @@
 </script>
 
 <body class="font-dm">
+
   <nav class="navbar bg-base-100 max-w-6xl mx-auto">
     <div class="navbar-start">
       <div class="dropdown">
@@ -98,7 +99,9 @@
           <ul id="myMenu" class="shadow-lg lg:hidden">
             <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
             <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
-            <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
+            <?php if (strpos($hakAkses, '12')) : ?>
+              <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
+            <?php endif; ?>
             <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
             <li><a class="fa-solid fa-user-tie">Master</a></li>
             <li><a href="golongan.php">Golongan</a></li>
@@ -118,10 +121,10 @@
             <li><a href="multiprice.php">Multi Price</a></li>
             <li><a class="fa-solid fa-money-bills">Transaksi</a></li>
             <li><a href="beli.php">Pembelian</a></li>
-            <li><a>Pelunasan Hutang</a></li>
+            <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
             <hr>
             <li><a href="invoices.php">Penjualan</a></li>
-            <li><a href="">Pembayaran Piutang</a></li>
+            <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
             <hr>
             <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
             <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
@@ -148,22 +151,46 @@
           <div class="dropdown dropdown-bottom dropdown-hover">
             <label tabindex="0" class=""><i class="fa-solid fa-user-tie"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a href="golongan.php">Golongan</a></li>
-              <li><a href="subgolongan.php">Subgolongan</a></li>
+              <?php if (strpos($hakAkses, '2')) : ?>
+                <li><a href="golongan.php">Golongan</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '3')) : ?>
+                <li><a href="subgolongan.php">Subgolongan</a></li>
+              <?php endif; ?>
               <hr />
-              <li><a href="wilayah.php">Wilayah</a></li>
-              <li><a href="lokasi.php">Lokasi</a></li>
+              <?php if (strpos($hakAkses, '4')) : ?>
+                <li><a href="wilayah.php">Wilayah</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '5')) : ?>
+                <li><a href="lokasi.php">Lokasi</a></li>
+              <?php endif; ?>
               <hr />
-              <li><a href="biaya.php">Biaya</a></li>
-              <li><a href="jasa.php">Jasa</a></li>
+              <?php if (strpos($hakAkses, '6')) : ?>
+                <li><a href="biaya.php">Biaya</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '7')) : ?>
+                <li><a href="jasa.php">Jasa</a></li>
+              <?php endif; ?>
               <hr />
-              <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
-              <li><a href="supplier.php">Supplier</a></li>
-              <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
+              <?php if (strpos($hakAkses, '8')) : ?>
+                <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '9')) : ?>
+                <li><a href="supplier.php">Supplier</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '10')) : ?>
+                <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
+              <?php endif; ?>
               <hr />
-              <li><a href="satuan.php">Satuan</a></li>
-              <li><a href="barang.php">Barang</a></li>
-              <li><a href="multiprice.php">Multi Price</a></li>
+              <?php if (strpos($hakAkses, '11')) : ?>
+                <li><a href="satuan.php">Satuan</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '12')) : ?>
+                <li><a href="barang.php">Barang</a></li>
+              <?php endif; ?>
+              <?php if (strpos($hakAkses, '13')) : ?>
+                <li><a href="multiprice.php">Multi Price</a></li>
+              <?php endif; ?>
             </ul>
           </div>
         </li>
@@ -172,10 +199,10 @@
             <label tabindex="0" class=""><i class="fa-solid fa-money-bills"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
               <li><a href="beli.php">Pembelian</a></li>
-              <li><a>Pelunasan Hutang</a></li>
+              <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
               <hr>
               <li><a href="invoices.php">Penjualan</a></li>
-              <li><a href="">Pembayaran Piutang</a></li>
+              <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
               <hr>
               <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
               <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
@@ -216,12 +243,12 @@
           <li><a href="satuan.php">Satuan</a></li>
           <li><a href="multiprice.php">Multi Price</a></li>
           <li><a href="beli.php">Pembelian</a></li>
-          <li><a>Pelunasan Hutang</a></li>
+          <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
           <li><a>
               <hr />
             </a></li>
           <li><a href="invoices.php">Penjualan</a></li>
-          <li><a href="">Pembayaran Piutang</a></li>
+          <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
           <li><a>
               <hr />
             </a></li>
@@ -242,6 +269,7 @@
           <li><a href="logoutAdmin.php">Logout</a></li>
         </ul>
       </div>
+
       <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
     </div>
   </nav>
