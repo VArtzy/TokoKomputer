@@ -28,7 +28,7 @@ include('shared/navadmin.php');
         } ?>
     </span>
 
-    <?php if (strpos($hakAkses, '8')) : ?>
+    <?php if (in_array("7", $aksesMenu)) : ?>
         <h2 id="customer" class="text-xl mb-4">Customer</h2>
 
         <a href="langganan.php" class="btn btn-primary mb-4">Tambah Customer</a>
@@ -88,7 +88,6 @@ include('shared/navadmin.php');
                                 <br>
                                 <span class="badge badge-warning badge-sm">Total Pembayaran: <?= $u['TOTAL_PEMBAYARAN_PIUTANG']; ?></span>
                                 <br>
-                                <a href="editPiutang.php?id=<?= $u["KODE"]; ?>" class="btn btn-info btn-xs">Edit Piutang</a>
                             </th>
                             <td>
                                 <?= $u['JENIS_ANGGOTA']; ?>
@@ -102,7 +101,7 @@ include('shared/navadmin.php');
         </div>
     <?php endif; ?>
 
-    <?php if (strpos($hakAkses, '10')) : ?>
+    <?php if (in_array("9", $aksesMenu)) : ?>
         <h2 class="text-xl mb-4" id="salesman">SALESMANS</h2>
 
         <a href="tambahSales.php" class="btn btn-primary mb-4">Tambah Salesman</a>

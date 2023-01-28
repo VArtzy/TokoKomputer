@@ -2,6 +2,10 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
+$nom = '15';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
 $nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 

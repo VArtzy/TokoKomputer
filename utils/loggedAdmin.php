@@ -17,8 +17,13 @@ if (isset($_COOKIE['1']) && isset($_COOKIE['2'])) {
         $username = $row['NAMA'];
         $hakAksesID = $row['GROUP_HAK_AKSES_ID'];
         $userAdminID = $row['ID'];
+
         $hakAkses = $row['HAK_AKSES_USER'];
+        $aksesMenu = [];
         $hakAksesArr = explode(',', $row['HAK_AKSES_USER']);
+        foreach ($hakAksesArr as $arrAkses) {
+            array_push($aksesMenu, explode('/', $arrAkses)[0]);
+        }
     } else {
         header("Location: logoutAdmin.php");
     }

@@ -2,6 +2,10 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+$nom = '13';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
 $item = query("select a.TANGGAL, a.TEMPO, a.TANGGAL, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
@@ -86,7 +90,9 @@ include('shared/navadmin.php');
     $(document).ready(function() {
         var table = $('#table').DataTable({
             "pageLength": 50,
-            dom: 'Blfrtip',
+            <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                dom: 'Blfrtip',
+            <?php endif; ?>
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
@@ -139,7 +145,9 @@ include('shared/navadmin.php');
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
+        <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
+            <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
+        <?php endif; ?>
     </div>
     <a class="btn btn-info text-sm mb-8" href="barangTerbeli.php">Lihat Records Barang Terbeli</a>
     <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Pelunasan Hutang</a>
@@ -361,15 +369,19 @@ include('shared/navadmin.php');
     </table>
     </div>
     <div class="modal-action">
-        <div class="tooltip tooltip-error" data-tip="CTRL + Q">
-            <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
-        </div>
+        <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+            <div class="tooltip tooltip-error" data-tip="CTRL + Q">
+                <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
+            </div>
+        <?php endif; ?>
         <div class="tooltip" data-tip="ESC (Tekan Lama)">
             <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
         </div>
-        <div class="tooltip tooltip-success" data-tip="CTRL + A">
-            <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
-        </div>
+        <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+            <div class="tooltip tooltip-success" data-tip="CTRL + A">
+                <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
+            </div>
+        <?php endif; ?>
     </div>
     </form>
     </div>

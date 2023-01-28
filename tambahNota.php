@@ -2,6 +2,10 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
+$nom = '15';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: jual.php');
+
 $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
@@ -60,6 +64,7 @@ if (isset($_POST["checkout"])) {
     }
 
     if (tambahNotaAdmin($nota, $username, $TOTAL, $_POST) > 0) {
+        mysqli_query($conn, "UPDATE salesman SET TOTAL_ITEM_PENJUALAN = TOTAL_ITEM_PENJUALAN + $d->count WHERE KODE = '$SALESMAN_ID'");
         echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
         echo  "<script>
         alert('Berhasil Menambah Jual!');

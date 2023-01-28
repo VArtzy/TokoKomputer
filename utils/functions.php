@@ -212,6 +212,8 @@ function tambahNota($nota, $id, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $TANGGAL = Date('Y-m-d');
 
+    mysqli_query($conn, "UPDATE salesman SET TOTAL_NOTA_PENJUALAN = TOTAL_NOTA_PENJUALAN + 1 WHERE KODE = '$SALESMAN_ID'");
+
     mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
      ('$NOTA', '$CUSTOMER_ID', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
@@ -234,6 +236,8 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     if (!is_numeric($CUSTOMER_NAMA)) $CUSTOMER_NAMA = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_NAMA'")[0]['KODE'];
+
+    mysqli_query($conn, "UPDATE salesman SET TOTAL_NOTA_PENJUALAN = TOTAL_NOTA_PENJUALAN + 1 WHERE KODE = '$SALESMAN_ID'");
 
     if ($STATUS_NOTA === 'T') {
         $NO_PELUNASAN = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM item_pelunasan_piutang")[0]["COUNT"];
@@ -926,6 +930,22 @@ function hapusBeli($data)
     $item = query("SELECT NO_PELUNASAN FROM item_pelunasan_hutang WHERE NOTA_BELI = '$KODE_LAMA'");
     foreach ($item as $i) {
         mysqli_query($conn, "DELETE FROM PELUNASAN_HUTANG WHERE NO_PELUNASAN = '" . $i['NO_PELUNASAN'] . "'");
+    }
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusJual($nota)
+{
+    global $conn;
+
+    mysqli_query($conn, "DELETE FROM Jual WHERE NOTA = '$nota'");
+    mysqli_query($conn, "DELETE FROM ITEM_JUAL WHERE NOTA = '$nota'");
+    mysqli_query($conn, "DELETE FROM ITEM_PELUNASAN_PIUTANG WHERE NOTA_JUAL = '$nota'");
+
+    $item = query("SELECT NO_PELUNASAN FROM item_pelunasan_piutang WHERE NOTA_JUAL = '$nota'");
+    foreach ($item as $i) {
+        mysqli_query($conn, "DELETE FROM PELUNASAN_PIUTANG WHERE NO_PELUNASAN = '" . $i['NO_PELUNASAN'] . "'");
     }
 
     return mysqli_affected_rows($conn);

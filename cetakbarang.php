@@ -2,6 +2,10 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+$nom = '11';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[3]) || $aksi[3] === '0') return header('Location: barang.php');
+
 $title = "Barang - $username";
 include('shared/navadmin.php');
 ?>

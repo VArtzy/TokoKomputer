@@ -94,14 +94,13 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
           </svg>
         </label>
+        <h2><?php var_dump($hakAksesArr); ?></h2>
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 overflow-hidden">
           <input type="text" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()" class="input input-bordered lg:hidden" />
           <ul id="myMenu" class="shadow-lg lg:hidden">
             <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
             <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
-            <?php if (strpos($hakAkses, '12')) : ?>
-              <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
-            <?php endif; ?>
+            <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
             <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
             <li><a class="fa-solid fa-user-tie">Master</a></li>
             <li><a href="golongan.php">Golongan</a></li>
@@ -151,46 +150,22 @@
           <div class="dropdown dropdown-bottom dropdown-hover">
             <label tabindex="0" class=""><i class="fa-solid fa-user-tie"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-              <?php if (strpos($hakAkses, '2')) : ?>
-                <li><a href="golongan.php">Golongan</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '3')) : ?>
-                <li><a href="subgolongan.php">Subgolongan</a></li>
-              <?php endif; ?>
+              <li><a href="golongan.php">Golongan</a></li>
+              <li><a href="subgolongan.php">Subgolongan</a></li>
               <hr />
-              <?php if (strpos($hakAkses, '4')) : ?>
-                <li><a href="wilayah.php">Wilayah</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '5')) : ?>
-                <li><a href="lokasi.php">Lokasi</a></li>
-              <?php endif; ?>
+              <li><a href="wilayah.php">Wilayah</a></li>
+              <li><a href="lokasi.php">Lokasi</a></li>
               <hr />
-              <?php if (strpos($hakAkses, '6')) : ?>
-                <li><a href="biaya.php">Biaya</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '7')) : ?>
-                <li><a href="jasa.php">Jasa</a></li>
-              <?php endif; ?>
+              <li><a href="biaya.php">Biaya</a></li>
+              <li><a href="jasa.php">Jasa</a></li>
               <hr />
-              <?php if (strpos($hakAkses, '8')) : ?>
-                <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '9')) : ?>
-                <li><a href="supplier.php">Supplier</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '10')) : ?>
-                <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
-              <?php endif; ?>
+              <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+              <li><a href="supplier.php">Supplier</a></li>
+              <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
               <hr />
-              <?php if (strpos($hakAkses, '11')) : ?>
-                <li><a href="satuan.php">Satuan</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '12')) : ?>
-                <li><a href="barang.php">Barang</a></li>
-              <?php endif; ?>
-              <?php if (strpos($hakAkses, '13')) : ?>
-                <li><a href="multiprice.php">Multi Price</a></li>
-              <?php endif; ?>
+              <li><a href="satuan.php">Satuan</a></li>
+              <li><a href="barang.php">Barang</a></li>
+              <li><a href="multiprice.php">Multi Price</a></li>
             </ul>
           </div>
         </li>

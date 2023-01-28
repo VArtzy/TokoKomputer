@@ -2,6 +2,10 @@
 require_once './utils/functions.php';
 require_once './utils/loggedAdmin.php';
 
+$nom = '11';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: barang.php');
+
 if (isset($_POST["tambah"])) {
     if (tambahBarang($_POST) > 0) {
         echo  "<script>

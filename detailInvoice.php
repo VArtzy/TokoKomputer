@@ -2,6 +2,10 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
+$nom = '15';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
 $nota = $_GET['nota'];
 
 $notas = query("SELECT CUSTOMER_ID, STATUS_NOTA, STATUS_BAYAR, SALESMAN_ID, TANGGAL, TEMPO, TOTAL_NOTA, TOTAL_PELUNASAN_NOTA, KETERANGAN, PROFIT, OPERATOR, LOKASI_ID FROM JUAL WHERE NOTA = '$nota'")[0];
@@ -22,6 +26,18 @@ if (isset($_POST["submit"])) {
         echo mysqli_error($conn);
     }
 }
+
+if (isset($_POST["hapus"])) {
+    if (hapusJual($nota) > 0) {
+        echo  "<script>
+    alert('Berhasil menghapus invoices nota $nota!');
+        document.location.href = 'invoices.php';
+        </script>";
+    } else {
+        echo mysqli_error($conn);
+    }
+}
+
 if (empty($item)) {
     return header('location: invoices.php');
 }
@@ -240,7 +256,12 @@ include('shared/navadmin.php');
                 </div>
                 <div class="modal-action">
                     <label for="my-modal-6" class="btn">Batal</label>
-                    <button name="submit" class="btn btn-success" type="submit">Edit</button>
+                    <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+                        <button name="submit" class="btn btn-success" type="submit">Edit</button>
+                    <?php endif; ?>
+                    <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                        <button name="hapus" class="btn btn-error" type="submit">Hapus</button>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
