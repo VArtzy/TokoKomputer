@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -143,6 +143,7 @@ function tambahAdmin($data)
     $NO_REKENING = mysqli_real_escape_string($conn, $data["NO_REKENING"]);
     $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
     $GAJI_POKOK = mysqli_real_escape_string($conn, $data["GAJI_POKOK"]);
+    $HAK_AKSES_USER = mysqli_real_escape_string($conn, $data["HAK_AKSES_USER"]);
 
     if ($PASS !== $PASS2) {
         echo "<script>alert('konfirmasi password tidak sesuai');</script>";
@@ -150,8 +151,8 @@ function tambahAdmin($data)
     }
 
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `user_`(`NAMA`, `PASS`, `IS_AKTIF`, `ALAMAT`, `WILAYAH_ID`, `TELEPON`, `NO_REKENING`, `GAJI_POKOK`) VALUES
-     ('$NAMA','$PASS','$IS_AKTIF','$ALAMAT','$WILAYAH_ID','$TELEPON', '$NO_REKENING', '$GAJI_POKOK')");
+    mysqli_query($conn, "INSERT INTO `user_`(`NAMA`, `PASS`, `IS_AKTIF`, `HAK_AKSES_USER`, `ALAMAT`, `WILAYAH_ID`, `TELEPON`, `NO_REKENING`, `GAJI_POKOK`) VALUES
+     ('$NAMA','$PASS','$IS_AKTIF','$HAK_AKSES_USER','$ALAMAT','$WILAYAH_ID','$TELEPON', '$NO_REKENING', '$GAJI_POKOK')");
 
     return mysqli_affected_rows($conn);
 }
@@ -248,8 +249,26 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     ('$NO_PELUNASAN', '$nota', '$TOTAL_NOTA', '$KETERANGAN')");
     }
 
-    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
-     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
+    mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `STATUS_NOTA`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
+     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', $STATUS_NOTA, '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahItemNotaCheckout($nota, $id, $jumlah, $harga)
+{
+    global $conn;
+
+    $NOTA = $nota;
+    $BARANG_ID = $id;
+    $JUMLAH = $jumlah;
+    $HARGA_BELI = query("SELECT HARGA_BELI FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["HARGA_BELI"];
+    $HARGA_JUAL = $harga;
+    $SATUAN_ID = query("SELECT SATUAN_ID FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["SATUAN_ID"];
+    $JUMLAH2 = query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $SATUAN_ID . "'")[0]["KONVERSI"];
+
+    mysqli_query($conn, "INSERT INTO `item_jual`(`NOTA`, `BARANG_ID`, `JUMLAH`, `JUMLAH2`, `HARGA_BELI`, `HARGA_JUAL`) VALUES
+     ('$NOTA', '$BARANG_ID','$JUMLAH', '$JUMLAH2', '$HARGA_BELI', '$HARGA_JUAL')");
 
     return mysqli_affected_rows($conn);
 }
@@ -549,11 +568,13 @@ function ubahAdmin($data)
     $id = $data["id"];
     $IS_AKTIF = mysqli_real_escape_string($conn, $data["IS_AKTIF"]);
     $GROUP_HAK_AKSES_ID = mysqli_real_escape_string($conn, $data["GROUP_HAK_AKSES_ID"]);
+    $HAK_AKSES_USER = mysqli_real_escape_string($conn, $data["HAK_AKSES_USER"]);
     $GAJI_POKOK = mysqli_real_escape_string($conn, $data["GAJI_POKOK"]);
 
     $query = "UPDATE `user_` SET
 IS_AKTIF = '$IS_AKTIF',
 GROUP_HAK_AKSES_ID = '$GROUP_HAK_AKSES_ID',
+HAK_AKSES_USER = '$HAK_AKSES_USER',
 GAJI_POKOK = '$GAJI_POKOK'
 WHERE ID = '$id';";
 

@@ -2,7 +2,9 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-if (!in_array("17", $aksesMenu)) return header('Location: admin.php');
+$nom = '17';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
 
 $item = query("SELECT * FROM `tanda_keluar_barang`");
 
@@ -311,7 +313,7 @@ include('shared/navadmin.php');
                         </div>
                     <?php endif; ?>
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="Multi_price.php" for="my-modal-edit" class="btn">Batal</a>
+                        <a id="batal" href="tandaKeluarBarang.php" for="my-modal-edit" class="btn">Batal</a>
                     </div>
                     <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
                         <div class="tooltip tooltip-success" data-tip="CTRL + A">

@@ -247,7 +247,7 @@ include('shared/navadmin.php');
                             <th>Nama</th>
                             <th>Stok/Satuan</th>
                             <th>Diskon</th>
-                            <th>Harga Beli/Jual</th>
+                            <th>Harga Jual</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
@@ -292,7 +292,7 @@ include('shared/navadmin.php');
                                         <span class="badge badge-ghost badge-sm">%4: <input tabindex="1" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
                                     </td>
                                     <th>
-                                        <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                                        <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="hidden" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
                                         <br>
                                         <input tabindex="1" name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70 harga-jual" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
                                                                                                                                                                                 echo query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'];

@@ -68,6 +68,10 @@ include('shared/navadmin.php');
                 <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="GAJI_POKOK" id="GAJI_POKOK">
             </li>
             <li>
+                <label for="HAK_AKSES_USER">Hak Akses User: </label>
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="HAK_AKSES_USER" id="HAK_AKSES_USER">
+            </li>
+            <li>
                 <button class="px-4 py-2 rounded-lg uppercase bg-amber-600 text-white hover:outline-amber-600 hover:bg-white hover:text-amber-600 hover:-translate-y-1 transition-all" type="submit" name="submit">Tambah admin</button>
             </li>
         </ul>

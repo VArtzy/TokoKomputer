@@ -27,7 +27,7 @@ if (isset($_POST["checkout"])) {
     }
 
     foreach ($data as $d) {
-        if (tambahItemNota($nota, $d['id'], $d['count'], $d['price']) > 0) {
+        if (tambahItemNotaCheckout($nota, $d['id'], $d['count'], $d['price']) > 0) {
         } else {
             echo mysqli_error($conn);
         }

@@ -2,7 +2,9 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-if (!in_array("14", $aksesMenu)) return header('Location: admin.php');
+$nom = '14';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
 
 $item = query("SELECT * FROM pelunasan_hutang");
 
@@ -120,7 +122,7 @@ include('shared/navadmin.php');
             $("#hapus")[0].click();
         }
         if (e.key === "Escape") {
-            $("#pilihbarang")[0].click();
+            $("#batal")[0].click();
         }
     });
 
@@ -149,6 +151,19 @@ include('shared/navadmin.php');
                     },
                     success: function(data) {
                         response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $.ajax({
+                    url: "ajax/pembelianidinfo.php",
+                    dataType: "json",
+                    data: {
+                        q: ui.item.value
+                    },
+                    success: function(data) {
+                        $("#TOTAL").val(data[0]).change();
+                        $("#KEKURANGAN").val(data[1]).change();
                     }
                 });
             }
@@ -187,7 +202,7 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
         <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-            <label for="my-modal-6" class="btn btn-success mb-4">Tambah Pelunasan</label>
+            <label for="my-modal-6" id="tambah" class="btn btn-success mb-4">Tambah Pelunasan</label>
         </div>
     <?php endif; ?>
     <a class="btn btn-warning mb-8" href="beli.php">Kembali</a>
@@ -242,8 +257,8 @@ include('shared/navadmin.php');
 
 <?php if (!isset($_GET['kode']) && isset($aksi[0]) && $aksi[0] === '1') : ?>
     <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-    <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
+    <div class="modal modal-bottom p-4">
+        <div class="modal-box w-11/12 max-w-6xl">
             <form action="" method="POST">
                 <h3 class="font-bold text-lg">Tambah Pembayaran Hutang</h3>
                 <div class="form-control">
@@ -252,7 +267,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>No Pelunasan:</span>
-                        <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"] ?>" required type="number" name="NO_PELUNASAN" id="KETERANGAN" class="input input-bordered">
+                        <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM pelunasan_hutang")[0]["COUNT"] ?>" required type="text" name="NO_PELUNASAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
@@ -299,35 +314,35 @@ include('shared/navadmin.php');
                         </thead>
                         <tbody>
                             <th>
-                                <input class="w-8" type="text" name="NO" />
+                                <input class="input input-xs input-bordered" class="w-8" type="text" name="NO" />
                             </th>
                             <th>
-                                <input type="text" id="NOTA_BELI" name="NOTA_BELI" />
+                                <input class="input input-xs input-bordered" type="text" id="NOTA_BELI" name="NOTA_BELI" />
                             </th>
                             <th>
-                                <input type="text" name="" />
+                                <input class="input input-xs input-bordered" id="TOTAL" type="number" name="" />
                             </th>
                             <th>
-                                <input type="text" name="" />
+                                <input class="input input-xs input-bordered" id="KEKURANGAN" type="number" name="" />
                             </th>
                             <th>
-                                <input type="text" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered" type="number" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input type="text" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered" type="text" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input type="text" name="RETUR" />
+                                <input class="input input-xs input-bordered" type="text" name="RETUR" />
                             </th>
                             <th>
-                                <input type="text" name="KETERANGAN_PELUNASAN" />
+                                <input class="input input-xs input-bordered" type="text" name="KETERANGAN_PELUNASAN" />
                             </th>
                         </tbody>
                     </table>
                 </div>
                 <div class="modal-action">
-                    <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="pembelianNota.php" for="my-modal-edit" class="btn">Batal</a>
+                    <div class="tooltip" data-tip="ESC">
+                        <label for="my-modal-6" id="batal" class="btn">Batal</label>
                     </div>
                     <div class="tooltip tooltip-success" data-tip="CTRL + A">
                         <button id="tambah" name="submit" class="btn btn-success" type="submit">Tambah</button>
@@ -343,10 +358,11 @@ include('shared/navadmin.php');
     $kode = $_GET['nota'];
     $item = query("SELECT * FROM pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
+    $iteminfo = query("select (select SUM(jumlah*harga_beli) from item_beli where nota = '$kode') AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = '$kode') - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = '$kode') AS SISA_HUTANG;")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
-    <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
-        <div class="modal-box">
+    <div class="modal visible opacity-100 pointer-events-auto modal-bottom p-4">
+        <div class="modal-box w-11/12 max-w-6xl">
             <form action="" method="POST">
                 <h3 class="font-bold text-lg">Aksi Pembayaran Hutang</h3>
 
@@ -404,28 +420,28 @@ include('shared/navadmin.php');
                         </thead>
                         <tbody>
                             <th>
-                                <input class="w-8" type="text" name="NO" />
+                                <input class="input input-xs input-bordered" class="w-8" type="text" name="NO" />
                             </th>
                             <th>
-                                <input type="text" value="<?= $itemp['NOTA_BELI']; ?>" name="NOTA_BELI" />
+                                <input class="input input-xs input-bordered" id="NOTA_BELI" type="text" value="<?= $itemp['NOTA_BELI']; ?>" name="NOTA_BELI" />
                             </th>
                             <th>
-                                <input type="text" name="" />
+                                <input class="input input-xs input-bordered" id="TOTAL" type="number" value="<?= $iteminfo['HUTANG']; ?>" name="" />
                             </th>
                             <th>
-                                <input type="text" name="" />
+                                <input class="input input-xs input-bordered" id="KEKURANGAN" type="number" value="<?= $iteminfo['SISA_HUTANG']; ?>" name="" />
                             </th>
                             <th>
-                                <input type="text" value="<?= $itemp['NOMINAL']; ?>" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered" type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input type="text" value="<?= $itemp['RETUR']; ?>" name="RETUR" />
+                                <input class="input input-xs input-bordered" type="text" value="<?= $itemp['RETUR']; ?>" name="RETUR" />
                             </th>
                             <th>
-                                <input type="text" value="<?= $itemp['KETERANGAN']; ?>" name="KETERANGAN_PELUNASAN" />
+                                <input class="input input-bordered" type="text" value="<?= $itemp['KETERANGAN']; ?>" name="KETERANGAN_PELUNASAN" />
                             </th>
                         </tbody>
                     </table>
