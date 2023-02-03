@@ -11,7 +11,7 @@ $item = query("SELECT * FROM pelunasan_hutang");
 function cekAvailable($SUPPLIER_ID, $NOTA_BELI)
 {
     global $conn;
-    $isSupplier = mysqli_query($conn, "SELECT NAMA, KODE FROM supplier WHERE NAMA = '$SUPPLIER_ID' OR KODE = '$SUPPLIER_ID'");
+    $isSupplier = mysqli_query($conn, "SELECT NAMA, KODE FROM supplier WHERE NAMA = '$SUPPLIER_ID' OR KODE_BARCODE = '$SUPPLIER_ID'");
     $isNota = mysqli_query($conn, "SELECT NOTA FROM beli WHERE NOTA = '$NOTA_BELI'");
 
     if (!mysqli_fetch_assoc($isSupplier)) {
@@ -202,7 +202,7 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
     <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
         <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-            <label for="my-modal-6" id="tambah" class="btn btn-success mb-4">Tambah Pelunasan</label>
+            <label for="my-modal-6" class="btn btn-success mb-4">Tambah Pelunasan</label>
         </div>
     <?php endif; ?>
     <a class="btn btn-warning mb-8" href="beli.php">Kembali</a>
@@ -329,10 +329,10 @@ include('shared/navadmin.php');
                                 <input class="input input-xs input-bordered" type="number" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered" type="number" value="0" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" name="RETUR" />
+                                <input class="input input-xs input-bordered" type="number" value="0" name="RETUR" />
                             </th>
                             <th>
                                 <input class="input input-xs input-bordered" type="text" name="KETERANGAN_PELUNASAN" />
@@ -358,7 +358,7 @@ include('shared/navadmin.php');
     $kode = $_GET['nota'];
     $item = query("SELECT * FROM pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
-    $iteminfo = query("select (select SUM(jumlah*harga_beli) from item_beli where nota = '$kode') AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = '$kode') - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = '$kode') AS SISA_HUTANG;")[0];
+    $iteminfo = query("select (select SUM(jumlah*harga_beli) from item_beli where nota = '$itemp->NOTA_BELI') AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = '$itemp->NOTA_BELI') - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = '$itemp->NOTA_BELI') AS SISA_HUTANG;")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom p-4">
@@ -373,7 +373,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>No Pelunasan:</span>
-                        <input value="<?= $item['NO_PELUNASAN']; ?>" required type="number" name="NO_PELUNASAN" id="NO_PELUNASAN" class="input input-bordered">
+                        <input value="<?= $item['NO_PELUNASAN']; ?>" required type="text" name="NO_PELUNASAN" id="NO_PELUNASAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
@@ -432,7 +432,7 @@ include('shared/navadmin.php');
                                 <input class="input input-xs input-bordered" id="KEKURANGAN" type="number" value="<?= $iteminfo['SISA_HUTANG']; ?>" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" max="<?= $iteminfo['SISA_HUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
                                 <input class="input input-xs input-bordered" type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />

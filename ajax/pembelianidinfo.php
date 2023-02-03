@@ -14,7 +14,7 @@ $info = array();
 // Loop through the results and add them to the array
 while ($row = $result->fetch_assoc()) {
     $info[] = $row['HUTANG'];
-    $info[] = $row['SISA_HUTANG'];
+    $info[] = $row['SISA_HUTANG'] ?? $row['HUTANG'];
 }
 
 // Send the array as a JSON response

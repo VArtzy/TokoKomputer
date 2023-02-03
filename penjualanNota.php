@@ -11,7 +11,7 @@ $item = query("SELECT * FROM pelunasan_piutang");
 function cekAvailable($CUSTOMER_ID, $NOTA_JUAL)
 {
     global $conn;
-    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_ID' OR KODE = '$CUSTOMER_ID'");
+    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_ID' OR KODE_BARCODE = '$CUSTOMER_ID'");
     $isNota = mysqli_query($conn, "SELECT NOTA FROM jual WHERE NOTA = '$NOTA_JUAL'");
 
     if (!mysqli_fetch_assoc($isCustomer)) {
@@ -329,10 +329,10 @@ include('shared/navadmin.php');
                                 <input class="input input-xs input-bordered" type="number" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered" type="number" value="0" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" name="RETUR" />
+                                <input class="input input-xs input-bordered" type="number" value="0" name="RETUR" />
                             </th>
                             <th>
                                 <input class="input input-xs input-bordered" type="text" name="KETERANGAN_PELUNASAN" />
@@ -342,7 +342,7 @@ include('shared/navadmin.php');
                 </div>
                 <div class="modal-action">
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
-                        <a id="batal" href="penjualanNota.php" for="my-modal-6" class="btn">Batal</a>
+                        <label id="batal" for="my-modal-6" class="btn">Batal</label>
                     </div>
                     <div class="tooltip tooltip-success" data-tip="CTRL + A">
                         <button id="tambah" name="submit" class="btn btn-success" type="submit">Tambah</button>
@@ -358,7 +358,7 @@ include('shared/navadmin.php');
     $kode = $_GET['nota'];
     $item = query("SELECT * FROM pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
-    $iteminfo = query("select SUM(jumlah*harga_jual) from item_jual where nota = '$kode') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$kode') as SISA_PIUTANG")[0];
+    $iteminfo = query("select SUM(jumlah*harga_jual) from item_jual where nota = '$itemp->NOTA_JUAL') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$itemp->NOTA_JUAL') as SISA_PIUTANG")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" 6="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom">
@@ -373,7 +373,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>No Pembayaran:</span>
-                        <input value="<?= $item['NO_PELUNASAN']; ?>" required type="number" name="NO_PELUNASAN" id="NO_PELUNASAN" class="input input-bordered">
+                        <input value="<?= $item['NO_PELUNASAN']; ?>" required type="text" name="NO_PELUNASAN" id="NO_PELUNASAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="form-control">
@@ -432,7 +432,7 @@ include('shared/navadmin.php');
                                 <input class="input input-xs input-bordered" id="KEKURANGAN" value="<?= $iteminfo['SISA_PIUTANG']; ?>" readonly type="number" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" max="<?= $iteminfo['PIUTANG'] - $iteminfo['SISA_PIUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
                                 <input class="input input-xs input-bordered" type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />
@@ -452,8 +452,8 @@ include('shared/navadmin.php');
                             <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
                         </div>
                     <?php endif; ?>
-                    <div class="tooltip" data-tip="ESC">
-                        <label for="my-modal-6" id="batal" class="btn">Batal</label>
+                    <div class="tooltip" data-tip="ESC (Tekan Lama)">
+                        <a href="penjualanNota.php" class="btn">Batal</a>
                     </div>
                     <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
                         <div class="tooltip tooltip-success" data-tip="CTRL + A">

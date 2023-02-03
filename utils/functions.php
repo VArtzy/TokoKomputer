@@ -1,6 +1,6 @@
 <?php
-$conn = mysqli_connect("localhost", "", "", "web_joga_comp");
-// $conn = mysqli_connect("localhost", "root", "", "tokokomputer");
+// $conn = mysqli_connect("localhost", "", "", "web_joga_comp");
+$conn = mysqli_connect("localhost", "root", "", "tokokomputer");
 
 function query($query)
 {
@@ -250,7 +250,7 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     }
 
     mysqli_query($conn, "INSERT INTO `jual`(`NOTA`, `CUSTOMER_ID`, `SALESMAN_ID`, `STATUS_NOTA`, `USER_ADMIN`, `OPERATOR`, `LOKASI_ID`, `TOTAL_NOTA`, `TANGGAL`, `TEMPO`) VALUES
-     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', $STATUS_NOTA, '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
+     ('$NOTA', '$CUSTOMER_NAMA', '$SALESMAN_ID', '$STATUS_NOTA', '$USER_ADMIN', '$USER_ADMIN', '$LOKASI_ID', '$TOTAL_NOTA', '$TANGGAL', '$TANGGAL')");
 
     return mysqli_affected_rows($conn);
 }
