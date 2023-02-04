@@ -216,15 +216,6 @@ include('shared/navadmin.php');
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="TOTAL_PELUNASAN_NOTA">Total Pelunasan: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Total Pelunasan:</span>
-                        <input value="<?= $item['TOTAL_PELUNASAN_NOTA']; ?>" max="<?= $item['TOTAL_NOTA']; ?>" required type="number" name="TOTAL_PELUNASAN_NOTA" id="KETERANGAN" class="input input-bordered">
-                    </label>
-                </div>
                 <div class="flex gap-4">
                     <div class="form-control">
                         <label class="label">

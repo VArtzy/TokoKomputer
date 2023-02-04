@@ -238,15 +238,6 @@ include('shared/navadmin.php');
                 </div>
                 <div class="form-control">
                     <label class="label">
-                        <label class="label-text" for="TOTAL_PELUNASAN_NOTA">Total Pelunasan: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Total Pelunasan:</span>
-                        <input type="number" name="TOTAL_PELUNASAN_NOTA" max="<?= $notas['TOTAL_NOTA']; ?>" value="<?= $notas['TOTAL_PELUNASAN_NOTA']; ?>" id="TOTAL_PELUNASAN_NOTA" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
                         <label class="label-text" for="PROFIT">Profit: </label>
                     </label>
                     <label class="input-group">

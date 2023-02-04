@@ -13,7 +13,7 @@ $customer = array();
 
 // Loop through the results and add them to the array
 while ($row = $result->fetch_assoc()) {
-    $customer[] = $row['NAMA'];
+    $customer[] = ["label" => $row['NAMA'], "id" => $row['KODE_BARCODE']];
     $customer[] = $row['KODE_BARCODE'];
 }
 

@@ -510,7 +510,6 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
-    $NO_PELUNASAN = uniqid();
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $STATUS_BAYAR = mysqli_real_escape_string($conn, $data["STATUS_BAYAR"]);
     $TEMPO = mysqli_real_escape_string($conn, $data["TEMPO"]);
@@ -535,12 +534,6 @@ function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
     `TOTAL_PELUNASAN_NOTA`='$TOTAL_PELUNASAN_NOTA', 
     `PROFIT`='$PROFIT' 
     WHERE NOTA = '$nota';");
-
-    mysqli_query($conn, "INSERT INTO `pelunasan_piutang`(`NO_PELUNASAN`, `CUSTOMER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
-    ('$NO_PELUNASAN', '$CUSTOMER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
-
-    mysqli_query($conn, "INSERT INTO `item_pelunasan_piutang`(`NO_PELUNASAN`, `NOTA_JUAL`, `NOMINAL`, `KETERANGAN`) VALUES 
-    ('$NO_PELUNASAN', '$nota', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN')");
 
     return mysqli_affected_rows($conn);
 }
@@ -926,14 +919,6 @@ OPERATOR = '$USER_ADMIN'
 WHERE NOTA = '$KODE_LAMA';";
 
     mysqli_query($conn, $query);
-
-    if ($TOTAL_PELUNASAN_NOTA !== null) {
-        mysqli_query($conn, "INSERT INTO `pelunasan_hutang`(`NO_PELUNASAN`, `SUPPLIER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
-    ('$NO_PELUNASAN', '$SUPPLIER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
-
-        mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
-    ('$NO_PELUNASAN', '$nota', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN')");
-    }
 
     return mysqli_affected_rows($conn);
 }

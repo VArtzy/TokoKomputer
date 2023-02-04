@@ -895,12 +895,6 @@ WHERE NOTA = '$KODE_LAMA';";
 
     mysqli_query($conn, $query);
 
-    mysqli_query($conn, "INSERT INTO `pelunasan_hutang`(`NO_PELUNASAN`, `SUPPLIER_ID`, `TANGGAL`, `KETERANGAN`, `OPERATOR`) VALUES 
-    ('$NO_PELUNASAN', '$SUPPLIER_ID', '$TANGGAL', '$KETERANGAN', '$USER_ADMIN')");
-
-    mysqli_query($conn, "INSERT INTO `item_pelunasan_hutang`(`NO_PELUNASAN`, `NOTA_BELI`, `NOMINAL`, `KETERANGAN`) VALUES 
-    ('$NO_PELUNASAN', '$nota', '$TOTAL_PELUNASAN_NOTA', '$KETERANGAN')");
-
     return mysqli_affected_rows($conn);
 }
 

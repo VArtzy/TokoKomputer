@@ -3,9 +3,10 @@ require '../utils/functions.php';
 
 // Escape the search term for security
 $q = $conn->real_escape_string($_GET['q']);
+$c = $conn->real_escape_string($_GET['c']);
 
 // Build and execute a SQL query
-$sql = "SELECT * FROM JUAL WHERE NOTA LIKE '%$q%' AND STATUS_NOTA = 'K' ORDER BY TANGGAL DESC";
+$sql = "SELECT * FROM JUAL WHERE NOTA LIKE '%$q%' AND CUSTOMER_ID = '$c' AND STATUS_NOTA = 'K' ORDER BY TANGGAL DESC";
 $result = $conn->query($sql);
 
 // Prepare an array to hold the results

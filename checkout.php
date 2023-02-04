@@ -34,7 +34,6 @@ if (isset($_POST["checkout"])) {
     }
 
     if (tambahNota($nota, $id, $total, $_POST) > 0) {
-        mysqli_query($conn, "UPDATE salesman SET TOTAL_ITEM_PENJUALAN = TOTAL_ITEM_PENJUALAN + $d->count WHERE KODE = '$SALESMAN_ID'");
         echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
         echo  "<script>
         alert('Berhasil Menambah Pesanan Kamu!');

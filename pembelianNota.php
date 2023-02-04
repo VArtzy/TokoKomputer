@@ -128,6 +128,7 @@ include('shared/navadmin.php');
 
     $(function() {
         $("#SUPPLIER_ID").autocomplete({
+            id: '',
             source: function(request, response) {
                 $.ajax({
                     url: "ajax/supplierid.php",
@@ -139,6 +140,9 @@ include('shared/navadmin.php');
                         response(data);
                     }
                 });
+            },
+            select: function(event, ui) {
+                $("#SUPPLIER_ID_AUTO").val(ui.item.id || ui.item.value)
             }
         });
         $("#NOTA_BELI").autocomplete({
@@ -147,7 +151,8 @@ include('shared/navadmin.php');
                     url: "ajax/pembelianid.php",
                     dataType: "json",
                     data: {
-                        q: request.term
+                        q: request.term,
+                        s: $("#SUPPLIER_ID_AUTO").val()
                     },
                     success: function(data) {
                         response(data);
@@ -288,6 +293,7 @@ include('shared/navadmin.php');
                         <input required type="text" name="SUPPLIER_ID" id="SUPPLIER_ID" class="input input-bordered">
                     </label>
                 </div>
+                <input type="hidden" name="SUPPLIER_ID_AUTO" id="SUPPLIER_ID_AUTO">
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KETERANGAN">Keterangan: </label>
@@ -358,7 +364,8 @@ include('shared/navadmin.php');
     $kode = $_GET['nota'];
     $item = query("SELECT * FROM pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_hutang WHERE NO_PELUNASAN = '$kode'")[0];
-    $iteminfo = query("select (select SUM(jumlah*harga_beli) from item_beli where nota = '$itemp->NOTA_BELI') AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = '$itemp->NOTA_BELI') - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = '$itemp->NOTA_BELI') AS SISA_HUTANG;")[0];
+    $NOTA_BELI = $itemp['NOTA_BELI'];
+    $iteminfo = query("select (select SUM(jumlah*harga_beli) from item_beli where nota = '$NOTA_BELI') AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = '$NOTA_BELI') - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = '$NOTA_BELI') AS SISA_HUTANG;")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom p-4">
@@ -394,6 +401,7 @@ include('shared/navadmin.php');
                         <input value="<?= $item['SUPPLIER_ID']; ?>" required type="text" name="SUPPLIER_ID" id="SUPPLIER_ID" class="input input-bordered">
                     </label>
                 </div>
+                <input type="hidden" name="SUPPLIER_ID_AUTO" id="SUPPLIER_ID_AUTO">
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KETERANGAN">Keterangan: </label>

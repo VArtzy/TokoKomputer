@@ -128,6 +128,7 @@ include('shared/navadmin.php');
 
     $(function() {
         $("#CUSTOMER_ID").autocomplete({
+            id: '',
             source: function(request, response) {
                 $.ajax({
                     url: "ajax/customerid.php",
@@ -139,6 +140,9 @@ include('shared/navadmin.php');
                         response(data);
                     }
                 });
+            },
+            select: function(event, ui) {
+                $("#CUSTOMER_ID_AUTO").val(ui.item.id || ui.item.value)
             }
         });
         $("#NOTA_JUAL").autocomplete({
@@ -147,7 +151,8 @@ include('shared/navadmin.php');
                     url: "ajax/penjualanid.php",
                     dataType: "json",
                     data: {
-                        q: request.term
+                        q: request.term,
+                        c: $("#CUSTOMER_ID_AUTO").val()
                     },
                     success: function(data) {
                         response(data);
@@ -288,6 +293,7 @@ include('shared/navadmin.php');
                         <input required type="text" name="CUSTOMER_ID" id="CUSTOMER_ID" class="input input-bordered">
                     </label>
                 </div>
+                <input type="hidden" name="CUSTOMER_ID_AUTO" id="CUSTOMER_ID_AUTO">
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KETERANGAN">Keterangan: </label>
@@ -358,7 +364,8 @@ include('shared/navadmin.php');
     $kode = $_GET['nota'];
     $item = query("SELECT * FROM pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
-    $iteminfo = query("select SUM(jumlah*harga_jual) from item_jual where nota = '$itemp->NOTA_JUAL') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$itemp->NOTA_JUAL') as SISA_PIUTANG")[0];
+    $NOTA_JUAL = $itemp['NOTA_JUAL'];
+    $iteminfo = query("select (select SUM(jumlah*harga_jual) from item_jual where nota = '$NOTA_JUAL') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$NOTA_JUAL') as SISA_PIUTANG")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" 6="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom">
@@ -394,6 +401,7 @@ include('shared/navadmin.php');
                         <input value="<?= $item['CUSTOMER_ID']; ?>" required type="text" name="CUSTOMER_ID" id="CUSTOMER_ID" class="input input-bordered">
                     </label>
                 </div>
+                <input type="hidden" name="CUSTOMER_ID_AUTO" id="CUSTOMER_ID_AUTO">
                 <div class="form-control">
                     <label class="label">
                         <label class="label-text" for="KETERANGAN">Keterangan: </label>

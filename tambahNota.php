@@ -29,7 +29,7 @@ if (isset($_POST["checkout"])) {
     $TOTAL = 0;
 
     $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $_POST["CUSTOMER_NAMA"]);
-    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_NAMA' OR KODE = '$CUSTOMER_NAMA'");
+    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_NAMA' OR KODE_BARCODE = '$CUSTOMER_NAMA'");
 
     if (!mysqli_fetch_assoc($isCustomer)) {
         echo "<script>
@@ -64,7 +64,6 @@ if (isset($_POST["checkout"])) {
     }
 
     if (tambahNotaAdmin($nota, $username, $TOTAL, $_POST) > 0) {
-        mysqli_query($conn, "UPDATE salesman SET TOTAL_ITEM_PENJUALAN = TOTAL_ITEM_PENJUALAN + $d->count WHERE KODE = '$SALESMAN_ID'");
         echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
         echo  "<script>
         alert('Berhasil Menambah Jual!');
