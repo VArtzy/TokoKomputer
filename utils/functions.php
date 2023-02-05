@@ -303,6 +303,33 @@ function tambahBeliItemNota($nota, $id, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL
     return mysqli_affected_rows($conn);
 }
 
+function ubahJualItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
+{
+    global $conn;
+
+    $SATUAN_ID = query("SELECT SATUAN_ID FROM barang WHERE KODE = '" . $BARANG_ID . "'")[0]["SATUAN_ID"];
+    $JUMLAH2 = query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $SATUAN_ID . "'")[0]["KONVERSI"];
+
+    mysqli_query($conn, "UPDATE `item_jual` SET
+JUMLAH = '$JUMLAH_BARANG',
+HARGA_BELI = '$HARGA_BELI',
+HARGA_JUAL = '$HARGA_JUAL',
+DISKON_1= '$DISKON1',
+DISKON_2 = '$DISKON2',
+DISKON_3 = '$DISKON3',
+DISKON_4 = '$DISKON4',
+DISKON_RP = '$DISKON_RP',
+JUMLAH2 = '$JUMLAH2',
+DAFTAR_SATUAN = '$SATUAN',
+KETERANGAN = '$KETERANGAN',
+KET1 = '$KET1',
+KET2 = '$KET2',
+IMEI = '$IMEI'
+WHERE BARANG_ID = '$BARANG_ID'");
+
+    return mysqli_affected_rows($conn);
+}
+
 function ubahBeliItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
@@ -505,34 +532,34 @@ function registrasi($data)
     return mysqli_affected_rows($conn);
 }
 
-function ubahNota($nota, $userAdmin, $CUSTOMER_ID, $data)
+function ubahNota($nota, $userAdmin, $data)
 {
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
-    $STATUS_BAYAR = mysqli_real_escape_string($conn, $data["STATUS_BAYAR"]);
     $TEMPO = mysqli_real_escape_string($conn, $data["TEMPO"]);
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
-    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
-    $PROFIT = mysqli_real_escape_string($conn, $data["PROFIT"]);
+    $DISKON = mysqli_real_escape_string($conn, $data["DISKON"]);
+    $PPN = mysqli_real_escape_string($conn, $data["PPN"]);
     $SALESMAN_ID = mysqli_real_escape_string($conn, $data["SALESMAN_ID"]);
+    $CUSTOMER_ID = mysqli_real_escape_string($conn, $data["CUSTOMER_ID"]);
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $USER_ADMIN = query("SELECT ID FROM `user_` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
 
     mysqli_query($conn, "UPDATE `jual` SET 
     `SALESMAN_ID`='$SALESMAN_ID', 
+    `CUSTOMER_ID`='$CUSTOMER_ID', 
     `LOKASI_ID`='$LOKASI_ID', 
     `STATUS_NOTA`='$STATUS_NOTA', 
-    `STATUS_BAYAR`='$STATUS_BAYAR', 
     `TEMPO`='$TEMPO', 
     `TANGGAL`='$TANGGAL', 
     `KETERANGAN` = '$KETERANGAN', 
     `USER_ADMIN`='$USER_ADMIN', 
     `OPERATOR`='$USER_ADMIN', 
-    `TOTAL_PELUNASAN_NOTA`='$TOTAL_PELUNASAN_NOTA', 
-    `PROFIT`='$PROFIT' 
+    `PPN`='$PPN', 
+    `DISKON`='$DISKON' 
     WHERE NOTA = '$nota';");
 
     return mysqli_affected_rows($conn);
@@ -889,8 +916,6 @@ function ubahBeli($nota, $userAdmin, $TOTAL_NOTA, $data)
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
 
-    $TOTAL_PELUNASAN_NOTA = mysqli_real_escape_string($conn, $data["TOTAL_PELUNASAN_NOTA"]);
-    $NO_PELUNASAN = mysqli_real_escape_string($conn, $data["NO_PELUNASAN"]);
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     $STATUS_NOTA = mysqli_real_escape_string($conn, $data["STATUS_NOTA"]);
     $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL2"]);
@@ -914,7 +939,6 @@ DISKON = '$DISKON',
 PPN = '$PPN',
 USER_ADMIN = '$USER_ADMIN',
 TOTAL_NOTA = '$TOTAL_NOTA',
-TOTAL_PELUNASAN_NOTA = '$TOTAL_PELUNASAN_NOTA',
 OPERATOR = '$USER_ADMIN'
 WHERE NOTA = '$KODE_LAMA';";
 

@@ -365,7 +365,7 @@ include('shared/navadmin.php');
     $item = query("SELECT * FROM pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
     $itemp = query("SELECT * FROM item_pelunasan_piutang WHERE NO_PELUNASAN = '$kode'")[0];
     $NOTA_JUAL = $itemp['NOTA_JUAL'];
-    $iteminfo = query("select (select SUM(jumlah*harga_jual) from item_jual where nota = '$NOTA_JUAL') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$NOTA_JUAL') as SISA_PIUTANG")[0];
+    $iteminfo = query("select (select SUM(jumlah*harga_jual) from item_jual where nota = '$NOTA_JUAL') AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = '$NOTA_JUAL') - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$NOTA_JUAL'), 0) as SISA_PIUTANG")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" 6="modal-toggle" />
     <div class="modal visible opacity-100 pointer-events-auto modal-bottom">
@@ -440,7 +440,7 @@ include('shared/navadmin.php');
                                 <input class="input input-xs input-bordered" id="KEKURANGAN" value="<?= $iteminfo['SISA_PIUTANG']; ?>" readonly type="number" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" max="<?= $iteminfo['PIUTANG'] - $iteminfo['SISA_PIUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" max="<?= $iteminfo['SISA_PIUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
                                 <input class="input input-xs input-bordered" type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />

@@ -5,7 +5,7 @@ require '../utils/functions.php';
 $q = $conn->real_escape_string($_GET['q']);
 
 // Build and execute a SQL query
-$sql = "select (select SUM(jumlah*harga_jual) from item_jual where nota = '$q') AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$q') as SISA_PIUTANG";
+$sql = "select (select SUM(jumlah*harga_jual) from item_jual where nota = '$q') AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = '$q') - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = '$q'), 0) as SISA_PIUTANG";
 $result = $conn->query($sql);
 
 // Prepare an array to hold the results

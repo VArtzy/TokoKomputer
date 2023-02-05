@@ -280,24 +280,6 @@ include('shared/navadmin.php');
                         <input value="<?= $item['KETERANGAN']; ?>" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="PPN">PPN: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>PPN:</span>
-                        <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="DISKON">Diskon: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Diskon:</span>
-                        <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
-                    </label>
-                </div>
                 <div class="overflow-x-auto w-full mt-8 mb-4">
                     <table class="table w-full">
                         <!-- head -->
@@ -358,6 +340,24 @@ include('shared/navadmin.php');
     <?php endforeach; ?>
     </tbody>
     </table>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <label class="label-text" for="DISKON">Diskon: </label>
+        </label>
+        <label class="input-group">
+            <span>Diskon:</span>
+            <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
+        </label>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <label class="label-text" for="PPN">PPN: </label>
+        </label>
+        <label class="input-group">
+            <span>PPN:</span>
+            <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
+        </label>
     </div>
     <div class="modal-action">
         <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>

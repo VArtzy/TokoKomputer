@@ -6,7 +6,7 @@ $nom = '15';
 if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
 $aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
 
-$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$nota = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota), 0) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 if (isset($_POST["cari"])) {
@@ -24,15 +24,10 @@ include('shared/navadmin.php');
 
     <a class="btn btn-info text-sm mb-8" href="jual.php">Lihat Records Nota</a>
 
-    <div class="">
-        <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Harga, Salesman, Harga" autocomplete="off" id="keyword">
-        <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
-    </div>
-
     <?php if (!empty($nota)) { ?>
         <div id="container" class="grid lg:grid-cols-3 md:grid-cols-2 gap-16 mt-8">
             <?php foreach ($nota as $n) : ?>
-                <div class="card w-96 <?php if (rupiah($n['PIUTANG']) === rupiah($n['SISA_PIUTANG'])) {
+                <div class="card w-96 <?php if (rupiah($n['SISA_PIUTANG']) === rupiah(0)) {
                                             echo 'bg-emerald-50';
                                         } else {
                                             echo 'bg-base-100';
