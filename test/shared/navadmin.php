@@ -85,6 +85,7 @@
 </script>
 
 <body class="font-dm">
+
   <nav class="navbar bg-base-100 max-w-6xl mx-auto">
     <div class="navbar-start">
       <div class="dropdown">
@@ -93,7 +94,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
           </svg>
         </label>
-        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 overflow-hidden">
           <input type="text" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()" class="input input-bordered lg:hidden" />
           <ul id="myMenu" class="shadow-lg lg:hidden">
             <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
@@ -118,10 +119,10 @@
             <li><a href="multiprice.php">Multi Price</a></li>
             <li><a class="fa-solid fa-money-bills">Transaksi</a></li>
             <li><a href="beli.php">Pembelian</a></li>
-            <li><a>Pelunasan Hutang</a></li>
+            <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
             <hr>
             <li><a href="invoices.php">Penjualan</a></li>
-            <li><a href="">Pembayaran Piutang</a></li>
+            <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
             <hr>
             <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
             <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
@@ -172,10 +173,10 @@
             <label tabindex="0" class=""><i class="fa-solid fa-money-bills"></i></label>
             <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
               <li><a href="beli.php">Pembelian</a></li>
-              <li><a>Pelunasan Hutang</a></li>
+              <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
               <hr>
               <li><a href="invoices.php">Penjualan</a></li>
-              <li><a href="">Pembayaran Piutang</a></li>
+              <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
               <hr>
               <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
               <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
@@ -216,12 +217,12 @@
           <li><a href="satuan.php">Satuan</a></li>
           <li><a href="multiprice.php">Multi Price</a></li>
           <li><a href="beli.php">Pembelian</a></li>
-          <li><a>Pelunasan Hutang</a></li>
+          <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
           <li><a>
               <hr />
             </a></li>
           <li><a href="invoices.php">Penjualan</a></li>
-          <li><a href="">Pembayaran Piutang</a></li>
+          <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
           <li><a>
               <hr />
             </a></li>
@@ -242,6 +243,7 @@
           <li><a href="logoutAdmin.php">Logout</a></li>
         </ul>
       </div>
+
       <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
     </div>
   </nav>

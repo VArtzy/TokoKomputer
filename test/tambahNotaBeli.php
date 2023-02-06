@@ -2,6 +2,10 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
+$nom = '13';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: beli.php');
+
 $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
@@ -15,7 +19,7 @@ if (isset($_POST["submit"])) {
     $TOTAL = 0;
 
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $_POST["SUPPLIER_ID"]);
-    $isSupplier = mysqli_query($conn, "SELECT NAMA, KODE FROM supplier WHERE NAMA = '$SUPPLIER_ID' OR KODE = '$SUPPLIER_ID'");
+    $isSupplier = mysqli_query($conn, "SELECT NAMA, KODE FROM supplier WHERE NAMA = '$SUPPLIER_ID' OR KODE_BARCODE = '$SUPPLIER_ID'");
 
     if (!mysqli_fetch_assoc($isSupplier)) {
         echo "<script>
@@ -134,7 +138,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Nota:</span>
-                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
+                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM beli")[0]["COUNT"]; ?>" required type="text" name="NOTA" id="NOTA" class="input input-bordered">
                         </label>
                     </div>
                     <div class="md:flex gap-4">
@@ -257,7 +261,7 @@ include('shared/navadmin.php');
                                         <br />
                                         Stok: <?= round($b["STOK"]); ?>
                                         <br />
-                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= query("SELECT NAMA FROM satuan where KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?>">
+                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['SATUAN_ID'] ?>">
                                         <br />
                                     </td>
                                     <td>

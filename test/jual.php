@@ -2,7 +2,11 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$nom = '15';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
+$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota), 0) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 $title = "Records Nota Jual - $username";
 include('shared/navadmin.php');
@@ -19,7 +23,9 @@ include('shared/navadmin.php');
     $(document).ready(function() {
         var table = $('#table').DataTable({
             "pageLength": 50,
-            dom: 'Blfrtip',
+            <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                dom: 'Blfrtip',
+            <?php endif; ?>
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
@@ -41,7 +47,10 @@ include('shared/navadmin.php');
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Track Records Pelunasan Nota</h1>
-    <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
+    <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
+        <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
+    <?php endif; ?>
+    <a class="btn btn-success mb-4" href="penjualanNota.php">Pembayaran Piutang</a>
     <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
 
     <div class="overflow-x-auto">
@@ -61,6 +70,7 @@ include('shared/navadmin.php');
                     <th>Tempo (Nota)</th>
                     <th>Salesman</th>
                     <th>Operator</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="container">
@@ -70,13 +80,22 @@ include('shared/navadmin.php');
                         <th><?= $key + 1; ?></th>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= $i['CUSTOMER_ID']; ?></td>
-                        <td><?= $i['KETERANGAN']; ?></td>
+                        <td class="max-w-[10ch] text-ellipsis overflow-hidden"><?php if (isset(query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]['NAMA'])) {
+                                                                                    echo query("SELECT NAMA FROM customer WHERE KODE = '" . $i['CUSTOMER_ID'] . "'")[0]['NAMA'];
+                                                                                } else {
+                                                                                    echo $i['CUSTOMER_ID'];
+                                                                                } ?></td>
+                        <td class="max-w-[20ch] text-ellipsis overflow-hidden"><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['PIUTANG']); ?></td>
                         <td><?= rupiah($i['SISA_PIUTANG']); ?></td>
                         <td><?= $i['TEMPO']; ?></td>
                         <td><?= query("SELECT NAMA FROM salesman WHERE KODE = '" . $i['SALESMAN_ID'] . "'")[0]["NAMA"]; ?></td>
                         <td><?= query("SELECT NAMA FROM user_admin WHERE id = '" . $i['OPERATOR'] . "'")[0]["NAMA"]; ?></td>
+                        <td>
+                            <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
+                                <a tabindex="1" href="detailinvoice.php?nota=<?= $i['NOTA']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 <?php } ?>
         </table>

@@ -2,6 +2,10 @@
 require_once './utils/functions.php';
 require_once './utils/loggedAdmin.php';
 
+$nom = '9';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: userAndAdminManagement.php#salesman');
+
 if (isset($_POST["submit"])) {
     if (tambahSales($userAdminID, $_POST) > 0) {
         echo "

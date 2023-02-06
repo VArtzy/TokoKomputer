@@ -2,6 +2,11 @@
 require_once './utils/functions.php';
 require_once './utils/loggedAdmin.php';
 
+$nom = '9';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+
+
 $kode = $_GET["kode"];
 
 $sales = query("SELECT * FROM `salesman` WHERE KODE = '$kode'")[0];
@@ -79,8 +84,12 @@ include('shared/navadmin.php');
                 <input value="<?= $sales["NO_REKENING"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="NO_REKENING" id="NO_REKENING">
             </li>
             <li>
-                <button class="px-4 py-2 rounded-lg uppercase bg-amber-600 text-white hover:outline-amber-600 hover:bg-white hover:text-amber-600 hover:-translate-y-1 transition-all" type="submit" name="submit">Perbarui</button>
-                <button class="btn btn-error" onclick="return confirm('Apakah anda yakin ingin menghapus sales ini?')" type="submit" name="hapus">!Hapus admin</button>
+                <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+                    <button class="px-4 py-2 rounded-lg uppercase bg-amber-600 text-white hover:outline-amber-600 hover:bg-white hover:text-amber-600 hover:-translate-y-1 transition-all" type="submit" name="submit">Perbarui</button>
+                <?php endif; ?>
+                <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                    <button class="btn btn-error" onclick="return confirm('Apakah anda yakin ingin menghapus sales ini?')" type="submit" name="hapus">!Hapus admin</button>
+                <?php endif ?>
             </li>
         </ul>
     </form>

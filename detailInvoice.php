@@ -204,8 +204,8 @@ include('shared/navadmin.php');
     </div>
 
     <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-    <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
+    <div class="modal modal-bottom p-4">
+        <div class="modal-box w-11/12 max-w-6xl">
             <form action="" method="POST">
                 <h3 class="font-bold text-lg">Edit Invoices <?= $nota; ?></h3>
                 <div class="flex gap-4">

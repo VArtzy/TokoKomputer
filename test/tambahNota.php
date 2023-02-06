@@ -2,6 +2,10 @@
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 
+$nom = '15';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: jual.php');
+
 $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
@@ -25,7 +29,7 @@ if (isset($_POST["checkout"])) {
     $TOTAL = 0;
 
     $CUSTOMER_NAMA = mysqli_real_escape_string($conn, $_POST["CUSTOMER_NAMA"]);
-    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_NAMA' OR KODE = '$CUSTOMER_NAMA'");
+    $isCustomer = mysqli_query($conn, "SELECT NAMA, KODE FROM customer WHERE NAMA = '$CUSTOMER_NAMA' OR KODE_BARCODE = '$CUSTOMER_NAMA'");
 
     if (!mysqli_fetch_assoc($isCustomer)) {
         echo "<script>
@@ -134,7 +138,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Nota:</span>
-                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"]; ?>" required type="number" name="NOTA" id="NOTA" class="input input-bordered">
+                            <input tabindex="1" value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM jual")[0]["COUNT"]; ?>" required type="text" name="NOTA" id="NOTA" class="input input-bordered">
                         </label>
                     </div>
                     <div class="flex gap-4">
@@ -242,7 +246,7 @@ include('shared/navadmin.php');
                             <th>Nama</th>
                             <th>Stok/Satuan</th>
                             <th>Diskon</th>
-                            <th>Harga Beli/Jual</th>
+                            <th>Harga Jual</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
@@ -272,7 +276,7 @@ include('shared/navadmin.php');
                                         <br />
                                         Stok: <?= round($b["STOK"]); ?>
                                         <br />
-                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= query("SELECT NAMA FROM satuan where KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?>">
+                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['SATUAN_ID'] ?>">
                                         <br />
                                     </td>
                                     <td>
@@ -287,7 +291,7 @@ include('shared/navadmin.php');
                                         <span class="badge badge-ghost badge-sm">%4: <input tabindex="1" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
                                     </td>
                                     <th>
-                                        <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="number" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                                        <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="hidden" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
                                         <br>
                                         <input tabindex="1" name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70 harga-jual" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
                                                                                                                                                                                 echo query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'];

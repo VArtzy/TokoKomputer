@@ -22,129 +22,137 @@ include('shared/navadmin.php');
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Halaman Manajemen User & Admin dan Sales</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
-    <h2 id="customer" class="text-xl mb-4">Customer</h2>
+    <span class='text-danger text-xl text-center'>
+        <?php if (!strpos($hakAkses, '8') && !strpos($hakAkses, '10')) {
+            echo 'Anda tidak memiliki akses untuk halaman ini';
+        } ?>
+    </span>
 
-    <a href="langganan.php" class="btn btn-primary mb-4">Tambah Customer</a>
+    <?php if (in_array("7", $aksesMenu)) : ?>
+        <h2 id="customer" class="text-xl mb-4">Customer</h2>
 
-    <div class="mb-4">
-        <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Telepon/Alamat/Jenis Anggota user" autocomplete="off" id="keyword">
-        <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
-    </div>
+        <a href="langganan.php" class="btn btn-primary mb-4">Tambah Customer</a>
 
-    <div class="overflow-x-auto w-full mb-16">
-        <table id="container" class="table w-full">
-            <!-- head -->
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Kontak</th>
-                    <th>NPWP</th>
-                    <th>Piutang</th>
-                    <th>Jenis Anggota</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($user as $u) : ?>
+        <div class="mb-4">
+            <input type="text" name="keyword" size="40" class="input input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama/Telepon/Alamat/Jenis Anggota user" autocomplete="off" id="keyword">
+            <button type="submit" name="cari" class="opacity-50" id="tombol-cari">Cari</button>
+        </div>
+        <div class="overflow-x-auto w-full mb-16">
+            <table id="container" class="table w-full">
+                <!-- head -->
+                <thead>
                     <tr>
-                        <td>
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <div class="font-bold"><?= $u['NAMA']; ?></div>
-                                    <div class="text-sm opacity-50">Kode: <?= $u['KODE'] ?></div>
-                                    <div class="text-sm opacity-50"><?= $u['ALAMAT'] . ', ' . $u["KOTA"]; ?></div>
-                                    <div class="text-sm opacity-50"><?= $u['ALAMAT2']; ?></div>
-                                    <div class="text-sm opacity-50"><?php if (isset($u["WILAYAH_ID"])) {
-                                                                        echo $u['WILAYAH_ID'] . ' - ' . query("SELECT KETERANGAN FROM wilayah WHERE KODE = '" . $u['WILAYAH_ID'] . "'")[0]["KETERANGAN"];
-                                                                    } else {
-                                                                        echo 'belum memasukan wilayah';
-                                                                    } ?></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <?= $u['KONTAK']; ?>
-                            <br />
-                            <a target="_blank" href="https://wa.me/<?php
-                                                                    if ($u['TELEPON'][0] === '0') {
-                                                                        echo '62' . substr($u['TELEPON'], 1) . "/?text=Hai%20pelangan%20" . $u['NAMA'] . ",%20...";
-                                                                    } else {
-                                                                        echo $u['TELEPON'] . "/?text=Hai%20pelangan%20" . $u['NAMA'] . ",%20...";
-                                                                    }
-                                                                    ?>"><i class="fa-brands fa-whatsapp"></i> Chat Pelanggan</a>
-                            <br />
-                            <span class=" badge badge-ghost badge-sm"><?= $u['TELEPON']; ?></span>
-                        </td>
-                        <td><?= $u['NPWP']; ?></td>
-                        <th>
-                            <span class="badge badge-ghost badge-sm">Plafon: <?= $u['PLAFON_PIUTANG']; ?></span>
-                            <br>
-                            <span class="badge badge-sm">Total: <?= $u['TOTAL_PIUTANG']; ?></span>
-                            <br>
-                            <span class="badge badge-warning badge-sm">Total Pembayaran: <?= $u['TOTAL_PEMBAYARAN_PIUTANG']; ?></span>
-                            <br>
-                            <a href="editPiutang.php?id=<?= $u["KODE"]; ?>" class="btn btn-info btn-xs">Edit Piutang</a>
-                        </th>
-                        <td>
-                            <?= $u['JENIS_ANGGOTA']; ?>
-                            <br>
-                            <a href="editJenisAnggota.php?id=<?= $u["KODE"]; ?>" class="btn btn-info btn-xs">Edit Jenis Anggota</a>
-                        </td>
+                        <th>Nama</th>
+                        <th>Kontak</th>
+                        <th>NPWP</th>
+                        <th>Piutang</th>
+                        <th>Jenis Anggota</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($user as $u) : ?>
+                        <tr>
+                            <td>
+                                <div class="flex items-center space-x-3">
+                                    <div>
+                                        <div class="font-bold"><?= $u['NAMA']; ?></div>
+                                        <div class="text-sm opacity-50">Kode: <?= $u['KODE'] ?></div>
+                                        <div class="text-sm opacity-50"><?= $u['ALAMAT'] . ', ' . $u["KOTA"]; ?></div>
+                                        <div class="text-sm opacity-50"><?= $u['ALAMAT2']; ?></div>
+                                        <div class="text-sm opacity-50"><?php if (isset($u["WILAYAH_ID"])) {
+                                                                            echo $u['WILAYAH_ID'] . ' - ' . query("SELECT KETERANGAN FROM wilayah WHERE KODE = '" . $u['WILAYAH_ID'] . "'")[0]["KETERANGAN"];
+                                                                        } else {
+                                                                            echo 'belum memasukan wilayah';
+                                                                        } ?></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <?= $u['KONTAK']; ?>
+                                <br />
+                                <a target="_blank" href="https://wa.me/<?php
+                                                                        if ($u['TELEPON'][0] === '0') {
+                                                                            echo '62' . substr($u['TELEPON'], 1) . "/?text=Hai%20pelangan%20" . $u['NAMA'] . ",%20...";
+                                                                        } else {
+                                                                            echo $u['TELEPON'] . "/?text=Hai%20pelangan%20" . $u['NAMA'] . ",%20...";
+                                                                        }
+                                                                        ?>"><i class="fa-brands fa-whatsapp"></i> Chat Pelanggan</a>
+                                <br />
+                                <span class=" badge badge-ghost badge-sm"><?= $u['TELEPON']; ?></span>
+                            </td>
+                            <td><?= $u['NPWP']; ?></td>
+                            <th>
+                                <span class="badge badge-ghost badge-sm">Plafon: <?= $u['PLAFON_PIUTANG']; ?></span>
+                                <br>
+                                <span class="badge badge-sm">Total: <?= $u['TOTAL_PIUTANG']; ?></span>
+                                <br>
+                                <span class="badge badge-warning badge-sm">Total Pembayaran: <?= $u['TOTAL_PEMBAYARAN_PIUTANG']; ?></span>
+                                <br>
+                            </th>
+                            <td>
+                                <?= $u['JENIS_ANGGOTA']; ?>
+                                <br>
+                                <a href="editJenisAnggota.php?id=<?= $u["KODE"]; ?>" class="btn btn-info btn-xs">Edit Jenis Anggota</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 
-    <h2 class="text-xl mb-4" id="salesman">SALESMANS</h2>
+    <?php if (in_array("9", $aksesMenu)) : ?>
+        <h2 class="text-xl mb-4" id="salesman">SALESMANS</h2>
 
-    <a href="tambahSales.php" class="btn btn-primary mb-4">Tambah Salesman</a>
+        <a href="tambahSales.php" class="btn btn-primary mb-4">Tambah Salesman</a>
 
-    <div class="">
-        <input type="text" name="keywords" size="40" class="input mb-4 input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama, No Telp, Alamat" autocomplete="off" id="keywords">
-        <button type="submit" name="caris" class="opacity-50" id="tombol-caris">Cari</button>
-    </div>
+        <div class="">
+            <input type="text" name="keywords" size="40" class="input mb-4 input-bordered max-w-xs mr-2" autofocus placeholder="Masukkan Keyword Nama, No Telp, Alamat" autocomplete="off" id="keywords">
+            <button type="submit" name="caris" class="opacity-50" id="tombol-caris">Cari</button>
+        </div>
 
-    <div class="overflow-x-auto w-full mb-8">
-        <table class="table w-full">
-            <!-- head -->
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>No. Telp</th>
-                    <th>No. Rekening</th>
-                    <th>Penjualan</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="containers">
-                <?php foreach ($salesman as $s) : ?>
+        <div class="overflow-x-auto w-full mb-8">
+            <table class="table w-full">
+                <!-- head -->
+                <thead>
                     <tr>
-                        <td>
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <div class="font-bold"><?= $s['NAMA']; ?></div>
-                                    <div class="text-sm opacity-50"><?= $s['ALAMAT']; ?></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="badge badge-ghost badge-sm"><?= $s['TELEPON']; ?></span>
-                        </td>
-                        <td><?= $s['NO_REKENING']; ?></td>
-                        </td>
-                        <td>
-                            <span class="badge text-white badge-success badge-sm"><?= $s['TOTAL_NOTA_PENJUALAN']; ?> Nota</span>
-                            <br>
-                            <span class="badge badge-sm"><?= $s['TOTAL_ITEM_PENJUALAN']; ?> Item</span>
-                        </td>
-                        <td>
-                            <a href="editSales.php?kode=<?= $s["KODE"]; ?>" class="btn btn-info btn-xs">Edit Sales</a>
-                        </td>
+                        <th>Nama</th>
+                        <th>No. Telp</th>
+                        <th>No. Rekening</th>
+                        <th>Penjualan</th>
+                        <th></th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody id="containers">
+                    <?php foreach ($salesman as $s) : ?>
+                        <tr>
+                            <td>
+                                <div class="flex items-center space-x-3">
+                                    <div>
+                                        <div class="font-bold"><?= $s['NAMA']; ?></div>
+                                        <div class="text-sm opacity-50"><?= $s['ALAMAT']; ?></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-ghost badge-sm"><?= $s['TELEPON']; ?></span>
+                            </td>
+                            <td><?= $s['NO_REKENING']; ?></td>
+                            </td>
+                            <td>
+                                <span class="badge text-white badge-success badge-sm"><?= $s['TOTAL_NOTA_PENJUALAN']; ?> Nota</span>
+                                <br>
+                                <span class="badge badge-sm"><?= $s['TOTAL_ITEM_PENJUALAN']; ?> Item</span>
+                            </td>
+                            <td>
+                                <a href="editSales.php?kode=<?= $s["KODE"]; ?>" class="btn btn-info btn-xs">Edit Sales</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 
     <h2 class="text-xl mb-4">ADMINS</h2>
 

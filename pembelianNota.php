@@ -304,7 +304,7 @@ include('shared/navadmin.php');
                     </label>
                 </div>
                 <div class="overflow-x-auto w-full mt-8 mb-4">
-                    <table class="table w-full">
+                    <table class="table table-compact w-full">
                         <!-- head -->
                         <thead>
                             <tr>
@@ -320,28 +320,28 @@ include('shared/navadmin.php');
                         </thead>
                         <tbody>
                             <th>
-                                <input class="input input-xs input-bordered" class="w-8" type="text" name="NO" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" class="w-8" type="text" name="NO" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" id="NOTA_BELI" name="NOTA_BELI" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="text" id="NOTA_BELI" name="NOTA_BELI" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" id="TOTAL" type="number" name="" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" id="TOTAL" type="number" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" id="KEKURANGAN" type="number" name="" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" id="KEKURANGAN" type="number" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="number" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="0" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="number" value="0" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="0" name="RETUR" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="number" value="0" name="RETUR" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" name="KETERANGAN_PELUNASAN" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="text" name="KETERANGAN_PELUNASAN" />
                             </th>
                         </tbody>
                     </table>
@@ -412,7 +412,7 @@ include('shared/navadmin.php');
                     </label>
                 </div>
                 <div class="overflow-x-auto w-full mt-8 mb-4">
-                    <table class="table w-full">
+                    <table class="table table-compact w-full">
                         <!-- head -->
                         <thead>
                             <tr>
@@ -428,28 +428,28 @@ include('shared/navadmin.php');
                         </thead>
                         <tbody>
                             <th>
-                                <input class="input input-xs input-bordered" class="w-8" type="text" name="NO" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" class="w-8" type="text" name="NO" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" id="NOTA_BELI" type="text" value="<?= $itemp['NOTA_BELI']; ?>" name="NOTA_BELI" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" id="NOTA_BELI" type="text" value="<?= $itemp['NOTA_BELI']; ?>" name="NOTA_BELI" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" id="TOTAL" type="number" value="<?= $iteminfo['HUTANG']; ?>" name="" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" id="TOTAL" type="number" value="<?= round($iteminfo['HUTANG']); ?>" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" id="KEKURANGAN" type="number" value="<?= $iteminfo['SISA_HUTANG']; ?>" name="" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" id="KEKURANGAN" type="number" value="<?= round($iteminfo['SISA_HUTANG']); ?>" name="" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="number" value="<?= $itemp['NOMINAL']; ?>" max="<?= $iteminfo['SISA_HUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="number" value="<?= round($itemp['NOMINAL']); ?>" max="<?= $iteminfo['SISA_HUTANG']; ?>" name="TOTAL_PELUNASAN_NOTA" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" value="<?= $itemp['DISKON']; ?>" name="DISKON_PELUNASAN" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="text" value="<?= round($itemp['DISKON']); ?>" name="DISKON_PELUNASAN" />
                             </th>
                             <th>
-                                <input class="input input-xs input-bordered" type="text" value="<?= $itemp['RETUR']; ?>" name="RETUR" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="text" value="<?= round($itemp['RETUR']); ?>" name="RETUR" />
                             </th>
                             <th>
-                                <input class="input input-bordered" type="text" value="<?= $itemp['KETERANGAN']; ?>" name="KETERANGAN_PELUNASAN" />
+                                <input class="input input-xs input-bordered max-w-[15ch]" type="text" value="<?= $itemp['KETERANGAN']; ?>" name="KETERANGAN_PELUNASAN" />
                             </th>
                         </tbody>
                     </table>

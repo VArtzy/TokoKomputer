@@ -2,6 +2,10 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+$nom = '11';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
 $brg = query("SELECT * FROM BARANG ORDER BY NAMA ASC LIMIT 0, 20");
 
 if (isset($_POST["cari"])) {
@@ -106,8 +110,12 @@ include('shared/navadmin.php');
                             <span class="badge badge-sm badge-warning"><?= query("SELECT KETERANGAN FROM sub_golongan WHERE KODE = '" . $b['SUB_GOLONGAN_ID'] . "'")[0]['KETERANGAN']; ?></span>
                         </th>
                         <td class="grid items-center gap-2">
-                            <a href="editBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
-                            <a href="deleteBarang.php?id=<?= $b["KODE"]; ?>" onclick="return confirm('Apakah anda benar benar ingin menghapus barang ini?')"><i class="fa-solid fa-trash text-rose-500 scale-150"></i></a>
+                            <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+                                <a href="editBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                            <?php endif; ?>
+                            <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                                <a href="deleteBarang.php?id=<?= $b["KODE"]; ?>" onclick="return confirm('Apakah anda benar benar ingin menghapus barang ini?')"><i class="fa-solid fa-trash text-rose-500 scale-150"></i></a>
+                            <?php endif; ?>
                             <a href="detailBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-file-lines text-amber-500 scale-150"></i></a>
                         </td>
                     </tr>

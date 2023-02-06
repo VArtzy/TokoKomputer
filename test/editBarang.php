@@ -2,6 +2,10 @@
 require_once './utils/functions.php';
 require_once './utils/loggedAdmin.php';
 
+$nom = '11';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[1]) || $aksi[1] === '0') return header('Location: barang.php');
+
 $id = $_GET["id"];
 
 $brg = query("SELECT * FROM BARANG WHERE KODE = '$id'")[0];

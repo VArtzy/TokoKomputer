@@ -68,6 +68,10 @@ include('shared/navadmin.php');
                 <input value="<?= $userAdmin["GROUP_HAK_AKSES_ID"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="GROUP_HAK_AKSES_ID" id="GROUP_HAK_AKSES_ID">
             </li>
             <li>
+                <label for="HAK_AKSES_USER">Hak Akses User: </label>
+                <input value="<?= $userAdmin["HAK_AKSES_USER"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="text" name="HAK_AKSES_USER" id="HAK_AKSES_USER">
+            </li>
+            <li>
                 <label for="GAJI_POKOK">Gaji Pokok: </label>
                 <input value="<?= $userAdmin["GAJI_POKOK"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="GAJI_POKOK" id="GAJI_POKOK">
             </li>

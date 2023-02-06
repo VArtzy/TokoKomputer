@@ -158,7 +158,7 @@ include('shared/navadmin.php');
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
         <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
-        <table id="table" class="display table w-full" style="width:100%">
+        <table id="table" class="table table-compact w-full">
             <thead>
                 <tr>
                     <th>No. </th>
@@ -179,12 +179,12 @@ include('shared/navadmin.php');
                         <td><?= $key + 1; ?></td>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?php if (isset(query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'])) {
-                                echo query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'];
-                            } else {
-                                echo $i['SUPPLIER_ID'];
-                            } ?></td>
-                        <td><?= $i['KETERANGAN']; ?></td>
+                        <td class="max-w-[10ch] text-ellipsis overflow-hidden"><?php if (isset(query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'])) {
+                                                                                    echo query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'];
+                                                                                } else {
+                                                                                    echo $i['SUPPLIER_ID'];
+                                                                                } ?></td>
+                        <td class="max-w-[20ch] text-ellipsis overflow-hidden"><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['HUTANG']); ?></td>
                         <td><?php if ($i['SISA_HUTANG']) {
                                 echo rupiah($i['SISA_HUTANG']);
@@ -211,8 +211,8 @@ include('shared/navadmin.php');
     $item = query("SELECT * FROM Beli WHERE NOTA = '$nota'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
-    <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
-        <div class="modal-box">
+    <div class="modal modal-bottom p-4">
+        <div class="modal-box w-11/12 max-w-6xl">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>

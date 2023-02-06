@@ -2,6 +2,10 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
+$nom = '7';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
 $item = query("SELECT * FROM customer ORDER BY NAMA ASC");
 
 if (isset($_POST["submit"])) {
@@ -66,7 +70,9 @@ include('shared/navadmin.php');
     $(document).ready(function() {
         var table = $('#table').DataTable({
             "pageLength": 50,
-            dom: 'Blfrtip',
+            <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                dom: 'Blfrtip',
+            <?php endif; ?>
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
@@ -100,9 +106,11 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Pelanggan</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
-    <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <label for="my-modal-6" class="btn btn-success">Tambah Pelanggan</label>
-    </div>
+    <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
+        <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
+            <label for="my-modal-6" class="btn btn-success">Tambah Pelanggan</label>
+        </div>
+    <?php endif; ?>
     <a href="userAndAdminManagement.php" class="btn btn-primary mb-4">Kembali ke Managemen</a>
 
     <div class="overflow-x-auto">
@@ -151,7 +159,7 @@ include('shared/navadmin.php');
     </div>
 </main>
 
-<?php if (!isset($_GET['kode'])) : ?>
+<?php if (!isset($_GET['kode']) && isset($aksi[0]) && $aksi[0] === '1') : ?>
     <input type="checkbox" id="my-modal-6" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
@@ -440,15 +448,19 @@ include('shared/navadmin.php');
                     </label>
                 </div>
                 <div class="modal-action">
-                    <div class="tooltip tooltip-error" data-tip="CTRL + Q">
-                        <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
-                    </div>
+                    <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                        <div class="tooltip tooltip-error" data-tip="CTRL + Q">
+                            <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
+                        </div>
+                    <?php endif; ?>
                     <div class="tooltip" data-tip="ESC (Tekan Lama)">
                         <a id="batal" href="Langganan.php" for="my-modal-edit" class="btn">Batal</a>
                     </div>
-                    <div class="tooltip tooltip-success" data-tip="CTRL + A">
-                        <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
-                    </div>
+                    <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                        <div class="tooltip tooltip-success" data-tip="CTRL + A">
+                            <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>

@@ -59,7 +59,7 @@ include('shared/navadmin.php');
   </div>
 
   <h2 class="text-2xl tracking-normal mb-2">Statistics</h2>
-  <div class="grid lg:grid-cols-2 gap-8 ">
+  <div class="grid lg:grid-cols-2 gap-8">
     <div class="shadow rounded" style="padding: 2em;">
       <h2 class="text-xl mb-4 text-sucess">Sales vs Budget</h2>
       <canvas style="width:100%;max-width:500px" id="pembelian"></canvas>
@@ -68,10 +68,10 @@ include('shared/navadmin.php');
       <h2 class="text-xl mb-4 text-sucess">Order & Invoices Minggu Ini</h2>
       <canvas style="width:100%;max-width:500px" id="penjualan"></canvas>
     </div>
-    <div class="">
+    <div class="overflow-hidden">
       <h2 class="text-xl mb-4 text-sucess">TOP 5 Barang</h2>
       <?php if (isset($barang)) { ?>
-        <div class="overflow-x-auto w-full shadow rounded p-4">
+        <div class="overflow-x-auto w-full">
           <table class="table w-full">
             <!-- head -->
             <thead>

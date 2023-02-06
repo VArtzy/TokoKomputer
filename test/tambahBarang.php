@@ -2,6 +2,10 @@
 require_once './utils/functions.php';
 require_once './utils/loggedAdmin.php';
 
+$nom = '11';
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return header('Location: barang.php');
+
 if (isset($_POST["tambah"])) {
     if (tambahBarang($_POST) > 0) {
         echo  "<script>
@@ -25,7 +29,7 @@ include('shared/navadmin.php');
         <ul class="flex flex-col gap-6 mb-4 justify-center">
             <li>
                 <label for="KODE">Kode: </label>
-                <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="KODE" id="KODE">
+                <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="KODE" id="KODE">
             </li>
             <div class="form-control">
                 <label class="label">
@@ -78,7 +82,7 @@ include('shared/navadmin.php');
             </div>
             <li>
                 <label for="HARGA_JUAL">Harga Jual: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="HARGA_JUAL" id="HARGA_JUAL">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="HARGA_JUAL" id="HARGA_JUAL">
             </li>
             <div class="form-control">
                 <label class="label">
@@ -97,27 +101,27 @@ include('shared/navadmin.php');
             </div>
             <li>
                 <label for="STOK">Stok :</label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" name="STOK" id="STOK">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" required type="number" value="0" name="STOK" id="STOK">
             </li>
             <li>
                 <label for="MIN_STOK">Min Stok: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MIN_STOK" id="MIN_STOK">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="MIN_STOK" id="MIN_STOK">
             </li>
             <li>
                 <label for="MAX_STOK">Max Stok: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MAX_STOK" id="MAX_STOK">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="MAX_STOK" id="MAX_STOK">
             </li>
             <li>
                 <label for="HARGA_BELI">Harga Beli: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="HARGA_BELI" id="HARGA_BELI">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="HARGA_BELI" id="HARGA_BELI">
             </li>
             <li>
                 <label for="STOK_AWAL">Stok Awal: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="STOK_AWAL" id="STOK_AWAL">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="STOK_AWAL" id="STOK_AWAL">
             </li>
             <li>
                 <label for="DISKON_RP">Diskon: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="DISKON_RP" id="DISKON_RP">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="DISKON_RP" id="DISKON_RP">
             </li>
             <li>
                 <label for="GARANSI">Garansi: </label>
@@ -125,23 +129,23 @@ include('shared/navadmin.php');
             </li>
             <li>
                 <label for="TGL_TRANSAKSI">Tanggal Transaksi: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="datetime-local" name="TGL_TRANSAKSI" id="TGL_TRANSAKSI">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="date" value="<?= date('Y-m-d'); ?>" name="TGL_TRANSAKSI" id="TGL_TRANSAKSI">
             </li>
             <li>
                 <label for="DISKON_GENERAL">Diskon General: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="DISKON_GENERAL" id="DISKON_GENERAL">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="DISKON_GENERAL" id="DISKON_GENERAL">
             </li>
             <li>
                 <label for="DISKON_SILVER">Diskon Silver: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="DISKON_SILVER" id="DISKON_SILVER">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="DISKON_SILVER" id="DISKON_SILVER">
             </li>
             <li>
                 <label for="DISKON_GOLD">Diskon Gold: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="DISKON_GOLD" id="DISKON_GOLD">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="DISKON_GOLD" id="DISKON_GOLD">
             </li>
             <li>
                 <label for="POIN">Poin: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="POIN" id="POIN">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="POIN" id="POIN">
             </li>
             <div class="form-control">
                 <label class="label">
@@ -160,7 +164,7 @@ include('shared/navadmin.php');
             </div>
             <li>
                 <label for="MARGIN">Margin: </label>
-                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" name="MARGIN" id="MARGIN">
+                <input class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="MARGIN" id="MARGIN">
             </li>
             <li>
                 <label for="FOTO">Upload Foto: </label>

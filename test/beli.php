@@ -2,7 +2,11 @@
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$nom = '13';
+if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
+$aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
+
+$item = query("select a.TANGGAL, a.TEMPO, a.TANGGAL, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
@@ -86,7 +90,9 @@ include('shared/navadmin.php');
     $(document).ready(function() {
         var table = $('#table').DataTable({
             "pageLength": 50,
-            dom: 'Blfrtip',
+            <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                dom: 'Blfrtip',
+            <?php endif; ?>
             buttons: [
                 'copyHtml5',
                 'excelHtml5',
@@ -130,6 +136,7 @@ include('shared/navadmin.php');
                 });
             }
         });
+        $('#ui-id-1').css('z-index', 1000)
     });
 </script>
 
@@ -138,10 +145,12 @@ include('shared/navadmin.php');
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
     <div class="tooltip tooltip-success tooltip-right" data-tip="ESC">
-        <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
+        <?php if (isset($aksi[0]) && $aksi[0] === '1') : ?>
+            <a id="pilihbarang" class="btn btn-success mb-4" href="pilihBarangBeli.php">Tambah Beli</a>
+        <?php endif; ?>
     </div>
     <a class="btn btn-info text-sm mb-8" href="barangTerbeli.php">Lihat Records Barang Terbeli</a>
-    <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Lihat Records Pembelian Nota</a>
+    <a class="btn btn-info text-sm mb-8" href="pembelianNota.php">Pelunasan Hutang</a>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Next Row (Tab)</p>
@@ -149,7 +158,7 @@ include('shared/navadmin.php');
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
         <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
-        <table id="table" class="display table w-full" style="width:100%">
+        <table id="table" class="table table-compact w-full">
             <thead>
                 <tr>
                     <th>No. </th>
@@ -170,8 +179,12 @@ include('shared/navadmin.php');
                         <td><?= $key + 1; ?></td>
                         <td><?= $i['TANGGAL']; ?></td>
                         <td><?= $i['NOTA']; ?></td>
-                        <td><?= $i['SUPPLIER_ID'] ?></td>
-                        <td><?= $i['KETERANGAN']; ?></td>
+                        <td class="max-w-[10ch] text-ellipsis overflow-hidden"><?php if (isset(query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'])) {
+                                                                                    echo query("SELECT NAMA FROM supplier WHERE KODE = '" . $i['SUPPLIER_ID'] . "'")[0]['NAMA'];
+                                                                                } else {
+                                                                                    echo $i['SUPPLIER_ID'];
+                                                                                } ?></td>
+                        <td class="max-w-[20ch] text-ellipsis overflow-hidden"><?= $i['KETERANGAN']; ?></td>
                         <td><?= rupiah($i['HUTANG']); ?></td>
                         <td><?php if ($i['SISA_HUTANG']) {
                                 echo rupiah($i['SISA_HUTANG']);
@@ -198,20 +211,11 @@ include('shared/navadmin.php');
     $item = query("SELECT * FROM Beli WHERE NOTA = '$nota'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
-    <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
-        <div class="modal-box">
+    <div class="modal modal-bottom p-4">
+        <div class="modal-box w-11/12 max-w-6xl">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="TOTAL_PELUNASAN_NOTA">Total Pelunasan: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Total Pelunasan:</span>
-                        <input value="<?= $item['TOTAL_PELUNASAN_NOTA']; ?>" max="<?= $item['TOTAL_NOTA']; ?>" required type="number" name="TOTAL_PELUNASAN_NOTA" id="KETERANGAN" class="input input-bordered">
-                    </label>
-                </div>
                 <div class="flex gap-4">
                     <div class="form-control">
                         <label class="label">
@@ -219,14 +223,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Status:</span>
-                            <select class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA">
-                                <option <?php if ($item['STATUS_NOTA'] === 'T') {
-                                            echo 'selected';
-                                        } ?> value="T">Tunai</option>
-                                <option <?php if ($item['STATUS_NOTA'] === 'K') {
-                                            echo 'selected';
-                                        } ?> value="K">Kredit</option>
-                            </select>
+                            <input readonly class="input input-bordered" name="STATUS_NOTA" id="STATUS_NOTA" value="<?= $item['STATUS_NOTA']; ?>">
                         </label>
                     </div>
                     <div class="form-control">
@@ -238,6 +235,15 @@ include('shared/navadmin.php');
                             <input value="<?= $item['TEMPO']; ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
                         </label>
                     </div>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <label class="label-text" for="TANGGAL2">Tanggal: </label>
+                    </label>
+                    <label class="input-group">
+                        <span>Tanggal:</span>
+                        <input value="<?= $item['TANGGAL']; ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
+                    </label>
                 </div>
                 <div class="form-control">
                     <label class="label">
@@ -271,25 +277,7 @@ include('shared/navadmin.php');
                     </label>
                     <label class="input-group">
                         <span>Keterangan:</span>
-                        <input value="<?= $item['KETERANGAN']; ?>" required type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="PPN">PPN: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>PPN:</span>
-                        <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="DISKON">Diskon: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Diskon:</span>
-                        <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
+                        <input value="<?= $item['KETERANGAN']; ?>" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
                 <div class="overflow-x-auto w-full mt-8 mb-4">
@@ -353,16 +341,38 @@ include('shared/navadmin.php');
     </tbody>
     </table>
     </div>
+    <div class="form-control">
+        <label class="label">
+            <label class="label-text" for="DISKON">Diskon: </label>
+        </label>
+        <label class="input-group">
+            <span>Diskon:</span>
+            <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
+        </label>
+    </div>
+    <div class="form-control">
+        <label class="label">
+            <label class="label-text" for="PPN">PPN: </label>
+        </label>
+        <label class="input-group">
+            <span>PPN:</span>
+            <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
+        </label>
+    </div>
     <div class="modal-action">
-        <div class="tooltip tooltip-error" data-tip="CTRL + Q">
-            <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
-        </div>
+        <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+            <div class="tooltip tooltip-error" data-tip="CTRL + Q">
+                <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
+            </div>
+        <?php endif; ?>
         <div class="tooltip" data-tip="ESC (Tekan Lama)">
             <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
         </div>
-        <div class="tooltip tooltip-success" data-tip="CTRL + A">
-            <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
-        </div>
+        <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+            <div class="tooltip tooltip-success" data-tip="CTRL + A">
+                <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
+            </div>
+        <?php endif; ?>
     </div>
     </form>
     </div>
