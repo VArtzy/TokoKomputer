@@ -22,6 +22,9 @@ include('shared/navadmin.php');
     <h1 class="text-2xl font-semibold">Order & Invoices.</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
+    <a class="btn btn-primary mt-8" href="pilihBarang.php">Tambah Nota</a>
+    <a class="btn btn-warning mt-8" href="admin.php">Kembali</a>
+
     <a class="btn btn-info text-sm mb-8" href="jual.php">Lihat Records Nota</a>
 
     <?php if (!empty($nota)) { ?>
@@ -64,9 +67,6 @@ include('shared/navadmin.php');
     <?php } else { ?>
         <p class="text-lg">Belum ada yang pesan... 😩</a>.</p>
     <?php } ?>
-
-    <a class="btn btn-primary mt-8" href="pilihBarang.php">Tambah Nota</a>
-    <a class="btn btn-warning mt-8" href="admin.php">Kembali</a>
 </main>
 
 <script src="script/cariNota.js"></script>

@@ -228,6 +228,7 @@ include('shared/navadmin.php');
                     <!-- head -->
                     <thead>
                         <tr>
+                            <th>No. </th>
                             <th>Nama</th>
                             <th>Stok/Satuan</th>
                             <th>Diskon</th>
@@ -237,10 +238,11 @@ include('shared/navadmin.php');
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($data as $d) {
+                        foreach ($data as $key => $d) {
                             $brg = query("SELECT * FROM BARANG where KODE = " . $d['id']);
                             foreach ($brg as $b) : ?>
                                 <tr>
+                                    <td><?= $key + 1; ?></td>
                                     <td>
                                         <div class="md:flex items-center space-x-3">
                                             <div class="avatar">
@@ -251,6 +253,7 @@ include('shared/navadmin.php');
                                             <div>
                                                 <div class="font-bold"><?= $b["NAMA"]; ?></div>
                                                 <div class="text-sm opacity-50"><?= $b["KODE"]; ?></div>
+                                                <div class="text-sm opacity-50"><?= $b["KODE_BARCODE"]; ?></div>
                                             </div>
                                         </div>
                                     </td>
@@ -261,7 +264,14 @@ include('shared/navadmin.php');
                                         <br />
                                         Stok: <?= round($b["STOK"]); ?>
                                         <br />
-                                        Satuan: <input tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['SATUAN_ID'] ?>">
+                                        Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
+                                                                                                                $satuan = query("SELECT * FROM satuan");
+                                                                                                                foreach ($satuan as $l) : ?>
+                                                <option <?php if ($l['KODE'] === $b['SATUAN_ID']) {
+                                                                                                                        echo 'selected';
+                                                                                                                    } ?> value="<?= $l['KODE']; ?>"><?= $l["NAMA"]; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                         <br />
                                     </td>
                                     <td>

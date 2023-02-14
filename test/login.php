@@ -26,8 +26,8 @@ if (isset($_SESSION["login"])) {
 
 if (isset($_POST["login"])) {
 
-    $username = $_POST["NAMAADMIN"];
-    $password = $_POST["PASSWORDADMIN"];
+    $username = mysqli_real_escape_string($conn, $_POST["NAMAADMIN"]);
+    $password = mysqli_real_escape_string($conn, $_POST["PASSWORDADMIN"]);
 
     $result = mysqli_query($conn, "SELECT * FROM customer WHERE NAMA = '$username'");
 
@@ -55,7 +55,7 @@ if (isset($_POST["login"])) {
     $error = true;
 }
 
- $title = "Login";
+$title = "Login";
 include('shared/nav.php');
 ?>
 

@@ -26,8 +26,8 @@ if (isset($_SESSION["loginAdmin"])) {
 
 if (isset($_POST["loginAdmin"])) {
 
-    $username = $_POST["NAMA"];
-    $password = $_POST["PASSWORD"];
+    $username = mysqli_real_escape_string($conn, $_POST["NAMA"]);
+    $password = mysqli_real_escape_string($conn, $_POST["PASSWORD"]);
 
     $result = mysqli_query($conn, "SELECT * FROM user_admin WHERE NAMA = '$username'");
 

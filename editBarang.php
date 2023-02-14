@@ -33,6 +33,10 @@ include('shared/navadmin.php');
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="gambarlama" value="<?= $brg["FOTO"]; ?>">
         <ul class="flex flex-col gap-6 mb-4 justify-center">
+            <li>
+                <label for="KODE_BARCODE">Kode Bacode: </label>
+                <input value="<?= $brg['KODE_BARCODE']; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="KODE_BARCODE" id="KODE_BARCODE">
+            </li>
             <div class="form-control">
                 <label class="label">
                     <label class="label-text" for="GOLONGAN_ID">Golongan: </label>

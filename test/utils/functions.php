@@ -18,7 +18,8 @@ function tambahBarang($data)
     global $conn;
 
     $KODE = mysqli_real_escape_string($conn, $data["KODE"]);
-    $NAMA = stripslashes($data["NAMA"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
     $SATUAN_ID = mysqli_real_escape_string($conn, $data["SATUAN_ID"]);
     $STOK = mysqli_real_escape_string($conn, $data["STOK"]);
     $MIN_STOK = mysqli_real_escape_string($conn, $data["MIN_STOK"]);
@@ -41,12 +42,10 @@ function tambahBarang($data)
 
     // upload gambar
     $FOTO = upload();
-    if (!$FOTO) {
-        return false;
-    }
+
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `KODE_BARCODE`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
-     ('$KODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$KODE', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
+    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `KODE_BARCODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `KODE_BARCODE`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
+     ('$KODE','$KODE_BARCODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$KODE', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
 
     mysqli_query($conn, "INSERT INTO multi_price(`KODE_SATUAN`, `CUSTOMER_ID`, `BARANG_ID`, `HARGA_KE`, `JUMLAH_R1`, `JUMLAH_R2`, `HARGA_JUAL`) VALUES
      ('$SATUAN_ID', '', '$KODE', 1, 1, 1000, '$HARGA_JUAL')");
@@ -237,6 +236,22 @@ function tambahNotaAdmin($nota, $username, $total, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     if (!is_numeric($CUSTOMER_NAMA)) $CUSTOMER_NAMA = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_NAMA'")[0]['KODE'];
+
+    $result = mysqli_query($conn, "SELECT KODE FROM item_jual WHERE KODE = '$nota'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+        alert('Nota jual dengan kode ini sudah ada. Coba gunakan kode lain.');
+        </script>";
+        return false;
+    }
+
+    $result2 = mysqli_query($conn, "SELECT NOTA FROM jual WHERE NOTA = '$nota'");
+    if (mysqli_fetch_assoc($result2)) {
+        echo "<script>
+        alert('Nota jual dengan kode ini sudah ada. Coba gunakan kode lain.');
+        </script>";
+        return false;
+    }
 
     mysqli_query($conn, "UPDATE salesman SET TOTAL_NOTA_PENJUALAN = TOTAL_NOTA_PENJUALAN + 1 WHERE KODE = '$SALESMAN_ID'");
 
@@ -439,7 +454,8 @@ function editBarang($data)
     global $conn;
 
     $id = $data["id"];
-    $NAMA = stripslashes($data["NAMA"]);
+    $KODE_BARCODE = mysqli_real_escape_string($conn, $data["KODE_BARCODE"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
     $SATUAN_ID = mysqli_real_escape_string($conn, $data["SATUAN_ID"]);
     $STOK = mysqli_real_escape_string($conn, $data["STOK"]);
     $MIN_STOK = mysqli_real_escape_string($conn, $data["MIN_STOK"]);
@@ -469,6 +485,7 @@ function editBarang($data)
     }
 
     mysqli_query($conn, "UPDATE `barang` SET 
+    KODE_BARCODE = '$KODE_BARCODE',
     NAMA = '$NAMA',
     SATUAN_ID = '$SATUAN_ID',
     STOK = '$STOK',
@@ -500,7 +517,7 @@ function registrasi($data)
     global $conn;
 
     $KODE = uniqid();
-    $NAMA = stripslashes($data["NAMA"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
     $PASSWORD = mysqli_real_escape_string($conn, $data["PASSWORD"]);
     $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
     $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
@@ -632,7 +649,7 @@ function ubahProfile($data)
     global $conn;
 
     $id = $data["id"];
-    $NAMA = stripslashes($data["NAMA"]);
+    $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
     $PASSWORD = mysqli_real_escape_string($conn, $data["PASSWORD"]);
     $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
     $ALAMAT = mysqli_real_escape_string($conn, $data["ALAMAT"]);
@@ -891,6 +908,22 @@ function tambahBeli($nota, $username, $total, $data)
     $SUPPLIER_ID = mysqli_real_escape_string($conn, $data["SUPPLIER_ID"]);
 
     if (!is_numeric($SUPPLIER_ID)) $SUPPLIER_ID = query("SELECT KODE FROM `supplier` WHERE NAMA = '$SUPPLIER_ID'")[0]['KODE'];
+
+    $result = mysqli_query($conn, "SELECT KODE FROM item_beli WHERE KODE = '$nota'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+        alert('Nota beli dengan kode ini sudah ada. Coba gunakan kode lain.');
+        </script>";
+        return false;
+    }
+
+    $result2 = mysqli_query($conn, "SELECT NOTA FROM beli WHERE NOTA = '$nota'");
+    if (mysqli_fetch_assoc($result2)) {
+        echo "<script>
+        alert('Nota beli dengan kode ini sudah ada. Coba gunakan kode lain.');
+        </script>";
+        return false;
+    }
 
     $KETERANGAN = mysqli_real_escape_string($conn, $data["KETERANGAN"]);
     $DISKON = mysqli_real_escape_string($conn, $data["DISKON"]);

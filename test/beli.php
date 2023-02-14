@@ -10,6 +10,13 @@ $item = query("select a.TANGGAL, a.TEMPO, a.TANGGAL, a.SUPPLIER_ID, a.OPERATOR, 
 
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
+if (isset($_POST["tambah_item"])) {
+    if (tambahBeliItemNota($_POST['KODE_LAMA'], $_POST['TAMBAH_BARANG_ID'], $_POST['TAMBAH_JUMLAH_BARANG'], $_POST['TAMBAH_HARGA_BELI'], $_POST['TAMBAH_HARGA_JUAL'], $_POST['TAMBAH_DISKON1'], $_POST['TAMBAH_DISKON2'], $_POST['TAMBAH_DISKON3'], $_POST['TAMBAH_DISKON4'], $_POST['TAMBAH_DISKON_RP'], $_POST['TAMBAH_SATUAN'], $_POST['KETERANGAN'], $_POST['TAMBAH_KET1'], $_POST['TAMBAH_KET2'], $_POST['TAMBAH_IMEI']) > 0) {
+    } else {
+        echo mysqli_error($conn);
+    }
+}
+
 if (isset($_POST["ubah"])) {
 
     $TOTAL = 0;
@@ -136,7 +143,36 @@ include('shared/navadmin.php');
                 });
             }
         });
+        $("#TAMBAH_BARANG_ID").autocomplete({
+            id: '',
+            source: function(request, response) {
+                $.ajax({
+                    url: "ajax/itemid.php",
+                    dataType: "json",
+                    data: {
+                        q: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $.ajax({
+                    url: "ajax/hargabarangid.php",
+                    dataType: "json",
+                    data: {
+                        q: ui.item.value
+                    },
+                    success: function(data) {
+                        $("#TAMBAH_HARGA_BELI").val(data[0]).change();
+                        $("#TAMBAH_HARGA_JUAL").val(data[1]).change();
+                    }
+                });
+            }
+        });
         $('#ui-id-1').css('z-index', 1000)
+        $('#ui-id-2').css('z-index', 1000)
     });
 </script>
 
@@ -285,6 +321,7 @@ include('shared/navadmin.php');
                         <!-- head -->
                         <thead>
                             <tr>
+                                <th>No. </th>
                                 <th>Nama</th>
                                 <th>Stok/Satuan</th>
                                 <th>Diskon</th>
@@ -295,13 +332,16 @@ include('shared/navadmin.php');
                         <tbody>
                             <?php
                             $item_beli = query("SELECT * FROM item_beli where NOTA = '$nota'");
-                            foreach ($item_beli as $b) :
+                            foreach ($item_beli as $key => $b) :
                             ?>
                                 <tr>
+                                    <td><?= $key + 1; ?></td>
                                     <td>
-                                        <div class="flex items-center space-x-3">
+                                        <div class="items-center space-x-3">
                                             <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $b["BARANG_ID"]; ?>" type="hidden">
+                                            <div class="font-bold"><?= query("SELECT NAMA FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['NAMA']; ?></div>
                                             <div class="text-sm opacity-50"><?= $b["BARANG_ID"]; ?></div>
+                                            <div class="text-sm opacity-50"><?= query("SELECT KODE_BARCODE FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['KODE_BARCODE']; ?></div>
                                         </div>
                 </div>
         </div>
@@ -311,7 +351,14 @@ include('shared/navadmin.php');
             <br />
             Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>">
             <br />
-            Satuan: <input type="text" name="SATUAN[]" id="SATUAN[]" value="<?= $b['DAFTAR_SATUAN']; ?>">
+            Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
+                                                                                    $satuan = query("SELECT * FROM satuan");
+                                                                                    foreach ($satuan as $l) : ?>
+                    <option <?php if ($l['KODE'] === $b['DAFTAR_SATUAN']) {
+                                                                                            echo 'selected';
+                                                                                        } ?> value="<?= $l['KODE']; ?>"><?= $l["NAMA"]; ?></option>
+                <?php endforeach; ?>
+            </select>
             <br />
         </td>
         <td>
@@ -338,6 +385,51 @@ include('shared/navadmin.php');
         </th>
         </tr>
     <?php endforeach; ?>
+    <tr>
+        <td>+</td>
+        <td>
+            <div class="items-center space-x-3">
+                <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
+                <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
+            </div>
+    </div>
+    </div>
+    </td>
+    <td>
+        IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
+        <br />
+        Jumlah: <input class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
+        Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
+                                                                                            $satuan = query("SELECT * FROM satuan");
+                                                                                            foreach ($satuan as $l) : ?>
+                <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <br />
+    </td>
+    <td>
+        % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
+        <br />
+        <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
+    </td>
+    <th>
+        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
+        <br>
+        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
+        <br>
+    </th>
+    <th>
+        KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
+        <br>
+        KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
+    </th>
+    </tr>
     </tbody>
     </table>
     </div>

@@ -31,6 +31,10 @@ include('shared/navadmin.php');
                 <label for="KODE">Kode: </label>
                 <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="KODE" id="KODE">
             </li>
+            <li>
+                <label for="KODE_BARCODE">Kode Bacode: </label>
+                <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM barang")[0]["COUNT"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="number" value="0" name="KODE_BARCODE" id="KODE_BARCODE">
+            </li>
             <div class="form-control">
                 <label class="label">
                     <label class="label-text" for="GOLONGAN_ID">Golongan: </label>
