@@ -70,6 +70,12 @@ var shoppingCart = (function () {
 
     // Add to cart
     obj.addItemToCart = function (id, name, price, stok, count) {
+        var item = new Item(id, name, price, stok, count)
+        cart.push(item)
+        saveCart()
+    }
+
+    obj.addItemToCartCount = function (id, name, price, stok, count) {
         for (var item in cart) {
             if (cart[item].name === name) {
                 cart[item].count++
@@ -240,7 +246,7 @@ plusItem = (e) => {
     var price = e.target.getAttribute("data-price")
     var stok = e.target.getAttribute("data-stok")
     var count = e.target.getAttribute("data-count")
-    shoppingCart.addItemToCart(id, name, price, stok, 1)
+    shoppingCart.addItemToCartCount(id, name, price, stok, 1)
     displayCart()
 }
 

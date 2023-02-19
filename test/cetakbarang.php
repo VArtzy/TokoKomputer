@@ -80,11 +80,12 @@ include('shared/navadmin.php');
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
         <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
-        <table id="table" class="table w-full">
+        <table id="table" class="table table-compact-small w-full">
             <!-- head -->
             <thead>
                 <tr>
                     <th>Kode</th>
+                    <th>Barcode</th>
                     <th>Nama</th>
                     <th>Stok Awal</th>
                     <th>Stok</th>

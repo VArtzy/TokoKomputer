@@ -7357,12 +7357,12 @@ html {
   width: 3rem;
 }
 
-.w-96 {
-  width: 24rem;
-}
-
 .w-11\/12 {
   width: 91.666667%;
+}
+
+.w-96 {
+  width: 24rem;
 }
 
 .w-5 {
@@ -7385,8 +7385,16 @@ html {
   max-width: 20rem;
 }
 
+.max-w-\[10ch\] {
+  max-width: 10ch;
+}
+
 .max-w-\[20ch\] {
   max-width: 20ch;
+}
+
+.max-w-6xl {
+  max-width: 72rem;
 }
 
 .max-w-\[567px\] {
@@ -7407,14 +7415,6 @@ html {
 
 .max-w-lg {
   max-width: 32rem;
-}
-
-.max-w-6xl {
-  max-width: 72rem;
-}
-
-.max-w-\[10ch\] {
-  max-width: 10ch;
 }
 
 .max-w-\[15ch\] {
@@ -9230,6 +9230,12 @@ h1 {
     --tw-bg-opacity: 1;
     background-color: rgb(156 163 175 / var(--tw-bg-opacity));
   }
+}
+
+.table-compact-small :where(th, td) {
+  padding: 0.25rem /* 8px */;
+  font-size: 0.55rem /* 14px */;
+  line-height: 1.25rem /* 20px */;
 }
 
 .hover\:-translate-y-1:hover {

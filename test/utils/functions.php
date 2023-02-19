@@ -237,13 +237,13 @@ function tambahNotaAdmin($nota, $username, $total, $data)
 
     if (!is_numeric($CUSTOMER_NAMA)) $CUSTOMER_NAMA = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_NAMA'")[0]['KODE'];
 
-    $result = mysqli_query($conn, "SELECT KODE FROM item_jual WHERE KODE = '$nota'");
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
-        alert('Nota jual dengan kode ini sudah ada. Coba gunakan kode lain.');
-        </script>";
-        return false;
-    }
+    // $result = mysqli_query($conn, "SELECT NOTA FROM item_jual WHERE NOTA = '$nota'");
+    // if (mysqli_fetch_assoc($result)) {
+    //     echo "<script>
+    //     alert('Nota jual dengan NOTA ini sudah ada. Coba gunakan NOTA lain.');
+    //     </script>";
+    //     return false;
+    // }
 
     $result2 = mysqli_query($conn, "SELECT NOTA FROM jual WHERE NOTA = '$nota'");
     if (mysqli_fetch_assoc($result2)) {
@@ -909,13 +909,13 @@ function tambahBeli($nota, $username, $total, $data)
 
     if (!is_numeric($SUPPLIER_ID)) $SUPPLIER_ID = query("SELECT KODE FROM `supplier` WHERE NAMA = '$SUPPLIER_ID'")[0]['KODE'];
 
-    $result = mysqli_query($conn, "SELECT KODE FROM item_beli WHERE KODE = '$nota'");
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
-        alert('Nota beli dengan kode ini sudah ada. Coba gunakan kode lain.');
-        </script>";
-        return false;
-    }
+    // $result = mysqli_query($conn, "SELECT NOTA FROM item_beli WHERE NOTA = '$nota'");
+    // if (mysqli_fetch_assoc($result)) {
+    //     echo "<script>
+    //     alert('Nota beli dengan NOTA ini sudah ada. Coba gunakan NOTA lain.');
+    //     </script>";
+    //     return false;
+    // }
 
     $result2 = mysqli_query($conn, "SELECT NOTA FROM beli WHERE NOTA = '$nota'");
     if (mysqli_fetch_assoc($result2)) {
@@ -1319,6 +1319,28 @@ function hapusLangganan($data)
 
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     mysqli_query($conn, "DELETE FROM Customer WHERE KODE = '$KODE_LAMA'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusItemBeli($nota, $barang_id)
+{
+    global $conn;
+
+    $NOTA = mysqli_real_escape_string($conn, $nota);
+    $BARANG_ID = mysqli_real_escape_string($conn, $barang_id);
+    mysqli_query($conn, "DELETE FROM item_beli WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusItemJual($nota, $barang_id)
+{
+    global $conn;
+
+    $NOTA = mysqli_real_escape_string($conn, $nota);
+    $BARANG_ID = mysqli_real_escape_string($conn, $barang_id);
+    mysqli_query($conn, "DELETE FROM item_jual WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
 
     return mysqli_affected_rows($conn);
 }

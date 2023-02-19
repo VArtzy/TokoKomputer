@@ -8,6 +8,7 @@ if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return 
 
 $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
+var_dump($data);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 foreach ($data as $d) {

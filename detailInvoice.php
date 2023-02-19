@@ -18,6 +18,20 @@ $item = query("SELECT * FROM ITEM_JUAL WHERE nota = '$nota'");
 
 if (isset($_POST["tambah_item"])) {
     if (tambahItemNota($nota, $_POST['TAMBAH_BARANG_ID'], $_POST['TAMBAH_JUMLAH_BARANG'], $_POST['TAMBAH_HARGA_BELI'], $_POST['TAMBAH_HARGA_JUAL'], $_POST['TAMBAH_DISKON1'], $_POST['TAMBAH_DISKON2'], $_POST['TAMBAH_DISKON3'], $_POST['TAMBAH_DISKON4'], $_POST['TAMBAH_DISKON_RP'], $_POST['TAMBAH_SATUAN'], $_POST['KETERANGAN'], $_POST['TAMBAH_KET1'], $_POST['TAMBAH_KET2'], $_POST['TAMBAH_IMEI']) > 0) {
+        "<script>
+        alert('Berhasil Menambah Jual');
+        </script>";
+    } else {
+        echo mysqli_error($conn);
+    }
+}
+
+if (isset($_GET['barang_id'])) {
+    if (hapusItemJual($nota, $_GET['barang_id']) > 0) {
+        echo "<script>
+        alert('Berhasil Menghapus Jual');
+        document.location.href = 'Detailinvoice.php?nota=$nota';
+        </script>";
     } else {
         echo mysqli_error($conn);
     }
@@ -71,7 +85,7 @@ if (isset($_POST["hapus"])) {
 }
 
 if (empty($item)) {
-    return header('location: invoices.php');
+    return header('location: jual.php');
 }
 
 $title = "Detail Invoices - " . $nota;
@@ -122,6 +136,7 @@ include('shared/navadmin.php');
                     success: function(data) {
                         $("#TAMBAH_HARGA_BELI").val(data[0]).change();
                         $("#TAMBAH_HARGA_JUAL").val(data[1]).change();
+                        $("#NAMA_BARANG").text(data[2]);
                     }
                 });
             }
@@ -135,7 +150,7 @@ include('shared/navadmin.php');
 
     <h1 class="text-2xl mb-8 font-semibold">Details Nota <?= $nota; ?></h1>
 
-    <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
+    <a class="btn btn-warning mb-8" href="jual.php">Kembali</a>
     <label for="my-modal-6" class="btn btn-success">Proses nota</label>
 
     <div class="flex gap-4 mb-4">
@@ -396,6 +411,7 @@ include('shared/navadmin.php');
             KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
             <br>
             KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
+            <a class="badge badge-error" type="submit" href="Detailinvoice.php?nota=<?= $nota; ?>&barang_id=<?= $b['BARANG_ID']; ?>" name="hapus_item">Hapus</a>
         </th>
         </tr>
     <?php endforeach; ?>
@@ -403,6 +419,7 @@ include('shared/navadmin.php');
         <td>+</td>
         <td>
             <div class="items-center space-x-3">
+                <div class="font-bold" id="NAMA_BARANG"></div>
                 <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
                 <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
             </div>
@@ -412,7 +429,7 @@ include('shared/navadmin.php');
     <td>
         IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
         <br />
-        Jumlah: <input class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
+        Jumlah: <input class="input input-bordered input-xs" value="1" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
         Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
                                                                                             $satuan = query("SELECT * FROM satuan");
                                                                                             foreach ($satuan as $l) : ?>

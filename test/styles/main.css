@@ -11,3 +11,9 @@ h1 {
         @apply bg-gray-400;
     }
 }
+
+.table-compact-small :where(th, td) {
+    padding: 0.25rem /* 8px */;
+    font-size: 0.55rem /* 14px */;
+    line-height: 1.25rem /* 20px */;
+}

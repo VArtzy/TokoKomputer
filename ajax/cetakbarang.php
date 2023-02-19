@@ -23,6 +23,7 @@ $table = <<<EOT
  (
     SELECT
       a.KODE,
+      a.KODE_BARCODE,
       a.NAMA,
       a.STOK_AWAL,
       a.STOK,
@@ -47,16 +48,17 @@ $primaryKey = 'KODE';
 // indexes
 $columns = array(
     array('db' => 'KODE', 'dt' => 0),
-    array('db' => 'NAMA',  'dt' => 1),
-    array('db' => 'STOK_AWAL',     'dt' => 2),
-    array('db' => 'STOK',     'dt' => 3),
-    array('db' => 'MIN_STOK',     'dt' => 4),
-    array('db' => 'MAX_STOK',     'dt' => 5),
-    array('db' => 'HARGA_BELI',     'dt' => 6),
-    array('db' => 'HARGA_JUAL',     'dt' => 7),
-    array('db' => 'GARANSI',     'dt' => 8),
-    array('db' => 'GOLONGAN_ID',     'dt' => 9),
-    array('db' => 'SUB_GOLONGAN_ID',     'dt' => 10),
+    array('db' => 'KODE_BARCODE', 'dt' => 1),
+    array('db' => 'NAMA',  'dt' => 2),
+    array('db' => 'STOK_AWAL',     'dt' => 3),
+    array('db' => 'STOK',     'dt' => 4),
+    array('db' => 'MIN_STOK',     'dt' => 5),
+    array('db' => 'MAX_STOK',     'dt' => 6),
+    array('db' => 'HARGA_BELI',     'dt' => 7),
+    array('db' => 'HARGA_JUAL',     'dt' => 8),
+    array('db' => 'GARANSI',     'dt' => 9),
+    array('db' => 'GOLONGAN_ID',     'dt' => 10),
+    array('db' => 'SUB_GOLONGAN_ID',     'dt' => 11),
     // array(
     //     'db'        => 'start_date',
     //     'dt'        => 4,

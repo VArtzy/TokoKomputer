@@ -15,6 +15,7 @@ $pembelian = array();
 while ($row = $result->fetch_assoc()) {
     $pembelian[] = $row['HARGA_BELI'] ?? 0;
     $pembelian[] = query("SELECT HARGA_JUAL from MULTI_PRICE WHERE BARANG_ID = '$q'")[0]['HARGA_JUAL'] ?? 0;
+    $pembelian[] = query("SELECT NAMA from BARANG WHERE KODE = '$q'")[0]['NAMA'] ?? "";
 }
 
 // Send the array as a JSON response

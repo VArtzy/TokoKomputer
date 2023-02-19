@@ -98,7 +98,7 @@
           <input type="text" id="search" autocomplete="off" placeholder="Search" onkeyup="myFunction()" class="input input-bordered lg:hidden" />
           <ul id="myMenu" class="shadow-lg lg:hidden">
             <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
-            <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
+            <li><a href="jual.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
             <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
             <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
             <li><a class="fa-solid fa-user-tie">Master</a></li>
@@ -111,7 +111,7 @@
             <li><a href="biaya.php">Biaya</a></li>
             <li><a href="jasa.php">Jasa</a></li>
             <hr />
-            <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+            <li><a href="langganan.php">Langganan</a></li>
             <li><a href="supplier.php">Supplier</a></li>
             <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
             <hr />
@@ -121,7 +121,7 @@
             <li><a href="beli.php">Pembelian</a></li>
             <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
             <hr>
-            <li><a href="invoices.php">Penjualan</a></li>
+            <li><a href="jual.php">Penjualan</a></li>
             <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
             <hr>
             <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
@@ -137,7 +137,7 @@
           <li><a href="admin.php"><i class="fa-solid fa-house"></i></a></li>
         </div>
         <div class="tooltip tooltip-bottom" data-tip="Order & Invoices">
-          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+          <li><a href="jual.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
         </div>
         <div class="tooltip tooltip-bottom" data-tip="Manajemen Barang">
           <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i></a></li>
@@ -158,7 +158,7 @@
               <li><a href="biaya.php">Biaya</a></li>
               <li><a href="jasa.php">Jasa</a></li>
               <hr />
-              <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+              <li><a href="langganan.php">Langganan</a></li>
               <li><a href="supplier.php">Supplier</a></li>
               <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
               <hr />
@@ -175,7 +175,7 @@
               <li><a href="beli.php">Pembelian</a></li>
               <li><a href="pembelianNota.php">Pelunasan Hutang</a></li>
               <hr>
-              <li><a href="invoices.php">Penjualan</a></li>
+              <li><a href="jual.php">Penjualan</a></li>
               <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
               <hr>
               <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
@@ -190,7 +190,7 @@
         <input type="text" autocomplete="off" placeholder="Search (ctrl + K)" onkeyup="search()" type="search" id="searchlg" class="input input-bordered" />
         <ul id="myMenulg" class="absolute bg-base-100 flex-col gap-4 p-8 mt-2 shadow-lg z-50 hidden group-focus-within:flex">
           <li><a href="admin.php"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li><a href="invoices.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
+          <li><a href="jual.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
           <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
           <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
           <li><a href="golongan.php">Golongan</a></li>
@@ -208,7 +208,7 @@
           <li><a>
               <hr />
             </a></li>
-          <li><a href="userAndAdminManagement.php#customer">Langganan</a></li>
+          <li><a href="langganan.php">Langganan</a></li>
           <li><a href="supplier.php">Supplier</a></li>
           <li><a href="userAndAdminManagement.php#salesman">Salesman</a></li>
           <li><a>
@@ -221,7 +221,7 @@
           <li><a>
               <hr />
             </a></li>
-          <li><a href="invoices.php">Penjualan</a></li>
+          <li><a href="jual.php">Penjualan</a></li>
           <li><a href="penjualanNota.php">Pembayaran Piutang</a></li>
           <li><a>
               <hr />
