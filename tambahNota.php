@@ -18,13 +18,18 @@ foreach ($data as $d) {
             $d['stok'] = round($b["STOK"]);
             $dataEncoded = json_encode($d);
             echo "<script>alert('Maaf, barang " . $d['name'] . " beberapa stoknya sudah dibeli. Silahkan ulangi isi keranjang 🤗.')</script>";
-            echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
             echo "<script>window.location.href = 'pilihBarang.php'</script>";
         }
     }
 }
 
 if (isset($_POST["checkout"])) {
+    if (isset($_POST['cetak'])) {
+        echo "<script>
+        window.print()
+        </script>";
+    }
+
     $nota = $_POST['NOTA'];
     $TOTAL = 0;
 
@@ -65,10 +70,19 @@ if (isset($_POST["checkout"])) {
 
     if (tambahNotaAdmin($nota, $username, $TOTAL, $_POST) > 0) {
         echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
-        echo  "<script>
-        alert('Berhasil Menambah Jual!');
-        document.location.href = 'jual.php';
-        </script>";
+        if (isset($_POST['cetak'])) {
+            echo  "<script> 
+            alert('Berhasil Menambah Jual!'); 
+            setTimeout(function () {
+   window.location.href= 'jual.php'; // the redirect goes here
+
+},5000); // 5 seconds </script>";
+        } else {
+            echo  "<script>
+            alert('Berhasil Menambah Jual!');
+            document.location.href = 'jual.php';
+            </script>";
+        }
     } else {
         echo mysqli_error($conn);
         echo  "<script>
@@ -116,7 +130,7 @@ include('shared/navadmin.php');
     });
 </script>
 
-<main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
+<main id="main" class="hidden-print max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <div class="flex justify-between items-center w-full mb-2">
         <h1 class="text-2xl font-semibold">Tambah Nota</h1>
         <div class="tooltip" data-tip="ESC">
@@ -239,7 +253,7 @@ include('shared/navadmin.php');
             <h2 class="font-bold mt-8 mb-4">Rincian Pembelian</h2>
 
             <div class="overflow-x-auto w-full mb-4">
-                <table class="table w-full">
+                <table class="table table-compact w-full">
                     <!-- head -->
                     <thead>
                         <tr>
@@ -366,6 +380,126 @@ include('shared/navadmin.php');
         <p>Kamu belum mengisi keranjang kamu 😅.</p>
     <?php } ?>
 </main>
+
+<div class="ticket">
+    <img src="./img/logo/ms-icon-70x70.png" alt="Logo">
+    <p class="centered">JOGA COMPUTER
+        <br>Jl. Ki Hajar Dewantara 53. Jebres. Surakarta.
+        <br>Nama Pembeli: <?php if (isset($_POST['CUSTOMER_NAMA'])) {
+                                if (is_numeric($_POST['CUSTOMER_NAMA'])) {
+                                    echo query("SELECT NAMA FROM CUSTOMER where KODE = " . $_POST['CUSTOMER_NAMA'])[0]['NAMA'];
+                                } else {
+                                    echo $_POST['CUSTOMER_NAMA'];
+                                }
+                            }; ?>
+    </p>
+    <table class="text-sm table table-compact w-full">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th>No. </th>
+                <th>Nama</th>
+                <th>Harga</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($data as $key => $d) {
+                $brg = query("SELECT * FROM BARANG where KODE = " . $d['id']);
+                foreach ($brg as $b) : ?>
+                    <tr>
+                        <td><?= $key + 1; ?></td>
+                        <td>
+                            <div class="flex items-center space-x-3">
+                                <div class="avatar">
+                                    <div class="mask mask-squircle w-12 h-12">
+                                        <img width="50px" height="50px" src="<?= $b["FOTO"]; ?>" alt="<?= $b["FOTO"]; ?>" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-bold"><?= $b["NAMA"]; ?></div>
+                                    <div class="text-sm opacity-50"><?= $b["KODE"]; ?></div>
+                                    <div class="text-sm opacity-50"><?= $b["KODE_BARCODE"]; ?></div>
+                                </div>
+                            </div>
+                        </td>
+                        <th>
+                            <input tabindex="1" name="HARGA_BELI[]" id="HARGA_BELI[]" type="hidden" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                            <br>
+                            <input tabindex="1" name="HARGA_JUAL[]" id="HARGA_JUAL[]" type="number" class="text-sm font-semibold opacity-70 harga-jual" value="<?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
+                                                                                                                                                                    echo floatval(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL']);
+                                                                                                                                                                } else {
+                                                                                                                                                                    echo '0';
+                                                                                                                                                                }; ?>"></input>
+                            <br>
+                        </th>
+                    </tr>
+                <?php endforeach; ?>
+            <?php } ?>
+        </tbody>
+    </table>
+    <p class="centered">Thanks for your purchase!
+        <br>parzibyte.me/blog
+    </p>
+</div>
+
+<style>
+    .ticket td,
+    .ticket th,
+    .ticket tr,
+    .ticket table {
+        border-top: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .ticket td.description,
+    .ticket th.description {
+        width: 75px;
+        max-width: 75px;
+    }
+
+    .ticket td.quantity,
+    .ticket th.quantity {
+        width: 40px;
+        max-width: 40px;
+        word-break: break-all;
+    }
+
+    .ticket td.price,
+    .ticket th.price {
+        width: 40px;
+        max-width: 40px;
+        word-break: break-all;
+    }
+
+    .ticket .centered {
+        text-align: center;
+        align-content: center;
+    }
+
+    .ticket {
+        display: none;
+        width: 44mm;
+        max-width: 44mm;
+    }
+
+    img {
+        max-width: inherit;
+        width: inherit;
+    }
+
+    @media print {
+        .ticket {
+            display: block;
+            font-size: 12px;
+        }
+
+        .hidden-print,
+        .hidden-print * {
+            display: none !important;
+        }
+    }
+</style>
 
 <script>
     const textInfoTotal = document.querySelector('.text-info-total');

@@ -155,7 +155,7 @@ include('shared/navadmin.php');
             </li>
             <li>
                 <label for="TGL_TRANSAKSI">Tanggal Transaksi: </label>
-                <input value="<?= $brg["TGL_TRANSAKSI"]; ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="datetime-local" name="TGL_TRANSAKSI" id="TGL_TRANSAKSI">
+                <input value="<?= $brg["TGL_TRANSAKSI"] ?? date('Y-m-d'); ?>" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 dark:text-white rounded-sm" type="date" name="TGL_TRANSAKSI" id="TGL_TRANSAKSI">
             </li>
             <li>
                 <label for="POIN">Poin: </label>

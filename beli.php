@@ -105,10 +105,40 @@ include('shared/navadmin.php');
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.3.0/js/dataTables.dateTime.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.3.0/css/dataTables.dateTime.min.css">
 
 <script>
+    var minDate, maxDate;
+
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date(data[1]);
+
+            if (
+                (min === null && max === null) ||
+                (min === null && date <= max) ||
+                (min <= date && max === null) ||
+                (min <= date && date <= max)
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
     $(document).ready(function() {
+        minDate = new DateTime($('#min'), {
+            format: 'MMMM Do YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'MMMM Do YYYY'
+        });
         var table = $('#table').DataTable({
             "pageLength": 50,
             <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
@@ -120,6 +150,9 @@ include('shared/navadmin.php');
                 'csvHtml5',
                 'pdfHtml5'
             ]
+        });
+        $('#min, #max').on('change', function() {
+            table.draw();
         });
 
         $(document).on("keydown", function(e) {
@@ -209,6 +242,21 @@ include('shared/navadmin.php');
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
         <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
 
+        <table border="0" cellspacing="5" cellpadding="5">
+            <tbody class="flex">
+                <tr>
+                    <td>Tanggal</td>
+                    <td><input class="input input-bordered input-xs" type=" text" id="min" name="min"></td>
+                </tr>
+                <tr>
+                    <td>sampai</td>
+                </tr>
+                <tr>
+                    <td><input class="input input-bordered input-xs" type=" text" id="max" name="max"></td>
+                </tr>
+            </tbody>
+        </table>
+
         <table id="table" class="table table-compact w-full">
             <thead>
                 <tr>
@@ -262,8 +310,8 @@ include('shared/navadmin.php');
     $item = query("SELECT * FROM Beli WHERE NOTA = '$nota'")[0];
     ?>
     <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
-    <div class="modal modal-bottom p-4">
-        <div class="modal-box w-11/12 max-w-6xl">
+    <div class="modal rounded-none modal-bottom items-start modal-open">
+        <div class="modal-box h-screen max-h-screen rounded-none w-full">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
                 <h3 class="font-bold text-lg">Aksi Beli</h3>
@@ -332,7 +380,7 @@ include('shared/navadmin.php');
                     </label>
                 </div>
                 <div class="overflow-x-auto w-full mt-8 mb-4">
-                    <table class="table w-full">
+                    <table class="table table-compact w-full">
                         <!-- head -->
                         <thead>
                             <tr>
@@ -379,73 +427,73 @@ include('shared/navadmin.php');
         <td>
             % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
             <br />
-            <span class="badge badge-ghost badge-sm">%1: <input value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+            <span class="badge badge-ghost badge-sm">%1: <input className="input-xs" value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
             <br />
-            <span class="badge badge-ghost badge-sm">%2: <input value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+            <span class="badge badge-ghost badge-sm">%2: <input className="input-xs" value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
             <br />
-            <span class="badge badge-ghost badge-sm">%3: <input value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+            <span class="badge badge-ghost badge-sm">%3: <input className="input-xs" value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
             <br />
-            <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+            <span class="badge badge-ghost badge-sm">%4: <input className="input-xs" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
         </td>
         <th>
             <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
             <br>
             <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_JUAL"]; ?>"></input>
             <br>
+            <br>
+            <span><?= $b["HARGA_BELI"] * $b["JUMLAH"]; ?></span>
         </th>
         <th>
             KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
             <br>
             KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
-            <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $b['BARANG_ID']; ?>" name="hapus_item">Hapus</a>
+            <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $b['ID']; ?>" name="hapus_item">Hapus</a>
         </th>
         </tr>
     <?php endforeach; ?>
     <tr>
         <td>+</td>
         <td>
-            <div class="items-center space-x-3">
+            <div class="gap-2 flex flex-col space-x-3">
                 <div class="font-bold" id="NAMA_BARANG"></div>
                 <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
                 <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
             </div>
-    </div>
-    </div>
-    </td>
-    <td>
-        IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
-        <br />
-        Jumlah: <input value="1" class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
-        Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
-                                                                                            $satuan = query("SELECT * FROM satuan");
-                                                                                            foreach ($satuan as $l) : ?>
-                <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <br />
-    </td>
-    <td>
-        % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
-        <br />
-        <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
-    </td>
-    <th>
-        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
-        <br>
-        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
-        <br>
-    </th>
-    <th>
-        KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
-        <br>
-        KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
-    </th>
+        </td>
+        <td>
+            IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
+            <br />
+            Jumlah: <input value="1" class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
+            Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
+                                                                                                $satuan = query("SELECT * FROM satuan");
+                                                                                                foreach ($satuan as $l) : ?>
+                    <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <br />
+        </td>
+        <td>
+            % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
+            <br />
+            <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
+            <br />
+            <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
+        </td>
+        <th>
+            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
+            <br>
+            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
+            <br>
+        </th>
+        <th>
+            KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
+            <br>
+            KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
+        </th>
     </tr>
     </tbody>
     </table>

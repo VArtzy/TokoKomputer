@@ -1,4 +1,4 @@
-<footer class="footer p-10 bg-base-300 text-base-content">
+<footer class="hidden-print footer p-10 bg-base-300 text-base-content">
     <div>
         <span class="footer-title">Produk</span>
         <a href="index.php" class="link link-hover">Home Page</a>

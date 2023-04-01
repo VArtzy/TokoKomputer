@@ -19,8 +19,39 @@ include('shared/navadmin.php');
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.3.0/js/dataTables.dateTime.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.3.0/css/dataTables.dateTime.min.css">
+
 <script>
+    var minDate, maxDate;
+
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date(data[1]);
+
+            if (
+                (min === null && max === null) ||
+                (min === null && date <= max) ||
+                (min <= date && max === null) ||
+                (min <= date && date <= max)
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
     $(document).ready(function() {
+        minDate = new DateTime($('#min'), {
+            format: 'MMMM Do YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'MMMM Do YYYY'
+        });
         var table = $('#table').DataTable({
             "pageLength": 50,
             <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
@@ -32,6 +63,9 @@ include('shared/navadmin.php');
                 'csvHtml5',
                 'pdfHtml5'
             ]
+        });
+        $('#min, #max').on('change', function() {
+            table.draw();
         });
 
         $(document).on("keydown", function(e) {
@@ -51,11 +85,25 @@ include('shared/navadmin.php');
         <a class="btn btn-primary mb-8" href="pilihBarang.php">Tambah Nota</a>
     <?php endif; ?>
     <a class="btn btn-success mb-4" href="penjualanNota.php">Pembayaran Piutang</a>
-    <a class="btn btn-warning mb-8" href="invoices.php">Kembali</a>
 
     <div class="overflow-x-auto">
         <p class="badge badge-sm">Convert To Excel (CTRL + E)</p>
         <p class="badge badge-sm">Convert To PDF (CTRL + F)</p>
+
+        <table border="0" cellspacing="5" cellpadding="5">
+            <tbody class="flex">
+                <tr>
+                    <td>Tanggal</td>
+                    <td><input class="input rounded-none input-bordered input-xs" type=" text" id="min" name="min"></td>
+                </tr>
+                <tr>
+                    <td>sampai</td>
+                </tr>
+                <tr>
+                    <td><input class="input rounded-none input-bordered input-xs" type=" text" id="max" name="max"></td>
+                </tr>
+            </tbody>
+        </table>
 
         <table id="table" class="table table-compact w-full">
             <thead>
@@ -93,7 +141,7 @@ include('shared/navadmin.php');
                         <td><?= query("SELECT NAMA FROM user_admin WHERE id = '" . $i['OPERATOR'] . "'")[0]["NAMA"]; ?></td>
                         <td>
                             <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
-                                <a tabindex="1" href="detailinvoice.php?nota=<?= $i['NOTA']; ?>"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
+                                <a tabindex="1" href="detailinvoice.php?nota=<?= $i['NOTA']; ?>&open"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
                             </div>
                         </td>
                     </tr>

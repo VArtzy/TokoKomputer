@@ -187,7 +187,7 @@ include('shared/navadmin.php');
                         </label>
                         <label class="input-group">
                             <span>Kode:</span>
-                            <input required type="text" name="KODE" id="KODE" class="input input-bordered">
+                            <input value="<?= date('Ymd') . query("SELECT COUNT(*) as COUNT FROM customer")[0]["COUNT"]; ?>" required type="text" name="KODE" id="KODE" class="input input-bordered">
                         </label>
                     </div>
                     <div class="form-control">

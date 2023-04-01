@@ -41,14 +41,10 @@ function tambahBarang($data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
 
     // upload gambar
-    $FOTO = upload();
 
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `KODE_BARCODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `KODE_BARCODE`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
-     ('$KODE','$KODE_BARCODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$KODE', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
-
-    mysqli_query($conn, "INSERT INTO multi_price(`KODE_SATUAN`, `CUSTOMER_ID`, `BARANG_ID`, `HARGA_KE`, `JUMLAH_R1`, `JUMLAH_R2`, `HARGA_JUAL`) VALUES
-     ('$SATUAN_ID', '', '$KODE', 1, 1, 1000, '$HARGA_JUAL')");
+    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `KODE_BARCODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `MARGIN`) VALUES
+     ('$KODE','$KODE_BARCODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$MARGIN')");
 
     return mysqli_affected_rows($conn);
 }
@@ -380,32 +376,10 @@ function upload()
     $error = $_FILES['FOTO']['error'];
     $tmpname = $_FILES['FOTO']['tmp_name'];
 
-    // cek apakah tidak ada gambar diupload
-    if ($error === 4) {
-        echo "<script>
-    alert('pilih gambar terlebih dahulu');
-    </script>";
-        return false;
-    }
-
     // cek yg diapload gambar bkn yang lain
     $ekstensigambarvalid = ['jpg', 'jpeg', 'png', 'webp'];
     $ekstensigambar = explode('.', $namafile);
     $ekstensigambar = strtolower(end($ekstensigambar));
-    if (!in_array($ekstensigambar, $ekstensigambarvalid)) {
-        echo "<script>
-    alert('yang anda upload bukan gambar');
-    </script>";
-        return false;
-    }
-
-    // cek jika ukurannya terlalu besar
-    if ($ukuranfile > 1000000) {
-        echo "<script>
-    alert('ukuran gambar terlalu besar');
-    </script>";
-        return false;
-    }
 
     // lolos pengecekan gambar siap diupload
     // generate nama gambar baru
@@ -516,7 +490,7 @@ function registrasi($data)
 {
     global $conn;
 
-    $KODE = uniqid();
+    $KODE = date('Ymd') . query("SELECT COUNT(*) as COUNT FROM customer")[0]["COUNT"];
     $NAMA = mysqli_real_escape_string($conn, $data["NAMA"]);
     $PASSWORD = mysqli_real_escape_string($conn, $data["PASSWORD"]);
     $PASSWORD2 = mysqli_real_escape_string($conn, $data["PASSWORD2"]);
@@ -564,6 +538,8 @@ function ubahNota($nota, $userAdmin, $data)
     $LOKASI_ID = mysqli_real_escape_string($conn, $data["LOKASI_ID"]);
     $USER_ADMIN = query("SELECT ID FROM `user_admin` WHERE NAMA = '$userAdmin'")[0]['ID'];
     $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
+
+    if (!is_numeric($CUSTOMER_ID)) $CUSTOMER_ID = query("SELECT KODE FROM `customer` WHERE NAMA = '$CUSTOMER_ID'")[0]['KODE'];
 
     mysqli_query($conn, "UPDATE `jual` SET 
     `SALESMAN_ID`='$SALESMAN_ID', 
@@ -960,6 +936,7 @@ function ubahBeli($nota, $userAdmin, $TOTAL_NOTA, $data)
     $DISKON = mysqli_real_escape_string($conn, $data["DISKON"]);
     $PPN = mysqli_real_escape_string($conn, $data["PPN"]);
 
+    if (!is_numeric($SUPPLIER_ID)) $SUPPLIER_ID = query("SELECT KODE FROM `supplier` WHERE NAMA = '$SUPPLIER_ID'")[0]['KODE'];
 
     $query = "UPDATE `Beli` SET
 STATUS_NOTA = '$STATUS_NOTA',
@@ -1323,13 +1300,13 @@ function hapusLangganan($data)
     return mysqli_affected_rows($conn);
 }
 
-function hapusItemBeli($nota, $barang_id)
+function hapusItemBeli($nota, $id)
 {
     global $conn;
 
     $NOTA = mysqli_real_escape_string($conn, $nota);
-    $BARANG_ID = mysqli_real_escape_string($conn, $barang_id);
-    mysqli_query($conn, "DELETE FROM item_beli WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
+    $ID = mysqli_real_escape_string($conn, $id);
+    mysqli_query($conn, "DELETE FROM item_beli WHERE NOTA = '$NOTA' AND ID = '$ID'");
 
     return mysqli_affected_rows($conn);
 }

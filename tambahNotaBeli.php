@@ -8,7 +8,6 @@ if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return 
 
 $cart = $_COOKIE["shoppingCart"];
 $data = json_decode($cart, true);
-var_dump($data);
 $salesman = query("SELECT KODE, NAMA FROM salesman");
 
 foreach ($data as $d) {
@@ -225,7 +224,7 @@ include('shared/navadmin.php');
             <h2 class="font-bold mt-8 mb-4">Rincian Pembelian</h2>
 
             <div class="overflow-x-auto w-full mb-4">
-                <table class="table w-full">
+                <table class="table table-compact w-full">
                     <!-- head -->
                     <thead>
                         <tr>

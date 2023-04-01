@@ -256,244 +256,249 @@ include('shared/navadmin.php');
         </table>
     </div>
 
-    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-    <div class="modal modal-bottom p-4">
-        <div class="modal-box w-11/12 max-w-6xl">
-            <form action="" method="POST">
-                <h3 class="font-bold text-lg">Edit Invoices <?= $nota; ?></h3>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="STATUS_NOTA">Status: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Status:</span>
-                            <input type="text" value="<?= $notas['STATUS_NOTA']; ?>" name="STATUS_NOTA" maxlength="1" id="STATUS_NOTA" class="input input-bordered">
-                        </label>
+    <?php if (isset($_GET['open'])) : ?>
+
+        <input type="checkbox" id="my-modal-6" class="modal-toggle" />
+        <div class="modal rounded-none modal-bottom items-start modal-open">
+            <div class="modal-box h-screen max-h-screen rounded-none w-full">
+                <form action="" method="POST">
+                    <h3 class="font-bold text-lg">Edit Invoices <?= $nota; ?></h3>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="STATUS_NOTA">Status: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Status:</span>
+                                <input type="text" value="<?= $notas['STATUS_NOTA']; ?>" name="STATUS_NOTA" maxlength="1" id="STATUS_NOTA" class="input input-bordered">
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="TEMPO">Tempo: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Tempo:</span>
+                                <input type="date" name="TEMPO" id="TEMPO" value="<?= $notas['TEMPO']; ?>" class="input input-bordered">
+                            </label>
+                        </div>
                     </div>
                     <div class="form-control">
                         <label class="label">
-                            <label class="label-text" for="TEMPO">Tempo: </label>
+                            <label class="label-text" for="TANGGAL">Tanggal: </label>
                         </label>
                         <label class="input-group">
-                            <span>Tempo:</span>
-                            <input type="date" name="TEMPO" id="TEMPO" value="<?= $notas['TEMPO']; ?>" class="input input-bordered">
+                            <span>Tanggal:</span>
+                            <input type="date" name="TANGGAL" id="TANGGAL" value="<?= $notas['TANGGAL']; ?>" class="input input-bordered">
                         </label>
                     </div>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <label class="label-text" for="TANGGAL">Tanggal: </label>
-                    </label>
-                    <label class="input-group">
-                        <span>Tanggal:</span>
-                        <input type="date" name="TANGGAL" id="TANGGAL" value="<?= $notas['TANGGAL']; ?>" class="input input-bordered">
-                    </label>
-                </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="CUSTOMER_ID">Langganan: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Langganan:</span>
-                            <input value="<?= $notas['CUSTOMER_ID'] ?>" required type="text" name="CUSTOMER_ID" id="CUSTOMER_ID" class="input input-bordered">
-                        </label>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="CUSTOMER_ID">Langganan: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Langganan:</span>
+                                <input value="<?= $notas['CUSTOMER_ID'] ?>" required type="text" name="CUSTOMER_ID" id="CUSTOMER_ID" class="input input-bordered">
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="LOKASI_ID">Lokasi: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Lokasi:</span>
+                                <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
+                                    <?php
+                                    $lokasi = query("SELECT * FROM lokasi");
+                                    foreach ($lokasi as $l) : ?>
+                                        <option <?php if ($l['KODE'] === $notas['LOKASI_ID']) {
+                                                    echo 'selected';
+                                                } ?> value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="LOKASI_ID">Lokasi: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Lokasi:</span>
-                            <select class="input input-bordered" name="LOKASI_ID" id="LOKASI_ID">
-                                <?php
-                                $lokasi = query("SELECT * FROM lokasi");
-                                foreach ($lokasi as $l) : ?>
-                                    <option <?php if ($l['KODE'] === $notas['LOKASI_ID']) {
-                                                echo 'selected';
-                                            } ?> value="<?= $l['KODE']; ?>"><?= $l["KETERANGAN"]; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
+                    <div class="flex gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="SALESMAN_ID">Salesman ID: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Salesman ID:</span>
+                                <select class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
+                                    <?php foreach ($salesman as $s) : ?>
+                                        <option <?php if ($s['KODE'] === $notas['SALESMAN_ID']) {
+                                                    echo 'selected';
+                                                } ?> value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="KETERANGAN">Keterangan: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Keterangan:</span>
+                                <input type="text" name="KETERANGAN" value="<?= $notas['KETERANGAN']; ?>" id="KETERANGAN" class="input input-bordered">
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="SALESMAN_ID">Salesman ID: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Salesman ID:</span>
-                            <select class="input input-bordered" name="SALESMAN_ID" id="SALESMAN_ID">
-                                <?php foreach ($salesman as $s) : ?>
-                                    <option <?php if ($s['KODE'] === $notas['SALESMAN_ID']) {
-                                                echo 'selected';
-                                            } ?> value="<?= $s['KODE']; ?>"><?= $s["NAMA"]; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <label class="label-text" for="KETERANGAN">Keterangan: </label>
-                        </label>
-                        <label class="input-group">
-                            <span>Keterangan:</span>
-                            <input type="text" name="KETERANGAN" value="<?= $notas['KETERANGAN']; ?>" id="KETERANGAN" class="input input-bordered">
-                        </label>
-                    </div>
-                </div>
-                <div class="overflow-x-auto w-full mt-8 mb-4">
-                    <table class="table w-full">
-                        <!-- head -->
-                        <thead>
-                            <tr>
-                                <th>No. </th>
-                                <th>Nama</th>
-                                <th>Stok/Satuan</th>
-                                <th>Diskon</th>
-                                <th>Harga Jual</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $item_jual = query("SELECT * FROM item_jual where NOTA = '$nota'");
-                            foreach ($item_jual as $key => $b) :
-                            ?>
+                    <div class="overflow-x-auto w-full mt-8 mb-4">
+                        <table class="table table-compact w-full">
+                            <!-- head -->
+                            <thead>
                                 <tr>
-                                    <td><?= $key + 1; ?></td>
-                                    <td>
-                                        <div class="items-center space-x-3">
-                                            <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $b["BARANG_ID"]; ?>" type="hidden">
-                                            <div class="font-bold"><?= query("SELECT NAMA FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['NAMA']; ?></div>
-                                            <div class="text-sm opacity-50"><?= $b["BARANG_ID"]; ?></div>
-                                            <div class="text-sm opacity-50"><?= query("SELECT KODE_BARCODE FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['KODE_BARCODE']; ?></div>
-                                        </div>
+                                    <th>No. </th>
+                                    <th>Nama</th>
+                                    <th>Stok/Satuan</th>
+                                    <th>Diskon</th>
+                                    <th>Harga Jual</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $item_jual = query("SELECT * FROM item_jual where NOTA = '$nota'");
+                                foreach ($item_jual as $key => $b) :
+                                ?>
+                                    <tr>
+                                        <td><?= $key + 1; ?></td>
+                                        <td>
+                                            <div class="items-center space-x-3">
+                                                <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $b["BARANG_ID"]; ?>" type="hidden">
+                                                <div class="font-bold"><?= query("SELECT NAMA FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['NAMA']; ?></div>
+                                                <div class="text-sm opacity-50"><?= $b["BARANG_ID"]; ?></div>
+                                                <div class="text-sm opacity-50"><?= query("SELECT KODE_BARCODE FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['KODE_BARCODE']; ?></div>
+                                            </div>
+                    </div>
+            </div>
+            </td>
+            <td>
+                IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
+                <br />
+                <?php $BARANG_ID = $b["BARANG_ID"]; ?>
+                Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>" max="<?= $b['JUMLAH'] + max(query("SELECT STOK FROM BARANG WHERE KODE = '$BARANG_ID'")[0]['STOK'], 0) ?>">
+                <br />
+                Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
+                                                                                        $satuan = query("SELECT * FROM satuan");
+                                                                                        foreach ($satuan as $l) : ?>
+                        <option <?php if ($l['KODE'] === $b['DAFTAR_SATUAN']) {
+                                                                                                echo 'selected';
+                                                                                            } ?> value="<?= $l['KODE']; ?>"><?= $l["NAMA"]; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <br />
+            </td>
+            <td>
+                % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
+                <br />
+                <span class="badge badge-ghost badge-sm">%1: <input value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+                <br />
+                <span class="badge badge-ghost badge-sm">%2: <input value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+                <br />
+                <span class="badge badge-ghost badge-sm">%3: <input value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+                <br />
+                <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+            </td>
+            <th>
+                <input type="hidden" name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+                <br>
+                <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_JUAL"]; ?>"></input>
+                <br>
+                <br>
+                <span><?= $b["HARGA_JUAL"] * $b["JUMLAH"]; ?></span>
+            </th>
+            <th>
+                KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
+                <br>
+                KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
+                <a class="badge badge-error" type="submit" href="Detailinvoice.php?nota=<?= $nota; ?>&barang_id=<?= $b['BARANG_ID']; ?>" name="hapus_item">Hapus</a>
+            </th>
+            </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td>+</td>
+            <td>
+                <div class="gap-2 flex flex-col space-x-3">
+                    <div class="font-bold" id="NAMA_BARANG"></div>
+                    <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
+                    <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
                 </div>
+        </div>
         </div>
         </td>
         <td>
-            IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
+            IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
             <br />
-            <?php $BARANG_ID = $b["BARANG_ID"]; ?>
-            Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>" max="<?= $b['JUMLAH'] + query("SELECT STOK FROM BARANG WHERE KODE = '$BARANG_ID'")[0]['STOK'] ?>">
-            <br />
-            Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
-                                                                                    $satuan = query("SELECT * FROM satuan");
-                                                                                    foreach ($satuan as $l) : ?>
-                    <option <?php if ($l['KODE'] === $b['DAFTAR_SATUAN']) {
-                                                                                            echo 'selected';
-                                                                                        } ?> value="<?= $l['KODE']; ?>"><?= $l["NAMA"]; ?></option>
+            Jumlah: <input class="input input-bordered input-xs" value="1" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
+            Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
+                                                                                                $satuan = query("SELECT * FROM satuan");
+                                                                                                foreach ($satuan as $l) : ?>
+                    <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
                 <?php endforeach; ?>
             </select>
             <br />
         </td>
         <td>
-            % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
+            % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
             <br />
-            <span class="badge badge-ghost badge-sm">%1: <input value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+            <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
             <br />
-            <span class="badge badge-ghost badge-sm">%2: <input value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+            <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
             <br />
-            <span class="badge badge-ghost badge-sm">%3: <input value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+            <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
             <br />
-            <span class="badge badge-ghost badge-sm">%4: <input value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+            <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
         </td>
         <th>
-            <input type="hidden" name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
             <br>
-            <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_JUAL"]; ?>"></input>
+            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
             <br>
         </th>
         <th>
-            KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
+            KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70 input-xs"></input>
             <br>
-            KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
-            <a class="badge badge-error" type="submit" href="Detailinvoice.php?nota=<?= $nota; ?>&barang_id=<?= $b['BARANG_ID']; ?>" name="hapus_item">Hapus</a>
+            KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70 input-xs"></input>
         </th>
         </tr>
-    <?php endforeach; ?>
-    <tr>
-        <td>+</td>
-        <td>
-            <div class="items-center space-x-3">
-                <div class="font-bold" id="NAMA_BARANG"></div>
-                <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
-                <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
-            </div>
-    </div>
-    </div>
-    </td>
-    <td>
-        IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
-        <br />
-        Jumlah: <input class="input input-bordered input-xs" value="1" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
-        Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
-                                                                                            $satuan = query("SELECT * FROM satuan");
-                                                                                            foreach ($satuan as $l) : ?>
-                <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <br />
-    </td>
-    <td>
-        % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
-        <br />
-        <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
-        <br />
-        <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
-    </td>
-    <th>
-        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
-        <br>
-        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
-        <br>
-    </th>
-    <th>
-        KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
-        <br>
-        KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
-    </th>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <label class="label-text" for="PPN">PPN: </label>
-        </label>
-        <label class="input-group">
-            <span>PPN:</span>
-            <input type="number" value="<?= $notas['PPN']; ?>" name="PPN" id="PPN" class="input input-bordered">
-        </label>
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <label class="label-text" for="DISKON">Diskon: </label>
-        </label>
-        <label class="input-group">
-            <span>Diskon:</span>
-            <input type="number" value="<?= $notas['DISKON']; ?>" name="DISKON" id="DISKON" class="input input-bordered">
-        </label>
-    </div>
-    <div class="modal-action">
-        <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
-            <button name="hapus" class="btn btn-error" type="submit">Hapus</button>
-        <?php endif; ?>
-        <label for="my-modal-6" class="btn">Batal</label>
-        <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
-            <button name="submit" class="btn btn-success" type="submit">Perbaiki</button>
-        <?php endif; ?>
-    </div>
-    </form>
-    </div>
-    </div>
+        </tbody>
+        </table>
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <label class="label-text" for="PPN">PPN: </label>
+            </label>
+            <label class="input-group">
+                <span>PPN:</span>
+                <input type="number" value="<?= $notas['PPN']; ?>" name="PPN" id="PPN" class="input input-bordered">
+            </label>
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <label class="label-text" for="DISKON">Diskon: </label>
+            </label>
+            <label class="input-group">
+                <span>Diskon:</span>
+                <input type="number" value="<?= $notas['DISKON']; ?>" name="DISKON" id="DISKON" class="input input-bordered">
+            </label>
+        </div>
+        <div class="modal-action">
+            <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                <button name="hapus" class="btn btn-error" type="submit">Hapus</button>
+            <?php endif; ?>
+            <a for="my-modal-6" class="btn" href="jual.php">Batal</a>
+            <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+                <button name="submit" class="btn btn-success" type="submit">Perbaiki</button>
+            <?php endif; ?>
+        </div>
+        </form>
+        </div>
+        </div>
+    <?php endif; ?>
 
 </main>
 

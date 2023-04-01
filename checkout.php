@@ -13,7 +13,6 @@ foreach ($data as $d) {
             $d['stok'] = round($b["STOK"]);
             $dataEncoded = json_encode($d);
             echo "<script>alert('Maaf, barang " . $d['name'] . " beberapa stoknya sudah dibeli. Silahkan ulangi isi keranjang 🤗.')</script>";
-            echo "<script>document.cookie = 'shoppingCart' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';</script>";
             echo "<script>window.location.href = 'pesan.php'</script>";
         }
     }

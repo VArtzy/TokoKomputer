@@ -86,7 +86,7 @@
 
 <body class="font-dm">
 
-  <nav class="navbar bg-base-100 max-w-6xl mx-auto">
+  <nav class="hidden-print navbar bg-base-100 max-w-6xl mx-auto">
     <div class="navbar-start">
       <div class="dropdown">
         <label tabindex="0" class="btn btn-ghost lg:hidden">

@@ -8,12 +8,16 @@ if (!in_array($nom, $aksesMenu) || !isset($aksi[0]) || $aksi[0] === '0') return 
 
 if (isset($_POST["tambah"])) {
     if (tambahBarang($_POST) > 0) {
-        echo  "<script>
-    alert('Barang baru berhasil ditambahkan');
-    </script>";
+        echo "<script>
+        alert('Berhasil Menambah Barang');
+        </script>";
         header('Location: barang.php');
     } else {
-        echo mysqli_error($conn);
+        $error = mysqli_error($conn);
+        echo 'inibenergaksih' . $error;
+        echo "<script>
+    alert('$error');
+    </script>";
     }
 }
 

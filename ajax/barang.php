@@ -14,7 +14,7 @@ $brg = query($query);
 ?>
 
 <?php if (!empty($brg)) : ?>
-    <table class="table w-full">
+    <table id="table" class="table w-full text-sm">
         <!-- head -->
         <thead>
             <tr>
@@ -23,7 +23,7 @@ $brg = query($query);
                 <th>Diskon</th>
                 <th>Harga/Margin</th>
                 <th>Garansi/Poin</th>
-                <th>Golongan/Subgolongan</th>
+                <th>Golongan<br />/Subgolongan</th>
                 <th></th>
             </tr>
         </thead>
@@ -34,7 +34,7 @@ $brg = query($query);
                         <div class="flex items-center space-x-3">
                             <div class="avatar">
                                 <div class="mask mask-squircle w-12 h-12">
-                                    <img width="50px" height="50px" src="<?= $b["FOTO"]; ?>" alt="Gambar <?= $b["FOTO"]; ?>" />
+                                    <img width="50px" height="50px" src="<?= $b["FOTO"]; ?>" alt="<?= $b["FOTO"]; ?>" />
                                 </div>
                             </div>
                             <div>
@@ -45,7 +45,7 @@ $brg = query($query);
                         </div>
                     </td>
                     <td>
-                        Satuan: <?= $b["SATUAN_ID"]; ?>
+                        Satuan: <?= query("SELECT NAMA FROM satuan WHERE KODE = '" . $b['SATUAN_ID'] . "'")[0]['NAMA']; ?> - <?= query("SELECT KONVERSI FROM satuan WHERE KODE = '" . $b['SATUAN_ID'] . "'")[0]['KONVERSI']; ?>
                         <br />
                         Stok: <?= round($b["STOK"]); ?>
                         <br />
