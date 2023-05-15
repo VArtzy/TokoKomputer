@@ -101,6 +101,8 @@
             <li><a href="jual.php"><i class="fa-solid fa-cart-shopping"></i> Invoices</a></li>
             <li><a href="barang.php"><i class="fa-solid fa-truck-field"></i> Barang</a></li>
             <li><a href="userAndAdminManagement.php"><i class="fa-solid fa-user-tie"></i> User & Admin</a></li>
+            <li><a target="_blank" href="https://tokopedia.link/jogacomputer"><img class="h-6" src="../img/tokopedia.png" alt="Tokopedia"> Tokopedia</a></li>
+            <li><a target="_blank" href="https://shopee.co.id/joga_computer"><img class="h-6" src="../img/shopee.png" alt="Shoope"> Shopee</a></li>
             <li><a class="fa-solid fa-user-tie">Master</a></li>
             <li><a href="golongan.php">Golongan</a></li>
             <li><a href="subgolongan.php">Subgolongan</a></li>
@@ -180,9 +182,17 @@
               <hr>
               <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
               <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
+              <hr>
+              <li><a href="kartustok.php">Kartu Stok</a></li>
             </ul>
           </div>
         </li>
+        <div class="tooltip tooltip-bottom" data-tip="Launch Tokopedia">
+          <li><a target="_blank" href="https://tokopedia.link/jogacomputer"><img class="h-6" src="../img/tokopedia.png" alt="Tokopedia"></a></li>
+        </div>
+        <div class="tooltip tooltip-bottom" data-tip="Launch Shopee">
+          <li><a target="_blank" href="https://shopee.co.id/joga_computer"><img class="h-6" src="../img/shopee.png" alt="Shoope"></a></li>
+        </div>
       </ul>
     </div>
     <div class="navbar-end">
@@ -228,6 +238,8 @@
             </a></li>
           <li><a href="tandakeluarbarang.php">Tanda Keluar Barang</a></li>
           <li><a href="tandaterimabarang.php">Tanda Masuk Barang</a></li>
+          <hr>
+          <li><a href="kartustok.php">Kartu Stok</a></li>
         </ul>
       </div>
       <div class="dropdown dropdown-end">

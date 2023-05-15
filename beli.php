@@ -1,4 +1,5 @@
 <?php
+
 require_once('utils/functions.php');
 require_once('utils/loggedAdmin.php');
 
@@ -8,30 +9,59 @@ $aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
 
 $item = query("select a.TANGGAL, a.TEMPO, a.TANGGAL, a.SUPPLIER_ID, a.OPERATOR, a.NOTA, b.NAMA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) AS HUTANG, (select SUM(jumlah*harga_beli) from item_beli where nota = a.nota) - (select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_hutang where nota_beli = a.nota) as SISA_HUTANG from beli a LEFT JOIN supplier b ON a.SUPPLIER_ID = b.KODE ORDER BY TANGGAL DESC LIMIT 0, 20;");
 
+if (!isset($_SESSION['hapus']) && empty($_SESSION['hapus'])) $_SESSION['hapus'] = array();
+if (!isset($_SESSION['tambah']) && empty($_SESSION['tambah'])) $_SESSION['tambah'] = array();
+if (!isset($_GET['nota']) && !isset($_SESSION['hapus']) && empty($_SESSION['hapus'])) $_SESSION['hapus'] = array();
+if (!isset($_GET['nota']) && !isset($_SESSION['tambah']) && empty($_SESSION['tambah'])) $_SESSION['tambah'] = array();
+
 if (isset($_GET['nota'])) $nota = $_GET['nota'];
 
 if (isset($_POST["tambah_item"])) {
-    if (tambahBeliItemNota($_POST['KODE_LAMA'], $_POST['TAMBAH_BARANG_ID'], $_POST['TAMBAH_JUMLAH_BARANG'], $_POST['TAMBAH_HARGA_BELI'], $_POST['TAMBAH_HARGA_JUAL'], $_POST['TAMBAH_DISKON1'], $_POST['TAMBAH_DISKON2'], $_POST['TAMBAH_DISKON3'], $_POST['TAMBAH_DISKON4'], $_POST['TAMBAH_DISKON_RP'], $_POST['TAMBAH_SATUAN'], $_POST['KETERANGAN'], $_POST['TAMBAH_KET1'], $_POST['TAMBAH_KET2'], $_POST['TAMBAH_IMEI']) > 0) {
-        echo "<script>
-        alert('Berhasil Menambah Item');
-        </script>";
-    } else {
-        echo mysqli_error($conn);
+    array_push($_SESSION['tambah'], array("KODE_LAMA" => $_POST['KODE_LAMA'], "TAMBAH_BARANG_ID" => $_POST['TAMBAH_BARANG_ID'], "TAMBAH_JUMLAH_BARANG" => $_POST['TAMBAH_JUMLAH_BARANG'], "TAMBAH_HARGA_BELI" => $_POST['TAMBAH_HARGA_BELI'], "TAMBAH_HARGA_JUAL" => $_POST['TAMBAH_HARGA_JUAL'], "TAMBAH_DISKON1" => $_POST['TAMBAH_DISKON1'], "TAMBAH_DISKON2" => $_POST['TAMBAH_DISKON2'], "TAMBAH_DISKON3" => $_POST['TAMBAH_DISKON3'], "TAMBAH_DISKON4" => $_POST['TAMBAH_DISKON4'], "TAMBAH_DISKON_RP" => $_POST['TAMBAH_DISKON_RP'], "TAMBAH_SATUAN" => $_POST['TAMBAH_SATUAN'], "KETERANGAN" => $_POST['KETERANGAN'], "TAMBAH_KET1" => $_POST['TAMBAH_KET1'], "TAMBAH_KET2" => $_POST['TAMBAH_KET2'], "TAMBAH_IMEI" => $_POST['TAMBAH_IMEI']));
+}
+
+if (isset($_GET['barang_id']) && !isset($_GET['bataltambah']) && !isset($_GET['batal'])) {
+    array_push($_SESSION['hapus'], $_GET['barang_id']);
+    $_SESSION['hapus'] = array_unique($_SESSION['hapus']);
+    header("Location: Beli.php?nota=$nota");
+}
+
+if (isset($_GET['barang_id']) && isset($_GET['batal'])) {
+    if (($key = array_search($_GET['barang_id'], $_SESSION['hapus'])) !== false) {
+        unset($_SESSION['hapus'][$key]);
+    }
+    header("Location: Beli.php?nota=$nota");
+}
+
+if (isset($_GET['barang_id']) && isset($_GET['bataltambah'])) {
+    foreach ($_SESSION['tambah'] as $key => $subArray) {
+        if ($subArray['TAMBAH_BARANG_ID'] === $_GET['barang_id']) {
+            unset($_SESSION['tambah'][$key]);
+            break;
+        }
+        header("Location: Beli.php?nota=$nota");
     }
 }
 
-if (isset($_GET['barang_id'])) {
-    if (hapusItemBeli($nota, $_GET['barang_id']) > 0) {
-        echo "<script>
-        alert('Berhasil Menghapus Beli');
-        document.location.href = 'Beli.php?nota=$nota';
-        </script>";
-    } else {
-        echo mysqli_error($conn);
-    }
+if (isset($_POST['hapus_item_all'])) {
+    $_SESSION['hapus'] = array();
+}
+
+if (isset($_POST['tambah_item_all'])) {
+    $_SESSION['tambah'] = array();
 }
 
 if (isset($_POST["ubah"])) {
+    foreach ($_SESSION['hapus'] as $h) {
+        hapusItemBeli($nota, $h);
+    }
+
+    foreach ($_SESSION['tambah'] as $t) {
+        tambahBeliItemNota($t['KODE_LAMA'], $t['TAMBAH_BARANG_ID'], $t['TAMBAH_JUMLAH_BARANG'], $t['TAMBAH_HARGA_BELI'], $t['TAMBAH_HARGA_JUAL'], $t['TAMBAH_DISKON1'], $t['TAMBAH_DISKON2'], $t['TAMBAH_DISKON3'], $t['TAMBAH_DISKON4'], $t['TAMBAH_DISKON_RP'], $t['TAMBAH_SATUAN'], $t['KETERANGAN'], $t['TAMBAH_KET1'], $t['TAMBAH_KET2'], $t['TAMBAH_IMEI']);
+    }
+
+    $_SESSION['hapus'] = array();
+    $_SESSION['tambah'] = array();
 
     $TOTAL = 0;
 
@@ -43,8 +73,8 @@ if (isset($_POST["ubah"])) {
         $DISKON1 = $_POST['DISKON1'][$i];
         $DISKON2 = $_POST['DISKON2'][$i];
         $DISKON3 = $_POST['DISKON3'][$i];
-        $DISKON4 = $_POST['DISKON4'][$i];
         $DISKON_RP = $_POST['DISKON_RP'][$i];
+        $DISKON4 = $_POST['DISKON4'][$i];
         $HARGA_JUAL = $_POST['HARGA_JUAL'][$i];
         $KET1 = $_POST['KET1'][$i];
         $KET2 = $_POST['KET2'][$i];
@@ -52,7 +82,7 @@ if (isset($_POST["ubah"])) {
 
         $TOTAL = $TOTAL + $JUMLAH_BARANG * $HARGA_BELI;
 
-        if (ubahBeliItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $_POST['KETERANGAN'], $KET1, $KET2, $IMEI) > 0) {
+        if (ubahBeliItemNota($nota, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $_POST['KETERANGAN'], $KET1, $KET2, $IMEI) > 0) {
         } else {
             echo mysqli_error($conn);
         }
@@ -379,6 +409,16 @@ include('shared/navadmin.php');
                         <input value="<?= $item['KETERANGAN']; ?>" type="text" name="KETERANGAN" id="KETERANGAN" class="input input-bordered">
                     </label>
                 </div>
+
+                <div class="flex justify-between items-center w-full mb-8 mt-8">
+                    <div>
+                        <h2 class="text-4xl font-bold">TOTAL</h2>
+                        <button name="hapus_item_all" class="badge badge-error">Hapus Semua Antrean Hapus</button>
+                        <button name="tambah_item_all" class="badge badge-error">Hapus Semua Antrean Tambah</button>
+                    </div>
+                    <h3 class="text-2xl font-bold text-info text-info-total"></h3>
+                </div>
+
                 <div class="overflow-x-auto w-full mt-8 mb-4">
                     <table class="table table-compact w-full">
                         <!-- head -->
@@ -412,7 +452,7 @@ include('shared/navadmin.php');
         <td>
             IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
             <br />
-            Jumlah: <input type="number" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>">
+            Jumlah: <input type="number" class="jumlah-barang" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $b['JUMLAH']; ?>">
             <br />
             Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
                                                                                     $satuan = query("SELECT * FROM satuan");
@@ -436,105 +476,205 @@ include('shared/navadmin.php');
             <span class="badge badge-ghost badge-sm">%4: <input className="input-xs" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
         </td>
         <th>
-            <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_BELI"]; ?>"></input>
+            <br>
+            <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70 harga-beli" value="<?= $b["HARGA_BELI"]; ?>"></input>
             <br>
             <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $b["HARGA_JUAL"]; ?>"></input>
             <br>
             <br>
-            <span><?= $b["HARGA_BELI"] * $b["JUMLAH"]; ?></span>
+            <span class="harga-barang"><?= $b["HARGA_BELI"] * $b["JUMLAH"]; ?></span>
         </th>
         <th>
             KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $b["KET1"]; ?>" class="text-sm opacity-70"></input>
             <br>
             KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $b["KET2"]; ?>" class="text-sm opacity-70"></input>
-            <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $b['ID']; ?>" name="hapus_item">Hapus</a>
+            <?php if (!in_array($b['ID'], $_SESSION['hapus'])) : ?>
+                <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $b['ID']; ?>" name="hapus_item">Hapus</a>
+            <?php endif; ?>
+            <?php if (in_array($b['ID'], $_SESSION['hapus'])) : ?>
+                <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $b['ID']; ?>&batal" name="batal_hapus">Batal</a>
+            <?php endif; ?>
         </th>
         </tr>
     <?php endforeach; ?>
-    <tr>
-        <td>+</td>
-        <td>
-            <div class="gap-2 flex flex-col space-x-3">
-                <div class="font-bold" id="NAMA_BARANG"></div>
-                <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
-                <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
-            </div>
-        </td>
-        <td>
-            IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
-            <br />
-            Jumlah: <input value="1" class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
-            Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
-                                                                                                $satuan = query("SELECT * FROM satuan");
-                                                                                                foreach ($satuan as $l) : ?>
-                    <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <br />
-        </td>
-        <td>
-            % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
-            <br />
-            <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
-            <br />
-            <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
-            <br />
-            <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
-            <br />
-            <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
-        </td>
-        <th>
-            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
-            <br>
-            <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
-            <br>
-        </th>
-        <th>
-            KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
-            <br>
-            KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
-        </th>
+    <?php
+    foreach ($_SESSION['tambah'] as $key => $t) :
+    ?>
+        <tr>
+            <td><?= $key + 1; ?></td>
+            <td>
+                <div class="items-center space-x-3">
+                    <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $t["TAMBAH_BARANG_ID"]; ?>" type="hidden">
+                    <div class="font-bold"><?= query("SELECT NAMA FROM BARANG where KODE = " . $t['TAMBAH_BARANG_ID'])[0]['NAMA']; ?></div>
+                    <div class="text-sm opacity-50"><?= $t["TAMBAH_BARANG_ID"]; ?></div>
+                    <div class="text-sm opacity-50"><?= query("SELECT KODE_BARCODE FROM BARANG where KODE = " . $t['TAMBAH_BARANG_ID'])[0]['KODE_BARCODE']; ?></div>
+                </div>
+    </div>
+    </div>
+    </td>
+    <td>
+        IMEI: <input type="text" name="IMEI[]" id="IMEI[]">
+        <br />
+        Jumlah: <input type="number" class="jumlah-barang" name="JUMLAH_BARANG[]" id="JUMLAH_BARANG[]" value="<?= $t['TAMBAH_JUMLAH_BARANG']; ?>">
+        <br />
+        Satuan: <select tabindex="1" type="text" name="SATUAN[]" id="SATUAN[]"><?php
+                                                                                $satuan = query("SELECT * FROM satuan");
+                                                                                foreach ($satuan as $l) : ?>
+                <option <?php if ($l['KODE'] === $t['TAMBAH_SATUAN']) {
+                                                                                        echo 'selected';
+                                                                                    } ?> value="<?= $l['KODE']; ?>"><?= $l["NAMA"]; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <br />
+    </td>
+    <td>
+        % Rupiah: <input value="0" type="number" name="DISKON_RP[]" id="DISKON_RP[]">
+        <br />
+        <span class="badge badge-ghost badge-sm">%1: <input className="input-xs" value="0" type="number" name="DISKON1[]" id="DISKON1[]"></span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%2: <input className="input-xs" value="0" type="number" name="DISKON2[]" id="DISKON2[]"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%3: <input className="input-xs" value="0" type="number" name="DISKON3[]" id="DISKON3[]"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%4: <input className="input-xs" value="0" type="number" name="DISKON4[]" id="DISKON4[]"> </span>
+    </td>
+    <th>
+        <br>
+        <input name="HARGA_BELI[]" id="HARGA_BELI[]" class="text-sm font-semibold opacity-70 harga-beli" value="<?= $t["TAMBAH_HARGA_BELI"]; ?>"></input>
+        <br>
+        <input name="HARGA_JUAL[]" id="HARGA_JUAL[]" class="text-sm font-semibold opacity-70" value="<?= $t["TAMBAH_HARGA_JUAL"]; ?>"></input>
+        <br>
+        <br>
+        <span class="harga-barang"><?= $t["TAMBAH_HARGA_BELI"] * $t["TAMBAH_JUMLAH_BARANG"]; ?></span>
+    </th>
+    <th>
+        KET1: <input type="text" name="KET1[]" id="KET1[]" value="<?= $t["TAMBAH_KET1"]; ?>" class="text-sm opacity-70"></input>
+        <br>
+        KET2: <input type="text" name="KET2[]" id="KET2[]" value="<?= $t["TAMBAH_KET2"]; ?>" class="text-sm opacity-70"></input>
+        <a class="badge badge-error" type="submit" href="Beli.php?nota=<?= $item['NOTA']; ?>&barang_id=<?= $t['TAMBAH_BARANG_ID']; ?>&bataltambah" name="hapus_item_tambah">Hapus Draf</a>
+    </th>
     </tr>
-    </tbody>
-    </table>
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <label class="label-text" for="DISKON">Diskon: </label>
-        </label>
-        <label class="input-group">
-            <span>Diskon:</span>
-            <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
-        </label>
-    </div>
-    <div class="form-control">
-        <label class="label">
-            <label class="label-text" for="PPN">PPN: </label>
-        </label>
-        <label class="input-group">
-            <span>PPN:</span>
-            <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
-        </label>
-    </div>
-    <div class="modal-action">
-        <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
-            <div class="tooltip tooltip-error" data-tip="CTRL + Q">
-                <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
-            </div>
-        <?php endif; ?>
-        <div class="tooltip" data-tip="ESC (Tekan Lama)">
-            <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
+<?php endforeach; ?>
+<tr>
+    <td>+</td>
+    <td>
+        <div class="gap-2 flex flex-col space-x-3">
+            <div class="font-bold" id="NAMA_BARANG"></div>
+            <input class="input input-bordered input-xs" name="TAMBAH_BARANG_ID" placeholder="KODE BARANG" id="TAMBAH_BARANG_ID" type="text">
+            <button class="badge badge-success" type="submit" name="tambah_item">Tambah Item</button>
         </div>
-        <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
-            <div class="tooltip tooltip-success" data-tip="CTRL + A">
-                <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
-            </div>
-        <?php endif; ?>
+    </td>
+    <td>
+        IMEI: <input class="input input-bordered input-xs" type="text" name="TAMBAH_IMEI" id="TAMBAH_IMEI">
+        <br />
+        Jumlah: <input value="1" class="input input-bordered input-xs" type="number" name="TAMBAH_JUMLAH_BARANG" id="TAMBAH_JUMLAH_BARANG"> <br />
+        Satuan: <select tabindex="1" type="text" name="TAMBAH_SATUAN" id="TAMBAH_SATUAN"><?php
+                                                                                            $satuan = query("SELECT * FROM satuan");
+                                                                                            foreach ($satuan as $l) : ?>
+                <option value="<?= $l['KODE']; ?>"><?= $l['NAMA']; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <br />
+    </td>
+    <td>
+        % Rupiah: <input value="0" class="input input-bordered input-xs" name=" TAMBAH_DISKON_RP" id="TAMBAH_DISKON_RP">
+        <br />
+        <span class="badge badge-ghost badge-sm">%1: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON1" id="TAMBAH_DISKON1"></span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%2: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON2" id="TAMBAH_DISKON2"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%3: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON3" id="TAMBAH_DISKON3"> </span>
+        <br />
+        <span class="badge badge-ghost badge-sm">%4: <input value="0" class="input input-bordered input-xs" name="TAMBAH_DISKON4" id="TAMBAH_DISKON4"> </span>
+    </td>
+    <th>
+        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_BELI" id="TAMBAH_HARGA_BELI" class="text-sm font-semibold opacity-70" input>
+        <br>
+        <input class="input input-bordered input-xs" name="TAMBAH_HARGA_JUAL" id="TAMBAH_HARGA_JUAL" class="text-sm font-semibold opacity-70" input>
+        <br>
+    </th>
+    <th>
+        KET1: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET1" id="TAMBAH_KET1" class="text-sm opacity-70"></input>
+        <br>
+        KET2: <input class="input input-bordered input-xs" type="text" name="TAMBAH_KET2" id="TAMBAH_KET2" class="text-sm opacity-70"></input>
+    </th>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="form-control">
+    <label class="label">
+        <label class="label-text" for="DISKON">Diskon: </label>
+    </label>
+    <label class="input-group">
+        <span>Diskon:</span>
+        <input value="<?= $item['DISKON']; ?>" type="text" name="DISKON" id="DISKON" class="input input-bordered">
+    </label>
+</div>
+<div class="form-control">
+    <label class="label">
+        <label class="label-text" for="PPN">PPN: </label>
+    </label>
+    <label class="input-group">
+        <span>PPN:</span>
+        <input value="<?= $item['PPN']; ?>" type="text" name="PPN" id="PPN" class="input input-bordered">
+    </label>
+</div>
+<div class="modal-action">
+    <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+        <div class="tooltip tooltip-error" data-tip="CTRL + Q">
+            <button id="hapus" name="hapus" class="btn btn-error" type="submit">Hapus</button>
+        </div>
+    <?php endif; ?>
+    <div class="tooltip" data-tip="ESC (Tekan Lama)">
+        <a id="batal" href="Beli.php" for="my-modal-edit" class="btn">Batal</a>
     </div>
-    </form>
-    </div>
-    </div>
+    <?php if (isset($aksi[1]) && $aksi[1] === '1') : ?>
+        <div class="tooltip tooltip-success" data-tip="CTRL + A">
+            <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
+        </div>
+    <?php endif; ?>
+</div>
+</form>
+</div>
+</div>
 <?php endif; ?>
+
+<script>
+    const textInfoTotal = document.querySelector('.text-info-total');
+    const hargaBeli = document.querySelectorAll('.harga-beli');
+    const jumlahBarang = document.querySelectorAll('.jumlah-barang');
+    const hargaBarang = document.querySelectorAll('.harga-barang');
+    let harga = 0;
+
+    const updateUI = () => {
+        let hargaSementara = 0
+        console.log(textInfoTotal, hargaBeli, jumlahBarang, hargaBarang)
+
+        hargaBeli.forEach((h, i) => {
+            hargaSementara += (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0)
+            hargaBarang[i].textContent = (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0)
+        })
+
+        textInfoTotal.textContent = rupiah(hargaSementara)
+    }
+
+    hargaBeli.forEach((h, i) => {
+        harga += parseInt(h.value) * parseInt(jumlahBarang[i].value)
+
+        jumlahBarang[i].addEventListener('keyup', updateUI)
+        h.addEventListener('keyup', updateUI)
+    })
+
+    const rupiah = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+        }).format(number)
+    }
+    textInfoTotal.textContent = rupiah(harga)
+</script>
+
 <?php
 include('shared/footer.php');
 ?>

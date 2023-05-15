@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'utils/functions.php';
 require_once 'utils/loggedAdmin.php';
 $id = $_GET["id"];

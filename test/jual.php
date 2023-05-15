@@ -6,7 +6,26 @@ $nom = '15';
 if (!in_array($nom, $aksesMenu)) return header('Location: admin.php');
 $aksi = explode('/', $hakAksesArr[array_search($nom, $aksesMenu)])[1] ?? '0000';
 
-$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota), 0) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC LIMIT 0, 20;");
+$item = query("select a.TANGGAL, a.TEMPO, a.SALESMAN_ID, a.CUSTOMER_ID, a.OPERATOR, a.NOTA, a.KETERANGAN, a.STATUS_NOTA, a.STATUS_BAYAR, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) AS PIUTANG, (select SUM(jumlah*harga_jual) from item_jual where nota = a.nota) - COALESCE((select sum(nominal-diskon-retur-diskon_rp) from item_pelunasan_piutang where nota_jual = a.nota), 0) as SISA_PIUTANG from jual a ORDER BY TANGGAL DESC");
+
+if (isset($_GET['hapus'])) {
+    // cek apakah daata berhasil diubah
+    if (hapusJual($_GET['nota']) > 0) {
+        echo "
+        <script>
+        alert('Berhasil Menghapus Jual');
+        document.location.href = 'Jual.php';
+        </script>
+        ";
+    } else {
+        echo mysqli_error($conn);
+        echo "<script>
+        alert('Berhasil Menghapus Jual');
+        document.location.href = 'Jual.php';
+        </script>
+        ";
+    }
+}
 
 $title = "Records Nota Jual - $username";
 include('shared/navadmin.php');
@@ -143,6 +162,11 @@ include('shared/navadmin.php');
                             <div class="tooltip tooltip-info tooltip-right" data-tip="Enter">
                                 <a tabindex="1" href="detailinvoice.php?nota=<?= $i['NOTA']; ?>&open"><i class="fa-solid fa-pen-to-square text-sky-500 scale-150"></i></a>
                             </div>
+                            <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
+                                <div class="tooltip tooltip-error" data-tip="Enter">
+                                    <a tabindex="1" onclick="return confirm('Yakin ingin menghapus nota?')" href="Jual.php?nota=<?= $i['NOTA']; ?>&hapus" id="hapus" name="hapus" class="text-rose-500" type="submit"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php } ?>

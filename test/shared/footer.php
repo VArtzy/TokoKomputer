@@ -4,7 +4,8 @@
         <a href="index.php" class="link link-hover">Home Page</a>
         <a href="pesan.php" class="link link-hover">Belanja</a>
         <a class="link link-hover">Servis</a>
-        <p>Joga Computer Developer © All Rights Reserved.</p>
+        <p><a href="https://vartz.web.id">Joga Computer Developer</a> © All Rights Reserved.</p>
+        <p>Design And Developed By <a class="underline" href="https://vartz.web.id">VArtz</a>.</p>
     </div>
     <div>
         <span class="footer-title">Joga Computer</span>

@@ -49,6 +49,8 @@
           </ul>
         </div>
         <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
+        <a target="_blank" href="https://tokopedia.link/jogacomputer"><img class="h-6" src="../img/tokopedia.png" alt="Tokopedia"></a <div class="toast toast-end z-50">
+        <a target="_blank" href="https://shopee.co.id/joga_computer"><img class="h-6" src="../img/shopee.png" alt="Shoope"></a>
       </div>
     </nav>
 

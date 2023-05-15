@@ -42,9 +42,11 @@ function tambahBarang($data)
 
     // upload gambar
 
+    $FOTO = 'http://www.joga-computer.com/gambar/' . upload($KODE_BARCODE);
+
     // tambahkan user baru ke database
-    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `KODE_BARCODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `MARGIN`) VALUES
-     ('$KODE','$KODE_BARCODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$MARGIN')");
+    mysqli_query($conn, "INSERT INTO `barang`(`KODE`, `KODE_BARCODE`, `NAMA`, `SATUAN_ID`, `STOK`, `MIN_STOK`, `MAX_STOK`, `HARGA_BELI`, `GOLONGAN_ID`, `LOKASI_ID`, `SUPPLIER_ID`, `STOK_AWAL`, `DISKON_RP`, `GARANSI`, `SUB_GOLONGAN_ID`, `TGL_TRANSAKSI`, `DISKON_GENERAL`, `DISKON_SILVER`, `DISKON_GOLD`, `POIN`, `FOTO`, `MARGIN`) VALUES
+     ('$KODE','$KODE_BARCODE','$NAMA','$SATUAN_ID','$STOK','$MIN_STOK','$MAX_STOK', '$HARGA_BELI', '$GOLONGAN_ID', '$LOKASI_ID', '$SUPPLIER_ID', '$STOK_AWAL', '$DISKON_RP', '$GARANSI', '$SUB_GOLONGAN_ID', '$TGL_TRANSAKSI', '$DISKON_GENERAL','$DISKON_SILVER','$DISKON_GOLD','$POIN','$FOTO','$MARGIN')");
 
     return mysqli_affected_rows($conn);
 }
@@ -314,7 +316,7 @@ function tambahBeliItemNota($nota, $id, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL
     return mysqli_affected_rows($conn);
 }
 
-function ubahJualItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
+function ubahJualItemNota($NOTA, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
 
@@ -336,12 +338,12 @@ KETERANGAN = '$KETERANGAN',
 KET1 = '$KET1',
 KET2 = '$KET2',
 IMEI = '$IMEI'
-WHERE BARANG_ID = '$BARANG_ID'");
+WHERE NOTA = $NOTA AND BARANG_ID = '$BARANG_ID'");
 
     return mysqli_affected_rows($conn);
 }
 
-function ubahBeliItemNota($BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
+function ubahBeliItemNota($NOTA, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
 
@@ -363,14 +365,13 @@ KETERANGAN = '$KETERANGAN',
 KET1 = '$KET1',
 KET2 = '$KET2',
 IMEI = '$IMEI'
-WHERE BARANG_ID = '$BARANG_ID'");
+WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
 
     return mysqli_affected_rows($conn);
 }
 
-function upload()
+function upload($barcode)
 {
-
     $namafile = $_FILES['FOTO']['name'];
     $ukuranfile = $_FILES['FOTO']['size'];
     $error = $_FILES['FOTO']['error'];
@@ -380,16 +381,34 @@ function upload()
     $ekstensigambarvalid = ['jpg', 'jpeg', 'png', 'webp'];
     $ekstensigambar = explode('.', $namafile);
     $ekstensigambar = strtolower(end($ekstensigambar));
+    if (!in_array($ekstensigambar, $ekstensigambarvalid)) {
+        echo "<script>
+    alert('yang anda upload bukan gambar');
+    </script>";
+        return false;
+    }
+
+    // cek jika ukurannya terlalu besar
+    if ($ukuranfile > 1000000) {
+        echo "<script>
+    alert('ukuran gambar terlalu besar');
+    </script>";
+        return false;
+    }
 
     // lolos pengecekan gambar siap diupload
     // generate nama gambar baru
-    $namafilebaru = uniqid();
+    $namafilebaru = $barcode;
     $namafilebaru .= '.';
     $namafilebaru .= $ekstensigambar;
 
-    move_uploaded_file($tmpname, './img/foto/' . $namafilebaru);
+    move_uploaded_file($tmpname, './GAMBAR/' . $namafilebaru);
 
-    return $namafilebaru;
+    if ($namafilebaru) {
+        return $namafilebaru;
+    } else {
+        return '';
+    }
 }
 
 function rupiah($angka)
@@ -455,7 +474,7 @@ function editBarang($data)
     if ($_FILES['FOTO']['error'] === 4) {
         $FOTO = $gambarlama;
     } else {
-        $FOTO = upload();
+        $FOTO = upload($KODE_BARCODE);
     }
 
     mysqli_query($conn, "UPDATE `barang` SET 
@@ -957,11 +976,11 @@ WHERE NOTA = '$KODE_LAMA';";
     return mysqli_affected_rows($conn);
 }
 
-function hapusBeli($data)
+function hapusBeli($nota)
 {
     global $conn;
 
-    $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
+    $KODE_LAMA = mysqli_real_escape_string($conn, $nota);
 
     mysqli_query($conn, "DELETE FROM Beli WHERE NOTA = '$KODE_LAMA'");
     mysqli_query($conn, "DELETE FROM ITEM_BELI WHERE NOTA = '$KODE_LAMA'");

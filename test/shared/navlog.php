@@ -9,6 +9,8 @@
                 <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                     <li><a href="/index.php">Home</a></li>
                     <li> <a href="/lihatbarang.php">Belanja</a></li>
+                    <a target="_blank" href="https://tokopedia.link/jogacomputer"><img src="../img/tokopedia.png" alt="Tokopedia"></a <div class="toast toast-end z-50">
+                    <a target="_blank" href="https://shopee.co.id/joga_computer"><img src="../img/shopee.png" alt="Shoope"></a>
                     <a class="btn btn-sm rounded-lg text-white" href="daftar.php">Register</a>
                 </ul>
             </div>
@@ -24,6 +26,8 @@
             <a class="btn btn-success rounded-lg text-white" href="login.php">Login</a>
             <a class="hidden lg:inline-flex btn rounded-lg text-white" href="daftar.php">Register</a>
             <p id="toggleTheme" class="mb-2 md:mb-0 hover:translate-y-1 transition-all cursor-pointer text-2xl">🌚</p>
+            <a class="hidden lg:inline-flex" target="_blank" href="https://tokopedia.link/jogacomputer"><img class="h-6" src="../img/tokopedia.png" alt="Tokopedia"></a>
+            <a class="hidden lg:inline-flex" target="_blank" href="https://shopee.co.id/joga_computer"><img class="h-6" src="../img/shopee.png" alt="Shoope"></a>
         </div>
     </nav>
     <div class="">

@@ -96,8 +96,14 @@ include('shared/nav.php');
                 <p class="hidden md:inline">atau</p>
                 <a href="lihatbarang.php" class="btn btn-success">Lihat Barang-Barang</a>
             </div>
+            <h2 class="text-2xl font-semibold mb-8">Lihat Kami di:</h2>
+            <div class="md:flex items-center gap-8 mb-4">
+                <a target="_blank" href="https://tokopedia.link/jogacomputer"><img src="img/tokopedia.png" alt="Tokopedia"></a>
+                <p class="hidden md:inline">atau</p>
+                <a target="_blank" href="https://shopee.co.id/joga_computer"><img src="img/shopee.png" alt="Shoope"></a>
+            </div>
+            <a href="https://goo.gl/maps/gCFnV1bsVfdT9mxy7" class="btn btn-info mx-auto">Pergi ke Toko</a>
         </div>
-        <a href="https://goo.gl/maps/gCFnV1bsVfdT9mxy7" class="btn btn-info mx-auto">Pergi ke Toko</a>
     </section>
 
     <section id="FAQ">

@@ -278,7 +278,7 @@ plusItem = (e) => {
     var stok = e.target.getAttribute("data-stok")
     var count = e.target.getAttribute("data-count")
 
-    if (count >= stok) {
+    if (Number(count) >= Number(stok)) {
         return alert(`Jumlah barang ${name} melebihi stok yang dimiliki 😢`)
     } else {
         shoppingCart.addItemToCartCount(id, name, price, stok, 1)

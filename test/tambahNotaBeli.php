@@ -156,20 +156,20 @@ include('shared/navadmin.php');
                         </div>
                         <div class="form-control">
                             <label class="label">
-                                <label class="label-text" for="TANGGAL">Tempo: </label>
-                            </label>
-                            <label class="input-group">
-                                <span>Tempo:</span>
-                                <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
-                            </label>
-                        </div>
-                        <div class="form-control">
-                            <label class="label">
                                 <label class="label-text" for="TANGGAL2">Tanggal: </label>
                             </label>
                             <label class="input-group">
                                 <span>Tanggal:</span>
                                 <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL2" id="TANGGAL2" class="input input-bordered">
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <label class="label-text" for="TANGGAL">Tempo: </label>
+                            </label>
+                            <label class="input-group">
+                                <span>Tempo:</span>
+                                <input tabindex="1" value="<?= date('Y-m-d'); ?>" type="date" name="TANGGAL" id="TANGGAL" class="input input-bordered">
                             </label>
                         </div>
                     </div>
@@ -294,6 +294,12 @@ include('shared/navadmin.php');
                                                                                                                                                                     echo '0';
                                                                                                                                                                 }; ?>"></input>
                                         <br>
+                                        <p class="harga-barang text-sm font-semibold"><?= number_format($b['HARGA_BELI'] * $d['count']); ?></p>
+                                        <p class="text-sm font-semibold"><?php if (isset(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'])) {
+                                                                                echo number_format(floatval(query("SELECT HARGA_JUAL FROM MULTI_PRICE where BARANG_ID = " . $b['KODE'])[0]['HARGA_JUAL'] * $d['count']));
+                                                                            } else {
+                                                                                echo '0';
+                                                                            }; ?></p>
                                     </th>
                                     <th>
                                         KET1: <input tabindex="1" type="text" name="KET1[]" id="KET1[]" class="text-sm opacity-70"></input>
@@ -348,11 +354,15 @@ include('shared/navadmin.php');
     const textInfoTotal = document.querySelector('.text-info-total');
     const hargaBeli = document.querySelectorAll('.harga-beli');
     const jumlahBarang = document.querySelectorAll('.jumlah-barang');
+    const hargaBarang = document.querySelectorAll('.harga-barang');
     let harga = 0;
 
     const updateUI = () => {
         let hargaSementara = 0
-        hargaBeli.forEach((h, i) => hargaSementara += (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0))
+        hargaBeli.forEach((h, i) => {
+            hargaSementara += (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0)
+            hargaBarang[i].textContent = (parseInt(h.value) | 0) * (jumlahBarang[i].value | 0)
+        })
 
         textInfoTotal.textContent = rupiah(hargaSementara)
     }

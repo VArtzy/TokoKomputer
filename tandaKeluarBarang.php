@@ -131,7 +131,7 @@ include('shared/navadmin.php');
     })
 </script>
 
-<main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
+<main id="main" class="hidden-print max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
     <h1 class="text-2xl font-semibold">Tanda Keluar Barang</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
 
@@ -186,8 +186,8 @@ include('shared/navadmin.php');
 </main>
 
 <?php if (!isset($_GET['kode']) && isset($aksi[0]) && $aksi[0] === '1') : ?>
-    <input type="checkbox" id="my-modal-6" class="modal-toggle" />
-    <div class="modal modal-bottom sm:modal-middle">
+    <input type="checkbox" id="my-modal-6" class="hidden-print modal-toggle" />
+    <div class="hidden-print modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
                 <h3 class="font-bold text-lg">Tanda Keluar Barang</h3>
@@ -255,8 +255,8 @@ include('shared/navadmin.php');
     $kode = $_GET['kode'];
     $item = query("SELECT * FROM tanda_keluar_barang WHERE NOTA = '$kode'")[0];
     ?>
-    <input type="checkbox" checked id="my-modal-edit" class="modal-toggle" />
-    <div class="modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
+    <input type="checkbox" checked id="my-modal-edit" class="hidden-print modal-toggle" />
+    <div class="hidden-print modal visible opacity-100 pointer-events-auto modal-bottom sm:modal-middle">
         <div class="modal-box">
             <form action="" method="POST">
                 <input type="hidden" value="<?= $item['NOTA']; ?>" name="KODE_LAMA">
@@ -320,11 +320,100 @@ include('shared/navadmin.php');
                             <button id="tambah" name="ubah" class="btn btn-success" type="submit">Perbaiki</button>
                         </div>
                     <?php endif; ?>
+                    <?php if (isset($aksi[3]) && $aksi[3] === '1') : ?>
+                        <div class="tooltip tooltip-success" data-tip="CTRL + P">
+                            <button class="btn btn-success" onclick="window.print()">Print</button>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
     </div>
 <?php endif; ?>
+
+<?php if (isset($_GET['kode'])) : ?>
+    <?php
+    $kode = $_GET['kode'];
+    $item = query("SELECT * FROM tanda_keluar_barang WHERE NOTA = '$kode'")[0];
+    ?>
+    <div class="ticket">
+        <img src="./img/logo/ms-icon-70x70.png" alt="Logo">
+        <p class="centered">JOGA COMPUTER
+            <br>Jl. Ki Hajar Dewantara 53. Jebres. Surakarta.
+        </p>
+        <div class="font-semibold font-md mb-4">
+            <br>
+            <br>Tanggal: <?= $item['TANGGAL']; ?>
+            <br class="">Nama: <?= $item['CUSTOMER']; ?>
+            <br class="">Telepon: <?= $item['TELEPON']; ?>
+            <br class="">Keluhan: <?= $item['KELUHAN']; ?>
+            <br class="mb-4">Solusi: <?= $item['SOLUSI']; ?>
+            <br>
+        </div>
+        <p class="centered">Terimakasih telah berbelanja!
+            <br>joga-computer.com
+        </p>
+    </div>
+<?php endif; ?>
+
+<style>
+    .ticket td,
+    .ticket th,
+    .ticket tr,
+    .ticket table {
+        border-top: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .ticket td.description,
+    .ticket th.description {
+        width: 75px;
+        max-width: 75px;
+    }
+
+    .ticket td.quantity,
+    .ticket th.quantity {
+        width: 40px;
+        max-width: 40px;
+        word-break: break-all;
+    }
+
+    .ticket td.price,
+    .ticket th.price {
+        width: 40px;
+        max-width: 40px;
+        word-break: break-all;
+    }
+
+    .ticket .centered {
+        text-align: center;
+        align-content: center;
+    }
+
+    .ticket {
+        display: none;
+        width: 44mm;
+        max-width: 44mm;
+    }
+
+    img {
+        max-width: inherit;
+        width: inherit;
+    }
+
+    @media print {
+        .ticket {
+            display: block;
+            font-size: 12px;
+        }
+
+        .hidden-print,
+        .hidden-print * {
+            display: none !important;
+        }
+    }
+</style>
+
 <?php
 include('shared/footer.php');
 ?>

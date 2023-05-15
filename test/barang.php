@@ -30,7 +30,7 @@ include('shared/navadmin.php');
 </script>
 
 <main id="main" class="max-w-7xl mx-auto leading-relaxed tracking-wider px-8 py-8 md:mt-8">
-    <h1 class="text-2xl font-semibold">Halaman Admin</h1>
+    <h1 class="text-2xl font-semibold">Halaman Barang</h1>
     <h2 class="text-xl mb-4">Admin: <?= $username; ?></h2>
     <div class="md:flex gap-4">
         <div class="tooltip tooltip-bottom" data-tip="CTRL + A">
@@ -116,7 +116,7 @@ include('shared/navadmin.php');
                             <?php if (isset($aksi[2]) && $aksi[2] === '1') : ?>
                                 <a href="deleteBarang.php?id=<?= $b["KODE"]; ?>" onclick="return confirm('Apakah anda benar benar ingin menghapus barang ini?')"><i class="fa-solid fa-trash text-rose-500 scale-150"></i></a>
                             <?php endif; ?>
-                            <a href="detailBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-file-lines text-amber-500 scale-150"></i></a>
+                            <a href="kartuBarang.php?id=<?= $b["KODE"]; ?>"><i class="fa-solid fa-file-lines text-amber-500 scale-150"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
