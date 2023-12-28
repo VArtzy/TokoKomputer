@@ -52,8 +52,8 @@ if (isset($_POST['tambah_item_all'])) {
 }
 
 if (isset($_POST["ubah"])) {
-    foreach ($_SESSION['hapus'] as $h) {
-        hapusItemBeli($nota, $h);
+    foreach ($_SESSION['hapus'] as $id) {
+        hapusItemBeli($id);
     }
 
     foreach ($_SESSION['tambah'] as $t) {
@@ -66,6 +66,7 @@ if (isset($_POST["ubah"])) {
     $TOTAL = 0;
 
     foreach ($_POST['BARANG_ID'] as $i => $d) {
+        $ID = $_POST['ID'][$i];
         $BARANG_ID = $_POST['BARANG_ID'][$i];
         $IMEI = $_POST['IMEI'][$i];
         $JUMLAH_BARANG = $_POST['JUMLAH_BARANG'][$i];
@@ -82,14 +83,14 @@ if (isset($_POST["ubah"])) {
 
         $TOTAL = $TOTAL + $JUMLAH_BARANG * $HARGA_BELI;
 
-        if (ubahBeliItemNota($nota, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $_POST['KETERANGAN'], $KET1, $KET2, $IMEI) > 0) {
+        if (ubahBeliItemNota($ID, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $_POST['KETERANGAN'], $KET1, $KET2, $IMEI) > 0) {
         } else {
             echo mysqli_error($conn);
         }
     }
 
     // cek apakah daata berhasil diubah
-    if (ubahBeli($nota, $username, $TOTAL, $_POST) > 0) {
+    if (ubahBeli($username, $TOTAL, $_POST) > 0) {
         echo "
         <script>
         alert('Berhasil Memperbaiki Beli');
@@ -441,6 +442,7 @@ include('shared/navadmin.php');
                                     <td><?= $key + 1; ?></td>
                                     <td>
                                         <div class="items-center space-x-3">
+                                            <input name="ID[]" id="ID[]" value="<?= $b["ID"]; ?>" type="hidden">
                                             <input name="BARANG_ID[]" id="BARANG_ID[]" value="<?= $b["BARANG_ID"]; ?>" type="hidden">
                                             <div class="font-bold"><?= query("SELECT NAMA FROM BARANG where KODE = " . $b['BARANG_ID'])[0]['NAMA']; ?></div>
                                             <div class="text-sm opacity-50"><?= $b["BARANG_ID"]; ?></div>

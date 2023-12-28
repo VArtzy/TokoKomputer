@@ -316,7 +316,7 @@ function tambahBeliItemNota($nota, $id, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL
     return mysqli_affected_rows($conn);
 }
 
-function ubahJualItemNota($NOTA, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
+function ubahJualItemNota($ID, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
 
@@ -338,12 +338,12 @@ KETERANGAN = '$KETERANGAN',
 KET1 = '$KET1',
 KET2 = '$KET2',
 IMEI = '$IMEI'
-WHERE NOTA = $NOTA AND BARANG_ID = '$BARANG_ID'");
+WHERE ID = '$ID'");
 
     return mysqli_affected_rows($conn);
 }
 
-function ubahBeliItemNota($NOTA, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
+function ubahBeliItemNota($ID, $BARANG_ID, $JUMLAH_BARANG, $HARGA_BELI, $HARGA_JUAL, $DISKON1, $DISKON2, $DISKON3, $DISKON4, $DISKON_RP, $SATUAN, $KETERANGAN, $KET1, $KET2, $IMEI)
 {
     global $conn;
 
@@ -365,7 +365,7 @@ KETERANGAN = '$KETERANGAN',
 KET1 = '$KET1',
 KET2 = '$KET2',
 IMEI = '$IMEI'
-WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
+WHERE ID = '$ID'");
 
     return mysqli_affected_rows($conn);
 }
@@ -474,7 +474,7 @@ function editBarang($data)
     if ($_FILES['FOTO']['error'] === 4) {
         $FOTO = $gambarlama;
     } else {
-        $FOTO = upload($KODE_BARCODE);
+        $FOTO = 'http://www.joga-computer.com/gambar/' . upload($KODE_BARCODE);
     }
 
     mysqli_query($conn, "UPDATE `barang` SET 
@@ -939,7 +939,7 @@ function tambahBeli($nota, $username, $total, $data)
     return mysqli_affected_rows($conn);
 }
 
-function ubahBeli($nota, $userAdmin, $TOTAL_NOTA, $data)
+function ubahBeli($userAdmin, $TOTAL_NOTA, $data)
 {
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
@@ -1319,29 +1319,27 @@ function hapusLangganan($data)
     return mysqli_affected_rows($conn);
 }
 
-function hapusItemBeli($nota, $id)
+function hapusItemBeli($id)
 {
     global $conn;
 
-    $NOTA = mysqli_real_escape_string($conn, $nota);
     $ID = mysqli_real_escape_string($conn, $id);
-    mysqli_query($conn, "DELETE FROM item_beli WHERE NOTA = '$NOTA' AND ID = '$ID'");
+    mysqli_query($conn, "DELETE FROM item_beli WHERE ID = '$ID'");
 
     return mysqli_affected_rows($conn);
 }
 
-function hapusItemJual($nota, $barang_id)
+function hapusItemJual($id)
 {
     global $conn;
 
-    $NOTA = mysqli_real_escape_string($conn, $nota);
-    $BARANG_ID = mysqli_real_escape_string($conn, $barang_id);
-    mysqli_query($conn, "DELETE FROM item_jual WHERE NOTA = '$NOTA' AND BARANG_ID = '$BARANG_ID'");
+    $ID = mysqli_real_escape_string($conn, $id);
+    mysqli_query($conn, "DELETE FROM item_jual WHERE ID = '$ID'");
 
     return mysqli_affected_rows($conn);
 }
 
-function tambahTandaMasukBarang($data, $userAdmin)
+function tambahTandaMasukBarang($data)
 {
     global $conn;
 
@@ -1351,16 +1349,17 @@ function tambahTandaMasukBarang($data, $userAdmin)
     $CUSTOMER = mysqli_real_escape_string($conn, $data["CUSTOMER"]);
     $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
     $KELUHAN = mysqli_real_escape_string($conn, $data["KELUHAN"]);
-    $SOLUSI = mysqli_real_escape_string($conn, $data["SOLUSI"]);
+    $KELENGKAPAN = mysqli_real_escape_string($conn, $data["KELENGKAPAN"]);
+    $ADDED_BY = mysqli_real_escape_string($conn, $data["ADDED_BY"]);
     $STATUS = mysqli_real_escape_string($conn, $data["STATUS"]);
 
-    mysqli_query($conn, "INSERT INTO `tanda_terima_barang`(`NOTA`, `TANGGAL`, `CUSTOMER`, `TELEPON`, `KELUHAN`, `SOLUSI`, `ADDED_BY`, `MODIFIED_BY`, `STATUS`) VALUES
-     ('$NOTA', '$TANGGAL', '$CUSTOMER', '$TELEPON', '$KELUHAN', '$SOLUSI', '$userAdmin', '$userAdmin', '$STATUS')");
+    mysqli_query($conn, "INSERT INTO `tanda_terima_barang`(`NOTA`, `TANGGAL`, `CUSTOMER`, `TELEPON`, `KELUHAN`, `KELENGKAPAN`, `ADDED_BY`, `MODIFIED_BY`, `STATUS`) VALUES
+     ('$NOTA', '$TANGGAL', '$CUSTOMER', '$TELEPON', '$KELUHAN', '$KELENGKAPAN', '$ADDED_BY', '$ADDED_BY', '$STATUS')");
 
     return mysqli_affected_rows($conn);
 }
 
-function ubahTandaMasukBarang($data, $userAdmin)
+function ubahTandaMasukBarang($data)
 {
     date_default_timezone_set("Asia/Jakarta");
     global $conn;
@@ -1368,22 +1367,21 @@ function ubahTandaMasukBarang($data, $userAdmin)
     $KODE_LAMA = mysqli_real_escape_string($conn, $data["KODE_LAMA"]);
     $NOTA =
         date('Ymd') . query("SELECT COUNT(*) as COUNT FROM tanda_terima_barang")[0]["COUNT"];
-    $TANGGAL = mysqli_real_escape_string($conn, $data["TANGGAL"]);
-    $CUSTOMER = mysqli_real_escape_string($conn, $data["CUSTOMER"]);
-    $TELEPON = mysqli_real_escape_string($conn, $data["TELEPON"]);
-    $KELUHAN = mysqli_real_escape_string($conn, $data["KELUHAN"]);
     $SOLUSI = mysqli_real_escape_string($conn, $data["SOLUSI"]);
-    $STATUS = mysqli_real_escape_string($conn, $data["STATUS"]);
+    $NO_NOTA_BAYAR = mysqli_real_escape_string($conn, $data["NO_NOTA_BAYAR"]);
+    $BIAYA_SERVIS = mysqli_real_escape_string($conn, $data["BIAYA_SERVIS"]);
+    $TGL_SELESAI = mysqli_real_escape_string($conn, $data["TGL_SELESAI"]);
+    $TEKNISI = mysqli_real_escape_string($conn, $data["TEKNISI"]);
+    $MODIFIED_BY = mysqli_real_escape_string($conn, $data["MODIFIED_BY"]);
 
     $query = "UPDATE `tanda_terima_barang` SET
 NOTA = '$NOTA',
-TANGGAL = '$TANGGAL',
-CUSTOMER = '$CUSTOMER',
-TELEPON = '$TELEPON',
-KELUHAN = '$KELUHAN',
 SOLUSI = '$SOLUSI',
-STATUS = '$STATUS',
-MODIFIED_BY = '$userAdmin'
+NO_NOTA_BAYAR = '$NO_NOTA_BAYAR',
+BIAYA_SERVIS = '$BIAYA_SERVIS',
+TGL_SELESAI = '$TGL_SELESAI',
+TEKNISI = '$TEKNISI',
+MODIFIED_BY = '$MODIFIED_BY'
 WHERE NOTA = '$KODE_LAMA';";
 
     mysqli_query($conn, $query);
